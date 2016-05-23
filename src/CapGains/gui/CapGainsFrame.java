@@ -99,7 +99,15 @@ public class CapGainsFrame extends JFrame {
 
 		// construct the frame and set its properties
 		initFrame();
+		
+		processCommandLine(args);
+	}
 
+	/**
+	 * Process the command line arguments.
+	 */
+	private void processCommandLine(String[] args)
+	{
 		// process the command line arguments
 		if (args.length > 0) {
 			dataDir = args[0];
