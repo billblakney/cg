@@ -5,7 +5,7 @@
 # column to the newer format that does not have a seq num column.
 # After all legacy files have been convered, this file becomes obsolete.
 
-BEGIN { push @INC, '/cygdrive/m/workspace/perlscripts' }
+BEGIN { push @INC, $ENV{"MY_PERLSCRIPTS"} }
 
 use strict;
 use warnings;

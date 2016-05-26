@@ -9,7 +9,7 @@
 # trade number and manually fix the csv or resulting trade file
 # output.
 
-BEGIN { push @INC, '/cygdrive/m/workspace/perlscripts' }
+BEGIN { push @INC, $ENV{"MY_PERLSCRIPTS"} }
 
 use strict;
 use warnings;

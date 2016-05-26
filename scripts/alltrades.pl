@@ -8,7 +8,6 @@
 use strict;
 use warnings;
 
-#BEGIN { push @INC, '/home/bill/workspace/perlscripts' }
 BEGIN { push @INC, $ENV{"MY_PERLSCRIPTS"} }
 
 #use MyPerl::Utils qw(msg readFile createBakFiles printlist);

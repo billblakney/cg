@@ -1,4 +1,6 @@
+allTrades.txt
 build/
 dist/
 .classpath
 .project
+*.bak

@@ -4,7 +4,7 @@
 # integers starting with "0001".
 #
 
-BEGIN { push @INC, '/cygdrive/m/workspace/perlscripts' }
+BEGIN { push @INC, $ENV{"MY_PERLSCRIPTS"} }
 
 use warnings;
 use strict;
