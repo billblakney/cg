@@ -1,0 +1,5 @@
+export MY_CG_SCRIPTS=`pwd`/scripts
+echo "MY_CG_SCRIPTS: $CG_SCRIPTS"
+export PATH=$MY_CG_SCRIPTS:${PATH}
+export MY_PERLSCRIPTS=/home/bill/workspace/perlscripts
+echo "MY_PERLSCRIPTS: $MY_PERLSCRIPTS"
