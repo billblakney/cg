@@ -2,17 +2,43 @@ package CapGains;
 
 public class DateRange {
 
-	public SimpleDate beginDate = null;
-	public SimpleDate endDate = null;
+	private SimpleDate _beginDate = null;
+	private SimpleDate _endDate = null;
 
-	public DateRange() {
+	public DateRange()
+	{
+	}
+	
+	public SimpleDate getBeginDate()
+	{
+		return _endDate;
+	}
+	
+	public SimpleDate getEndDate()
+	{
+		return _endDate;
+	}
+	
+	public void setBeginDate(SimpleDate aBeginDate)
+	{
+		_beginDate = aBeginDate;
+	}
+	
+	public void setEndDate(SimpleDate aEndDate)
+	{
+		_endDate = aEndDate;
 	}
 
-	public String toString() {
-		if (endDate == null)
-			return beginDate.toString();
+	public String toString()
+	{
+		if (_endDate == null)
+		{
+			return _beginDate.toString();
+		}
 		else
-			return "various (" + beginDate.toString() + ","
-					+ endDate.toString() + ")";
+		{
+			return "various (" + _beginDate.toString() + ","
+					+ _endDate.toString() + ")";
+		}
 	}
 }

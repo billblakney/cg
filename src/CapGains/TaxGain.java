@@ -96,7 +96,7 @@ public class TaxGain extends Lot {
 			this.buyDate = gc.buyDate;
 			this.newestBuyDate = gc.buyDate;
 			this.term = gc.term;
-			buyDateRange.beginDate = gc.buyDate;
+			buyDateRange.setBeginDate(gc.buyDate);
 		} else {
 			// First, update term.
 			if (gc.term != this.term)
@@ -105,11 +105,11 @@ public class TaxGain extends Lot {
 			// Next, update oldestBuyDate and newestBuyDate as appropriate.
 			if (gc.buyDate.before(this.buyDate) == true) {
 				this.buyDate = gc.buyDate;
-				buyDateRange.beginDate = gc.buyDate;
+				buyDateRange.setBeginDate(gc.buyDate);
 			}
 			if (gc.buyDate.after(this.newestBuyDate) == true) {
 				this.newestBuyDate = gc.buyDate;
-				buyDateRange.endDate = gc.buyDate;
+				buyDateRange.setEndDate(gc.buyDate);
 			}
 		}
 	}
