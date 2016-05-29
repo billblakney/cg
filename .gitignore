@@ -4,3 +4,4 @@ dist/
 .classpath
 .project
 *.bak
+data/EtMain/All
