@@ -5,3 +5,4 @@ dist/
 .project
 *.bak
 data/EtMain/All
+.DS_Store

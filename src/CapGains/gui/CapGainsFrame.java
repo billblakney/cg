@@ -132,6 +132,7 @@ System.out.println("dataDir" + dataDir);
 	private void showAccount(Account acct){
 		displayAccount = acct;
 		reportTabbedPane.removeAll();
+		reportTabbedPane.addReport(ReportType.SHARES_HELD,displayAccount);
 		reportTabbedPane.addReport(ReportType.ALL_TRADES,displayAccount);
 		reportTabbedPane.addReport(ReportType.TAX_GAINS,displayAccount);
 		reportSelectorPanel.setAccount(displayAccount);
