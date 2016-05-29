@@ -1,0 +1,74 @@
+#
+# See special note for 3/9/11 entry below.
+#
+02/09/11,Sell,NAVB,9500,3.7,9.99
+02/09/11,Sell,NAVB,10000,3.71,9.99
+02/10/11,Buy,NAVB,22000,3.27,9.99
+02/17/11,Sell,NAVB,100,3.72,0.00
+02/17/11,Sell,NAVB,3000,3.78,9.99
+02/17/11,Sell,NAVB,4000,3.7,9.99
+02/17/11,Sell,NAVB,8000,3.7,9.99
+02/17/11,Sell,NAVB,9900,3.71,9.99
+02/17/11,Sell,NAVB,10000,3.8,9.99
+02/18/11,Sell,NAVB,2200,3.7501,0.00
+02/18/11,Sell,NAVB,4800,3.75,9.99
+02/23/11,Sell,NAVB,2400,3.98,9.99
+02/23/11,Sell,NAVB,10000,3.97,9.99
+02/24/11,Sell,NAVB,200,4.31,9.99
+02/24/11,Sell,NAVB,300,4.2575,0.00
+02/24/11,Sell,NAVB,500,4.27,9.99
+02/24/11,Sell,NAVB,700,4.315,0.00
+02/24/11,Sell,NAVB,1000,4.26,0.00
+02/24/11,Sell,NAVB,1700,4.25,0.00
+02/24/11,Sell,NAVB,2500,4.2688,0.00
+02/24/11,Sell,NAVB,2600,4.04,9.99
+02/24/11,Sell,NAVB,9000,4.25,9.99
+02/24/11,Sell,NAVB,9100,4.3,0.00
+02/25/11,Sell,NAVB,10000,4.55,9.99
+03/01/11,Buy,NAVB,8000,3.84,9.99
+03/01/11,Buy,NAVB,700,3.83,0.00
+03/01/11,Buy,NAVB,1300,3.85,0.00
+#
+# In April of 2012, I informed ETrade that I had made an ineligible
+# contribution to my Roth IRA. They reversed it by transferring 2085
+# shares of NAVB from my Roth IRA to my Individual account. (They
+# did the calculations.)
+#
+# From my ETrade account records, it appears that they transferred
+# those shares with the basis price of 3.26, which was the price that
+# they were purchased at on 3/9/2011.
+#
+# This next line represents that transfer, and matches a lot that
+# shows in my current shares (as of 8/31/2013). I didn't assign any
+# commission to the purchase of those shares, although there was some.
+#
+03/09/11,Buy,NAVB,2085,3.26,0.00
+#
+03/10/11,Buy,NAVB,7330,3.07,9.99
+03/10/11,Buy,NAVB,5000,3.08,9.99
+03/11/11,Buy,NAVB,10000,3.25,9.99
+03/11/11,Buy,NAVB,6400,3.25,9.99
+03/11/11,Buy,NAVB,2388,3.2499,0.00
+03/11/11,Buy,NAVB,2000,3.2499,0.00
+03/11/11,Buy,NAVB,1600,3.23,9.99
+03/11/11,Buy,NAVB,282,3.25,9.99
+03/14/11,Buy,NAVB,5000,3.25,9.99
+03/14/11,Buy,NAVB,4900,3.25,9.99
+03/14/11,Buy,NAVB,3500,3.25,9.99
+03/14/11,Buy,NAVB,1500,3.2499,0.00
+03/14/11,Buy,NAVB,100,3.2499,0.00
+08/03/11,Buy,NAVB,10000,2.48,9.99
+08/04/11,Buy,NAVB,10000,2.23,9.99
+08/05/11,Buy,NNLX,20000,0.4,9.99
+08/05/11,Buy,NNLX,10000,0.4,9.99
+08/05/11,Buy,NNLX,8825,0.41,9.99
+08/08/11,Buy,NAVB,9900,2.01,0.00
+08/08/11,Buy,NAVB,8784,2.01,9.99
+08/08/11,Buy,NAVB,3900,2.04533,0.00
+08/08/11,Buy,NAVB,2300,2.04,9.99
+08/08/11,Buy,NAVB,2000,2.05,0.00
+08/08/11,Buy,NAVB,1016,2.0098,0.00
+08/08/11,Buy,NAVB,300,2.01,9.99
+08/08/11,Buy,NAVB,100,2.005,9.99
+08/08/11,Sell,NNLX,30000,0.51,9.99
+08/08/11,Sell,NNLX,8825,0.54,9.99
