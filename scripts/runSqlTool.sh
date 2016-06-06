@@ -6,4 +6,4 @@ if [ $# -eq 0 ]
     exit;
 fi
 dbdir=$CG_DB/$1
-java -Ddbdir=$dbdir -jar $HSQLDB/sqltool.jar --rcFile $dbdir/sqltool.rc $1
+java -Ddbdir=$dbdir -jar $HSQLDB/sqltool.jar --rcFile $dbdir/sqltool.rc $1 $2
