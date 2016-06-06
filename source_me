@@ -1,5 +1,29 @@
-export MY_CG_SCRIPTS=`pwd`/scripts
-echo "MY_CG_SCRIPTS: $MY_CG_SCRIPTS"
-export PATH=$MY_CG_SCRIPTS:${PATH}
-export MY_PERLSCRIPTS=$HOME/workspace/perlscripts
-echo "MY_PERLSCRIPTS: $MY_PERLSCRIPTS"
+#!/bash/bin
+#
+# External dependencies: $HOME/workspace/perlscripts
+#
+# 
+export CG=`pwd`
+export CG_DB=$CG/db
+export CG_SCRIPTS=$CG/scripts
+export CG_LIB=$CG/lib
+export HSQLDB=$CG_LIB
+#
+echo "CG: $CG"
+echo "CG_DB: $CG_DB"
+echo "CG_SCRIPTS: $CG_SCRIPTS"
+echo "CG_LIB: $CG_LIB"
+echo "HSQLDB: $HSQLDB"
+#
+alias cg='cd $CG'
+alias cgdb='cd $CG_DB'
+alias cgscr='cd $CG_SCRIPTS'
+alias cglib='cd $CG_LIB'
+#
+# add the scripts directory to the path
+#
+export PATH=$CG_SCRIPTS:${PATH}
+#
+export PERLSCRIPTS=$HOME/workspace/perlscripts
+echo "PERLSCRIPTS: $PERLSCRIPTS"
+export PATH=$PERLSCRIPTS:${PATH}
