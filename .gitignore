@@ -6,3 +6,4 @@ dist/
 *.bak
 data/EtMain/All
 .DS_Store
+db/*/data

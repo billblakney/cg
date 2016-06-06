@@ -6,7 +6,7 @@ if [ $# -eq 0 ]
     echo "missing db urlid"
     exit;
 fi
-dbdir=$CG_DB/$1
 sqldir=$CG_DB/$1/sql
 cd $sqldir
-java -classpath $HSQLDB/hsqldb.jar org.hsqldb.util.DatabaseManagerSwing --rcFile $dbdir/sqltool.rc --urlid $1
+dbdir=$CG_DB/$1
+java -Ddbdir=$dbdir -classpath $HSQLDB/hsqldb.jar org.hsqldb.util.DatabaseManagerSwing --rcFile $dbdir/sqltool.rc --urlid $1
