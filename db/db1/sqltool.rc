@@ -1,0 +1,5 @@
+# Add this to ~/sqltool.rc
+urlid db1
+url jdbc:hsqldb:hsql://localhost/home/bill/workspace/cg/db/db1/data/db1
+username sa
+password
