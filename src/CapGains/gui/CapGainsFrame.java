@@ -112,6 +112,13 @@ public class CapGainsFrame extends JFrame {
 		processEnvironmentVars();
 		
 		processCommandLine(args);
+
+if( tradeFile != null)
+{
+TradeList trades = TradeFileReader.loadTradeFile(tradeFile);
+Account acct = new Account(trades);
+showAccount(acct);
+}
 	}
 
 	/**
@@ -122,10 +129,6 @@ public class CapGainsFrame extends JFrame {
 	   dataDir = System.getenv("CG_DATADIR");
 	   tradeFile = System.getenv("CG_TRADEFILE");
 	   dbUrl = System.getenv("HSQLDB_URL");
-
-TradeList trades = TradeFileReader.loadTradeFile(tradeFile);
-Account acct = new Account(trades);
-showAccount(acct);
 	}
 
 	/**
