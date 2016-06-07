@@ -7,3 +7,4 @@ dist/
 data/EtMain/All
 .DS_Store
 db/*/data
+all.sql
