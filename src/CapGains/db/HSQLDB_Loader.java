@@ -28,11 +28,11 @@ public class HSQLDB_Loader implements CapGainsDB
    
    /**
     * Constructor
-    * @param aDatabaseLocation
+    * @param aDbUrl
     */
-   public HSQLDB_Loader(String aLocalDbPath)
+   public HSQLDB_Loader(String aDbUrl)
    {
-      _dbUrl = "jdbc:hsqldb:hsql://localhost" + aLocalDbPath;
+      _dbUrl = aDbUrl;
    }
 
    /**

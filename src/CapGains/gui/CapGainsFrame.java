@@ -46,10 +46,18 @@ import CapGains.db.*;
 public class CapGainsFrame extends JFrame {
 
 	/** Starting directory for the file chooser launched by "Load Trades". */
-	private String dataDir = "M:\\workspace\\capGains\\CapGains.data";
+	private String dataDir = null;
 
-	/** HSQLDB db location (must be full local path). */
-	private String dbLocation = null;
+	/** Starting directory for the file chooser launched by "Load Trades". */
+	private String tradeFile = null;
+
+	/**
+	 * HSQLDB URL
+	 * Example for local server engine:
+	 * "jdbc:hsqldb:hsql://localhost/cg/db/db1/data/db1"
+	 * See HSQLDB documentation for more possible setups.
+	 */
+	private String dbUrl = null;
 
 	/**
 	 * The account that is currently displayed.
@@ -101,7 +109,23 @@ public class CapGainsFrame extends JFrame {
 		// construct the frame and set its properties
 		initFrame();
 		
+		processEnvironmentVars();
+		
 		processCommandLine(args);
+	}
+
+	/**
+	 * Process any relevant environment variables.
+	 */
+	private void processEnvironmentVars()
+	{
+	   dataDir = System.getenv("CG_DATADIR");
+	   tradeFile = System.getenv("CG_TRADEFILE");
+	   dbUrl = System.getenv("HSQLDB_URL");
+
+TradeList trades = TradeFileReader.loadTradeFile(tradeFile);
+Account acct = new Account(trades);
+showAccount(acct);
 	}
 
 	/**
@@ -126,35 +150,32 @@ public class CapGainsFrame extends JFrame {
 	            System.out.println("missing -datadir arg");
 	         }
 	      }
-	      else if (args[i].equals("-file"))
+	      else if (args[i].equals("-tradefile"))
 	      {
 	         if (i+1 < args.length)
 	         {
 	            String tradeFile = args[i+1];
-	            System.out.println("tradeFile: " + tradeFile);
-
-	            TradeList trades = TradeFileReader.loadTradeFile(tradeFile);
-	            Account acct = new Account(trades);
-	            showAccount(acct);
 	         }
 	         else
 	         {
-	            System.out.println("missing -file arg");
+	            System.out.println("missing -tradefile arg");
 	         }
 	      }
-	      else if (args[i].equals("-db"))
+	      else if (args[i].equals("-dburl"))
 	      {
 	         if (i+1 < args.length)
 	         {
-	            dbLocation = args[i+1];
+	            dbUrl = args[i+1];
 	         }
 	         else
 	         {
-	            System.out.println("missing -datadir arg");
+	            System.out.println("missing -dburl arg");
 	         }
 	      }
 	   }
-System.out.println("dataDir" + dataDir);
+System.out.println("dataDir: " + dataDir);
+System.out.println("tradeFile: " + tradeFile);
+System.out.println("dbUrl: " + dbUrl);
 	}
 
 	/**
@@ -229,7 +250,7 @@ System.out.println("dataDir" + dataDir);
 	 */
 	private void actionSelectAccount() {
 
-		CapGainsDB db = new HSQLDB_Loader(dbLocation);
+		CapGainsDB db = new HSQLDB_Loader(dbUrl);
 		Vector<AccountInfo> accts = db.getAccountInfoVector();
 		Object[] choices = accts.toArray();
 
