@@ -1,0 +1,17 @@
+INSERT INTO investor VALUES (0, 'Me');
+INSERT INTO investor VALUES (1, 'Dad');
+INSERT INTO investor VALUES (2, 'Karen');
+INSERT INTO broker VALUES (0, 'ETrade');
+INSERT INTO broker VALUES (1, 'TD Ameritrade');
+INSERT INTO broker VALUES (2, 'Vanguard');
+INSERT INTO acct_type VALUES (0, 'Normal (taxable, non-retirement)');
+INSERT INTO acct_type VALUES (1, 'Rollover IRA');
+INSERT INTO acct_type VALUES (2, 'Roth IRA');
+INSERT INTO acct_type VALUES (3, '401k');
+INSERT INTO acct VALUES (0, 'Main Account', 0, 0, 0);
+INSERT INTO acct VALUES (1, 'Roth IRA',     2, 0, 0);
+INSERT INTO acct VALUES (2, 'Rollover IRA', 1, 0, 0);
+INSERT INTO acct VALUES (3, 'Rollover IRA', 1, 0, 1);
+INSERT INTO acct VALUES (4, 'Dad''s Account', 0, 1, 1);
+INSERT INTO acct VALUES (5, 'Karen''s Account', 0, 2, 1);
+commit;
