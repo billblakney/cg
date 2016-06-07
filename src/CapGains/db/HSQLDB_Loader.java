@@ -5,7 +5,6 @@ import java.sql.*;
 import java.util.Collections;
 import java.util.Vector;
 import java.util.GregorianCalendar;
-
 import CapGains.AccountInfo;
 import CapGains.Trade;
 import CapGains.BuyTrade;
@@ -13,179 +12,243 @@ import CapGains.SellTrade;
 import CapGains.SimpleDate;
 import CapGains.TradeList;
 
-public class HSQLDB_Loader implements CapGainsDB {
+public class HSQLDB_Loader implements CapGainsDB
+{
+   /** Full path to the database. */
+   private String _dbUrl = null;
 
-	Connection db = null; // A connection to the database
-	Statement sql; // Our statement to run queries with
+   /** Database user. */
+   private String _dbUser = "SA";
 
-	public Vector<AccountInfo> getAccountInfoVector() {
+   /** Database user. */
+   private String _dbPwd = "";
 
-		Vector<AccountInfo> accounts = new Vector<AccountInfo>();
+   /** Database connection. */
+   private Connection _db = null;
+   
+   /**
+    * Constructor
+    * @param aDatabaseLocation
+    */
+   public HSQLDB_Loader(String aLocalDbPath)
+   {
+      _dbUrl = "jdbc:hsqldb:hsql://localhost" + aLocalDbPath;
+   }
 
-		if( connectdb() == false )
-			return accounts;
+   /**
+    * Get accounts.
+    */
+   public Vector<AccountInfo> getAccountInfoVector()
+   {
 
-		// run query
-		try {
-			System.out.println("Now executing the command: "
-					+ "select * from acct");
-			ResultSet results = sql.executeQuery("select * from acct");
-			if (results != null) {
+      Vector<AccountInfo> accounts = new Vector<AccountInfo>();
 
-				while (results.next()) {
-					AccountInfo acct = new AccountInfo();
-					acct.shortname = results.getString("shortname");
-					acct.longname = results.getString("longname");
-					acct.investor = results.getString("investor");
-					acct.broker = results.getString("broker");
-					System.out.println(acct.toString());
+      if (connectdb() == false)
+      {
+         return accounts;
+      }
 
-					accounts.add(acct);
-				}
-			}
-			results.close();
-		} catch (Exception ex) {
-			System.out.println("***Exception:\n" + ex);
-			ex.printStackTrace();
-		}
+      // run query
+      try
+      {
+         System.out.println("Now executing the command: "
+               + "select * from acct");
 
-		closedb();
-		
-		return accounts;
-	}
+         Statement tSql = _db.createStatement();
 
-	public TradeList getTrades(String acct_shortname) {
+         ResultSet tResults = tSql.executeQuery("select * from acct");
 
-		TradeList tlist = new TradeList();
-		
-		if( connectdb() == false )
-			return tlist;
-		
-		// run query
-		try {
-			System.out.println("Now executing the command: "
-					+ "SELECT DISTINCT * FROM trade WHERE trade.acct = acct.shortname = acct_shortname ORDER BY trade.seqnum");
-			ResultSet results = sql.executeQuery("SELECT DISTINCT * FROM trade WHERE trade.acct='" + acct_shortname
-					                    + "' ORDER BY trade.seqnum");
-			if (results != null) {
+         if (tResults != null)
+         {
 
-				while (results.next()) {
-					// convert all fields from the db record
-					String acct = results.getString("acct");
-					int seqnum = results.getInt("seqnum");
-/*					
-GregorianCalendar refdate = new GregorianCalendar();
-					Date date = results.getDate("date",refdate);
-*/
-					Date date = results.getDate("date");
-					String buysell = results.getString("buysell");
-					String ticker = results.getString("ticker");
-					long shares = results.getLong("shares");
-					float price = results.getFloat("price");
-					BigDecimal commission = results.getBigDecimal("commission");
-					String special_rule = results.getString("special_rule");
+            while (tResults.next())
+            {
+               AccountInfo acct = new AccountInfo();
+               acct.shortname = tResults.getString("shortname");
+               acct.longname = tResults.getString("longname");
+               acct.investor = tResults.getString("investor");
+               acct.broker = tResults.getString("broker");
+               System.out.println(acct.toString());
 
-					// Convert date to format needed by the Trade constructor
-					SimpleDate tdate = new SimpleDate(date);
+               accounts.add(acct);
+            }
+         }
+         tResults.close();
+         tSql.close();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("ERROR:\n" + ex);
+         ex.printStackTrace();
+      }
 
-					// Convert buysell to format needed by the Trade constructor
-					Trade.Type tradeType = Trade.Type.getEnumValue(buysell);
+      closedb();
 
-					// Convert special_rule to format needed by the Trade constructor
-					Trade.SpecialInstruction instr = Trade.SpecialInstruction.getEnumValue(special_rule);
+      return accounts;
+   }
 
-					
-					// protected Trade(int id, CapGains.TradeDate date, Trade.Type tradeType,
-					//        String ticker, long numShares, float sharePrice, BigDecimal comm,
-					//        Trade.SpecialInstruction instruction, String note)
-					
-					if( tradeType == Trade.Type.BUY ){
-						BuyTrade bt = new BuyTrade(seqnum,tdate,tradeType,ticker,shares,price,commission,instr,"");
-						tlist.add(bt);
-					}
-					else {
-						SellTrade st = new SellTrade(seqnum,tdate,tradeType,ticker,shares,price,commission,instr,"");
-						tlist.add(st);
-					}
-				}
-			}
-			results.close();
-		} catch (Exception ex) {
-			System.out.println("***Exception:\n" + ex);
-			ex.printStackTrace();
-		}
+   /**
+    * Get trades.
+    */
+   public TradeList getTrades(String acct_shortname)
+   {
 
-		closedb();
-		return tlist;
-	}
+      TradeList tlist = new TradeList();
 
-	private boolean connectdb(){
-		try {
-			connectToDB();
-		}
-		catch (Exception ex) {
-			System.out.println("Failed to connect to db:\n" + ex);
-			ex.printStackTrace();
-			return false;
-		}
-		return true;
-	}
+      if (connectdb() == false) return tlist;
 
-	private boolean closedb(){
-		try {
-			db.close();
-		}
-		catch (Exception ex) {
-			System.out.println("Failed to close db:\n" + ex);
-			ex.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-	
-	private void connectToDB() {
-		System.out
-				.println("Checking if Driver is registered with DriverManager.");
+      // run query
+      try
+      {
+         Statement tSql = _db.createStatement();
 
-		try {
-			Class.forName("org.hsqldb.jdbcDriver");
-		} catch (ClassNotFoundException cnfe) {
-			System.out.println("Couldn't find the driver!");
-			System.out.println("Let's print a stack trace, and exit.");
-			cnfe.printStackTrace();
-			System.exit(1);
-		}
+         System.out
+               .println("Now executing the command: "
+                     + "SELECT DISTINCT * FROM trade WHERE trade.acct = acct.shortname = acct_shortname ORDER BY trade.seqnum");
 
-		System.out
-				.println("Registered the driver ok, so let's make a connection.");
+         ResultSet tResults = tSql.executeQuery(
+               "SELECT DISTINCT * FROM trade WHERE trade.acct='"
+                     + acct_shortname + "' ORDER BY trade.seqnum");
+         if (tResults != null)
+         {
 
-		try {
-			// The second and third arguments are the username and password,
-			// respectively. They should be whatever is necessary to connect
-			// to the database.
-			db = DriverManager
-					.getConnection(
-							"jdbc:hsqldb:hsql://localhost/E/home/CapGains/CapGains.db/dbz/dbz_text",
-							"SA", "");
-		} catch (SQLException se) {
-			System.out
-					.println("Couldn't connect: print out a stack trace and exit.");
-			se.printStackTrace();
-			System.exit(1);
-		}
+            while (tResults.next())
+            {
+               // convert all fields from the db record
+               String acct = tResults.getString("acct");
+               int seqnum = tResults.getInt("seqnum");
+               /*
+                * GregorianCalendar refdate = new GregorianCalendar(); Date date
+                * = results.getDate("date",refdate);
+                */
+               Date date = tResults.getDate("date");
+               String buysell = tResults.getString("buysell");
+               String ticker = tResults.getString("ticker");
+               long shares = tResults.getLong("shares");
+               float price = tResults.getFloat("price");
+               BigDecimal commission = tResults.getBigDecimal("commission");
+               String special_rule = tResults.getString("special_rule");
 
-		if (db != null)
-			System.out.println("Hooray! We connected to the database!");
-		else
-			System.out.println("We should never get here.");
+               // Convert date to format needed by the Trade constructor
+               SimpleDate tdate = new SimpleDate(date);
 
-			try {
-				sql = db.createStatement(); // create sql statement for later use 
-			} catch (SQLException se) {
-				System.out
-						.println("Couldn't create sql statement: print out a stack trace and exit.");
-				se.printStackTrace();
-				System.exit(1);
-			}
-	}
+               // Convert buysell to format needed by the Trade constructor
+               Trade.Type tradeType = Trade.Type.getEnumValue(buysell);
+
+               // Convert special_rule to format needed by the Trade constructor
+               Trade.SpecialInstruction instr = Trade.SpecialInstruction
+                     .getEnumValue(special_rule);
+
+               // protected Trade(int id, CapGains.TradeDate date, Trade.Type
+               // tradeType,
+               // String ticker, long numShares, float sharePrice, BigDecimal
+               // comm,
+               // Trade.SpecialInstruction instruction, String note)
+
+               if (tradeType == Trade.Type.BUY)
+               {
+                  BuyTrade bt = new BuyTrade(seqnum, tdate, tradeType, ticker,
+                        shares, price, commission, instr, "");
+                  tlist.add(bt);
+               }
+               else
+               {
+                  SellTrade st = new SellTrade(seqnum, tdate, tradeType,
+                        ticker, shares, price, commission, instr, "");
+                  tlist.add(st);
+               }
+            }
+         }
+         tResults.close();
+         tSql.close();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("***Exception:\n" + ex);
+         ex.printStackTrace();
+      }
+
+      closedb();
+      return tlist;
+   }
+
+   /**
+    * Open connection to the database.
+    * @return
+    */
+   private boolean connectdb()
+   {
+      try
+      {
+         connectToDB();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("Failed to connect to db:\n" + ex);
+         ex.printStackTrace();
+         return false;
+      }
+      return true;
+   }
+
+   /**
+    * Close connection to the dtabase.
+    * @return
+    */
+   private boolean closedb()
+   {
+      try
+      {
+         _db.close();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("Failed to close db:\n" + ex);
+         ex.printStackTrace();
+         return false;
+      }
+      return true;
+   }
+
+   /**
+    * Obtain a connection to the database.
+    */
+   private void connectToDB()
+   {
+      /*
+       * Verify that the driver is registered.
+       */
+      try
+      {
+         Class.forName("org.hsqldb.jdbcDriver");
+      }
+      catch (ClassNotFoundException ex)
+      {
+         System.out.println("Couldn't find the driver!\n" + ex);
+         System.exit(1);
+      }
+
+      try
+      {
+         // The second and third arguments are the username and password,
+         // respectively. They should be whatever is necessary to connect
+         // to the database.
+         _db = DriverManager.getConnection(_dbUrl,_dbUser,_dbPwd);
+      }
+      catch (SQLException ex)
+      {
+         System.out.println("Couldn't connect:\n" + ex);
+         System.exit(1);
+      }
+
+      if (_db != null)
+      {
+         System.out.println("Connected to the database.");
+      }
+      else
+      {
+         System.out.println("ERROR: null database connection");
+         System.exit(1);
+      }
+   }
 }
