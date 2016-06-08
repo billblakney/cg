@@ -266,9 +266,6 @@ System.out.println("dbUrl: " + dbUrl);
 		TradeList trades = db.getTrades(selected_acct.shortname);
 		Account acct = new Account(trades);
 		showAccount(acct);
-
-		TradeList tList = new TradeList();
-		db.addTrades(tList);
 	}
 
 	/**
@@ -276,6 +273,8 @@ System.out.println("dbUrl: " + dbUrl);
 	 */
 	private void actionSelectFileAccount(String tradeFile) {
 		TradeList trades = TradeFileReader.loadTradeFile(tradeFile);
+HSQLDB_Loader db = new HSQLDB_Loader(dbUrl);
+db.addTrades(trades);
 		Account acct = new Account(trades);
 		showAccount(acct);
 	}

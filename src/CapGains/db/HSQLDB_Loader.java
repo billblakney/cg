@@ -189,30 +189,65 @@ public class HSQLDB_Loader implements CapGainsDB
     	  _db.setAutoCommit(false);
 
     	  //INSERT INTO trade VALUES ('Main(ET)',1,'2000-04-10','Buy','NEOP',3000,1.0,19.95,null);
-    	  PreparedStatement pstmt = _db.prepareStatement("INSERT INTO trade VALUES(?,?,?,?,?,?,?,?,?)");
+//    	  acct varchar(10) NOT NULL,
+//    	  seqnum INT NOT NULL,
+//    	  date DATE NOT NULL,
+//    	  buysell varchar(4) NOT NULL,
+//    	  ticker varchar(6) NOT NULL,
+//    	  shares INT NOT NULL,
+//    	  price REAL NOT NULL,
+//    	  commission REAL NOT NULL,
+//    	  special_rule varchar(10),
+//    	  PreparedStatement pstmt = _db.prepareStatement("INSERT INTO trade VALUES(?,?,?,?,?,?,?,?,?)");
 
-    	  pstmt.setString(1,"Main(ET)");
-    	  pstmt.setInt(2, 9);
-    	  pstmt.setDate(3, new Date(2016,6,7));
-    	  pstmt.setString(4,"Buy");
-    	  pstmt.setString(5,"AGEN");
-    	  pstmt.setInt(6,1500);
-    	  pstmt.setBigDecimal(7,new BigDecimal(3.5));
-    	  pstmt.setBigDecimal(8,new BigDecimal(9.95));
-    	  pstmt.setString(9,null);
-//    	  pstmt.setString(2, "52919-49278");
-//    	  pstmt.setFloat(3, 49.99);
-//    	  pstmt.setBoolean(4, true);
+    	  PreparedStatement pstmt = _db.prepareStatement(
+"INSERT INTO trade (acct,seqnum,date,buysell,ticker,shares,price,commission,special_rule) VALUES (?,?,?,?,?,?,?,?,?)");
 
-    	  pstmt.addBatch();
+    	  int count = 3000;
+    	  for (Trade tTrade: aTrades)
+    	  {
+System.out.println("another trade");
+    		  pstmt.setString(1,"Main(ET)");
+
+//    		  pstmt.setInt(2,tTrade.uID);
+    		  pstmt.setInt(2,count++);
+
+    		  pstmt.setDate(3, new Date(2016,6,7));
+    		  
+    		  String tBuySell = (tTrade.isBuyTrade() ? "Buy":"Sell");
+    		  pstmt.setString(4,tBuySell);
+
+    		  pstmt.setString(5,tTrade.ticker);
+
+    		  pstmt.setInt(6,(int)tTrade.numShares.intValue());
+
+    		  pstmt.setBigDecimal(7,new BigDecimal(tTrade.sharePrice));
+
+    		  pstmt.setBigDecimal(8,tTrade.comm);
+
+    		  pstmt.setString(9,"test");
+
+//System.out.println("executing...");
+//    		  pstmt.execute();
+//System.out.println("pstmt close...");
+//System.out.println("done executing...");
+
+//System.out.println("committing...");
+//    	  _db.commit();
+    		  pstmt.addBatch();
+    	  }
+
+//         pstmt.close();
+
 
     	  // rinse, lather, repeat
 
-System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+System.out.println("executing batch...");
     	  int[] updateCount = pstmt.executeBatch();
-    	  _db.commit();
+System.out.println("setting auto commit...");
     	  _db.setAutoCommit(true); 
 
+System.out.println("pstmt close...");
          pstmt.close();
 //         tSql.close();
 //    	  
@@ -287,6 +322,7 @@ System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
          ex.printStackTrace();
       }
 
+System.out.println("closing db...");
       closedb();
    }
 
