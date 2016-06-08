@@ -253,7 +253,7 @@ System.out.println("dbUrl: " + dbUrl);
 	 */
 	private void actionSelectAccount() {
 
-		CapGainsDB db = new HSQLDB_Loader(dbUrl);
+		HSQLDB_Loader db = new HSQLDB_Loader(dbUrl);
 		Vector<AccountInfo> accts = db.getAccountInfoVector();
 		Object[] choices = accts.toArray();
 
@@ -266,6 +266,9 @@ System.out.println("dbUrl: " + dbUrl);
 		TradeList trades = db.getTrades(selected_acct.shortname);
 		Account acct = new Account(trades);
 		showAccount(acct);
+
+		TradeList tList = new TradeList();
+		db.addTrades(tList);
 	}
 
 	/**

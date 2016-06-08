@@ -173,6 +173,124 @@ public class HSQLDB_Loader implements CapGainsDB
    }
 
    /**
+    * Get trades.
+    */
+   public void addTrades(Vector<Trade> aTrades)
+   {
+      if (connectdb() == false){
+    	  //TODO error msg
+    	  System.out.println("ERROR: failed to connect to db");
+    	  return;
+      }
+
+      // run query
+      try
+      {
+    	  _db.setAutoCommit(false);
+
+    	  //INSERT INTO trade VALUES ('Main(ET)',1,'2000-04-10','Buy','NEOP',3000,1.0,19.95,null);
+    	  PreparedStatement pstmt = _db.prepareStatement("INSERT INTO trade VALUES(?,?,?,?,?,?,?,?,?)");
+
+    	  pstmt.setString(1,"Main(ET)");
+    	  pstmt.setInt(2, 9);
+    	  pstmt.setDate(3, new Date(2016,6,7));
+    	  pstmt.setString(4,"Buy");
+    	  pstmt.setString(5,"AGEN");
+    	  pstmt.setInt(6,1500);
+    	  pstmt.setBigDecimal(7,new BigDecimal(3.5));
+    	  pstmt.setBigDecimal(8,new BigDecimal(9.95));
+    	  pstmt.setString(9,null);
+//    	  pstmt.setString(2, "52919-49278");
+//    	  pstmt.setFloat(3, 49.99);
+//    	  pstmt.setBoolean(4, true);
+
+    	  pstmt.addBatch();
+
+    	  // rinse, lather, repeat
+
+System.out.println("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+    	  int[] updateCount = pstmt.executeBatch();
+    	  _db.commit();
+    	  _db.setAutoCommit(true); 
+
+         pstmt.close();
+//         tSql.close();
+//    	  
+//    	  
+//    	  
+//    	  
+//         Statement tSql = _db.createStatement();
+//
+//         System.out
+//               .println("Now executing the command: "
+//                     + "SELECT DISTINCT * FROM trade WHERE trade.acct = acct.shortname = acct_shortname ORDER BY trade.seqnum");
+//
+//         ResultSet tResults = tSql.executeQuery(
+//               "SELECT DISTINCT * FROM trade WHERE trade.acct='"
+//                     + acct_shortname + "' ORDER BY trade.seqnum");
+//         if (tResults != null)
+//         {
+//
+//            while (tResults.next())
+//            {
+//               // convert all fields from the db record
+//               String acct = tResults.getString("acct");
+//               int seqnum = tResults.getInt("seqnum");
+//               /*
+//                * GregorianCalendar refdate = new GregorianCalendar(); Date date
+//                * = results.getDate("date",refdate);
+//                */
+//               Date date = tResults.getDate("date");
+//               String buysell = tResults.getString("buysell");
+//               String ticker = tResults.getString("ticker");
+//               long shares = tResults.getLong("shares");
+//               float price = tResults.getFloat("price");
+//               BigDecimal commission = tResults.getBigDecimal("commission");
+//               String special_rule = tResults.getString("special_rule");
+//
+//               // Convert date to format needed by the Trade constructor
+//               SimpleDate tdate = new SimpleDate(date);
+//
+//               // Convert buysell to format needed by the Trade constructor
+//               Trade.Type tradeType = Trade.Type.getEnumValue(buysell);
+//
+//               // Convert special_rule to format needed by the Trade constructor
+//               Trade.SpecialInstruction instr = Trade.SpecialInstruction
+//                     .getEnumValue(special_rule);
+//
+//               // protected Trade(int id, CapGains.TradeDate date, Trade.Type
+//               // tradeType,
+//               // String ticker, long numShares, float sharePrice, BigDecimal
+//               // comm,
+//               // Trade.SpecialInstruction instruction, String note)
+//
+//               if (tradeType == Trade.Type.BUY)
+//               {
+//                  BuyTrade bt = new BuyTrade(seqnum, tdate, tradeType, ticker,
+//                        shares, price, commission, instr, "");
+//                  aTrades.add(bt);
+//               }
+//               else
+//               {
+//                  SellTrade st = new SellTrade(seqnum, tdate, tradeType,
+//                        ticker, shares, price, commission, instr, "");
+//                  aTrades.add(st);
+//               }
+//            }
+//         }
+//         tResults.close();
+//         tSql.close();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("***Exception:\n" + ex);
+         ex.printStackTrace();
+      }
+
+      closedb();
+   }
+
+   /**
     * Open connection to the database.
     * @return
     */
