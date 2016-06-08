@@ -189,24 +189,12 @@ public class HSQLDB_Loader implements CapGainsDB
     	  _db.setAutoCommit(false);
 
     	  //INSERT INTO trade VALUES ('Main(ET)',1,'2000-04-10','Buy','NEOP',3000,1.0,19.95,null);
-//    	  acct varchar(10) NOT NULL,
-//    	  seqnum INT NOT NULL,
-//    	  date DATE NOT NULL,
-//    	  buysell varchar(4) NOT NULL,
-//    	  ticker varchar(6) NOT NULL,
-//    	  shares INT NOT NULL,
-//    	  price REAL NOT NULL,
-//    	  commission REAL NOT NULL,
-//    	  special_rule varchar(10),
-//    	  PreparedStatement pstmt = _db.prepareStatement("INSERT INTO trade VALUES(?,?,?,?,?,?,?,?,?)");
-
     	  PreparedStatement pstmt = _db.prepareStatement(
 "INSERT INTO trade (acct,seqnum,date,buysell,ticker,shares,price,commission,special_rule) VALUES (?,?,?,?,?,?,?,?,?)");
 
-    	  int count = 3000;
+    	  int count = 4000;
     	  for (Trade tTrade: aTrades)
     	  {
-System.out.println("another trade");
     		  pstmt.setString(1,"Main(ET)");
 
 //    		  pstmt.setInt(2,tTrade.uID);
@@ -227,98 +215,17 @@ System.out.println("another trade");
 
     		  pstmt.setString(9,"test");
 
-//System.out.println("executing...");
-//    		  pstmt.execute();
-//System.out.println("pstmt close...");
-//System.out.println("done executing...");
-
-//System.out.println("committing...");
-//    	  _db.commit();
     		  pstmt.addBatch();
     	  }
 
-//         pstmt.close();
-
-
-    	  // rinse, lather, repeat
-
-System.out.println("executing batch...");
     	  int[] updateCount = pstmt.executeBatch();
-System.out.println("setting auto commit...");
     	  _db.setAutoCommit(true); 
 
-System.out.println("pstmt close...");
          pstmt.close();
-//         tSql.close();
-//    	  
-//    	  
-//    	  
-//    	  
-//         Statement tSql = _db.createStatement();
-//
-//         System.out
-//               .println("Now executing the command: "
-//                     + "SELECT DISTINCT * FROM trade WHERE trade.acct = acct.shortname = acct_shortname ORDER BY trade.seqnum");
-//
-//         ResultSet tResults = tSql.executeQuery(
-//               "SELECT DISTINCT * FROM trade WHERE trade.acct='"
-//                     + acct_shortname + "' ORDER BY trade.seqnum");
-//         if (tResults != null)
-//         {
-//
-//            while (tResults.next())
-//            {
-//               // convert all fields from the db record
-//               String acct = tResults.getString("acct");
-//               int seqnum = tResults.getInt("seqnum");
-//               /*
-//                * GregorianCalendar refdate = new GregorianCalendar(); Date date
-//                * = results.getDate("date",refdate);
-//                */
-//               Date date = tResults.getDate("date");
-//               String buysell = tResults.getString("buysell");
-//               String ticker = tResults.getString("ticker");
-//               long shares = tResults.getLong("shares");
-//               float price = tResults.getFloat("price");
-//               BigDecimal commission = tResults.getBigDecimal("commission");
-//               String special_rule = tResults.getString("special_rule");
-//
-//               // Convert date to format needed by the Trade constructor
-//               SimpleDate tdate = new SimpleDate(date);
-//
-//               // Convert buysell to format needed by the Trade constructor
-//               Trade.Type tradeType = Trade.Type.getEnumValue(buysell);
-//
-//               // Convert special_rule to format needed by the Trade constructor
-//               Trade.SpecialInstruction instr = Trade.SpecialInstruction
-//                     .getEnumValue(special_rule);
-//
-//               // protected Trade(int id, CapGains.TradeDate date, Trade.Type
-//               // tradeType,
-//               // String ticker, long numShares, float sharePrice, BigDecimal
-//               // comm,
-//               // Trade.SpecialInstruction instruction, String note)
-//
-//               if (tradeType == Trade.Type.BUY)
-//               {
-//                  BuyTrade bt = new BuyTrade(seqnum, tdate, tradeType, ticker,
-//                        shares, price, commission, instr, "");
-//                  aTrades.add(bt);
-//               }
-//               else
-//               {
-//                  SellTrade st = new SellTrade(seqnum, tdate, tradeType,
-//                        ticker, shares, price, commission, instr, "");
-//                  aTrades.add(st);
-//               }
-//            }
-//         }
-//         tResults.close();
-//         tSql.close();
       }
       catch (Exception ex)
       {
-         System.out.println("***Exception:\n" + ex);
+         System.out.println("Exception writing trades to db:\n" + ex);
          ex.printStackTrace();
       }
 
