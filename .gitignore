@@ -6,5 +6,6 @@ dist/
 *.bak
 data/EtMain/All
 .DS_Store
+db/dbl
 db/*/data
 all.sql

@@ -1,4 +1,0 @@
-urlid db2
-url jdbc:hsqldb:hsql://localhost/{$dbdir}/db2/data/db2
-username sa
-password

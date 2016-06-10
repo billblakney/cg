@@ -1,0 +1,4 @@
+urlid dbl
+url jdbc:hsqldb:hsql://localhost/{$dbdir}/dbl/data/dbl
+username sa
+password

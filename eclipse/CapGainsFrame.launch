@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<stringAttribute key="bad_container_name" value="/cg/testRunConfig.tx"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/cg/src/CapGains/gui/CapGainsFrame.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<mapAttribute key="org.eclipse.debug.core.environmentVariables">
+<mapEntry key="CG_DATADIR" value="${project_loc}/data"/>
+<mapEntry key="HSQLDB_URL" value="jdbc:hsqldb:hsql://localhost${project_loc}/db/dbl/data/dbl"/>
+</mapAttribute>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="CapGains.gui.CapGainsFrame"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="cg"/>
+</launchConfiguration>
