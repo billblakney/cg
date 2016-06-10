@@ -260,9 +260,9 @@ System.out.println("dbUrl: " + dbUrl);
 				this, "Select an account", "Select Account",
 				JOptionPane.PLAIN_MESSAGE, null, choices, choices[0]);
 
-		System.out.println("Selected account: " + selected_acct.shortname);
+		System.out.println("Selected account: " + selected_acct.name);
 
-		TradeList trades = db.getTrades(selected_acct.shortname);
+		TradeList trades = db.getTrades(selected_acct.name);
 		Account acct = new Account(trades);
 		showAccount(acct);
 	}
