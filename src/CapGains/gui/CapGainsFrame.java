@@ -2,13 +2,12 @@ package CapGains.gui;
 
 import java.io.*;
 import java.util.*;
-
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 
 import CapGains.*;
-
 //import CapGains.db.PostgreSQL_Loader;
 import CapGains.db.*;
 
@@ -280,6 +279,36 @@ db.addTrades(trades);
 	}
 
 	/**
+	 * Using this to test dialog box. TODO
+	 */
+	private void actionLoadTradeFile() {
+		HSQLDB_Loader db = new HSQLDB_Loader(dbUrl);
+//db.addTrades(trades);
+//		Account acct = new Account(trades);
+//		showAccount(acct);
+//		TradeList trades = TradeFileReader.loadTradeFile(tradeFile);
+
+		Vector<AccountInfo> tAccountInfo = db.getAccountInfoVector();
+		HSQLDB_Loader.printAccountInfoVector(tAccountInfo);
+		
+		Vector<String> tAccountNames = AccountInfo.getNames(tAccountInfo);
+
+		LoadTradeFileDialog tDialog = new LoadTradeFileDialog(
+				(JFrame)this,true,tAccountNames,dataDir,"Test Message");
+		if (tDialog.pressedOk())
+		{
+			System.out.println("user pressed ok");
+
+			String tAccountName = tDialog.getAccountName();
+			int tAccountId = AccountInfo.getAccountId(tAccountInfo, tAccountName);
+			String tTradeFileName = tDialog.getTradeFileName();
+
+			System.out.println("user selected account " + tAccountName + ", id " + tAccountId);
+			System.out.println("user selected trade file " + tTradeFileName);
+		}
+	}
+
+	/**
 	 * Loads new trades into the displayed account.
 	 * 
 	 * @param tradeFile
@@ -438,17 +467,18 @@ db.addTrades(trades);
 			if (e.getActionCommand().equals(LOAD_TRADES_FROM_FILE)) {
 				System.out.println("User selected \"Select Load Trades\"");
 
-				JFileChooser chooser = new JFileChooser();
-				chooser.setCurrentDirectory(new File(dataDir));
-				int option = chooser.showOpenDialog(this);
-				if (option == JFileChooser.APPROVE_OPTION) {
-					String tradeFile = chooser.getSelectedFile().getPath();
-					System.out.println("File selected: " + tradeFile);
-					// load the trades
-					actionLoadTrades(tradeFile);
-				} else {
-					System.out.println("File selection canceled");
-				}
+//				JFileChooser chooser = new JFileChooser();
+//				chooser.setCurrentDirectory(new File(dataDir));
+//				int option = chooser.showOpenDialog(this);
+//				if (option == JFileChooser.APPROVE_OPTION) {
+//					String tradeFile = chooser.getSelectedFile().getPath();
+//					System.out.println("File selected: " + tradeFile);
+//					// load the trades
+//					actionLoadTrades(tradeFile);
+//				} else {
+//					System.out.println("File selection canceled");
+//				}
+				actionLoadTradeFile();
 			}
 			// Handle "Clear Trades".
 			else if (e.getActionCommand().equals(CLEAR_TRADES)) {
