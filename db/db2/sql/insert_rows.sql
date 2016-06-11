@@ -1,6 +1,13 @@
 INSERT INTO investor (name) VALUES ('Me');
-INSERT INTO broker (name) VALUES ('Brkr');
-INSERT INTO acct_type (acct_type_id,label) VALUES (0,'TX');
-INSERT INTO acct_type (acct_type_id,label) VALUES (1,'nTX');
-INSERT INTO acct (name,acct_type_id,investor_id,broker_id) VALUES ('tstacct',0,0,0);
+INSERT INTO broker (name) VALUES ('E*Trade');
+INSERT INTO broker (name) VALUES ('TD Ameritrade');
+INSERT INTO acct_type (acct_type_id,label) VALUES (0,'Taxable');
+INSERT INTO acct_type (acct_type_id,label) VALUES (1,'Rollover IRA');
+INSERT INTO acct_type (acct_type_id,label) VALUES (2,'Roth IRA');
+INSERT INTO acct (name,acct_type_id,investor_id,broker_id) VALUES ('EtMain',0,0,0);
+INSERT INTO acct (name,acct_type_id,investor_id,broker_id) VALUES ('EtTrade',0,0,0);
+INSERT INTO acct (name,acct_type_id,investor_id,broker_id) VALUES ('EtRoll1',1,0,0);
+INSERT INTO acct (name,acct_type_id,investor_id,broker_id) VALUES ('EtRoll2',1,0,0);
+INSERT INTO acct (name,acct_type_id,investor_id,broker_id) VALUES ('EtRoth',2,0,0);
+INSERT INTO acct (name,acct_type_id,investor_id,broker_id) VALUES ('TdRoll1',1,0,0);
 commit;

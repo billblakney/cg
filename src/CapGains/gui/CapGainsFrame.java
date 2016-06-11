@@ -115,7 +115,7 @@ public class CapGainsFrame extends JFrame {
 if( tradeFile != null)
 {
 TradeList trades = TradeFileReader.loadTradeFile(tradeFile);
-Account acct = new Account(trades);
+Account acct = new Account("TODO",trades);
 showAccount(acct);
 }
 	}
@@ -196,9 +196,9 @@ System.out.println("dbUrl: " + dbUrl);
 	private void showAccount(Account acct){
 		displayAccount = acct;
 		reportTabbedPane.removeAll();
-		reportTabbedPane.addReport(ReportType.SHARES_HELD,displayAccount);
-		reportTabbedPane.addReport(ReportType.ALL_TRADES,displayAccount);
-		reportTabbedPane.addReport(ReportType.TAX_GAINS,displayAccount);
+		reportTabbedPane.addReport(acct.getName(),ReportType.SHARES_HELD,displayAccount);
+		reportTabbedPane.addReport(acct.getName(),ReportType.ALL_TRADES,displayAccount);
+		reportTabbedPane.addReport(acct.getName(),ReportType.TAX_GAINS,displayAccount);
 		reportSelectorPanel.setAccount(displayAccount);
 	}
 
@@ -263,7 +263,7 @@ System.out.println("dbUrl: " + dbUrl);
 		System.out.println("Selected account: " + selected_acct.name);
 
 		TradeList trades = db.getTrades(selected_acct.name);
-		Account acct = new Account(trades);
+		Account acct = new Account(selected_acct.name,trades);
 		showAccount(acct);
 	}
 
@@ -273,8 +273,8 @@ System.out.println("dbUrl: " + dbUrl);
 	private void actionSelectFileAccount(String tradeFile) {
 		TradeList trades = TradeFileReader.loadTradeFile(tradeFile);
 HSQLDB_Loader db = new HSQLDB_Loader(dbUrl);
-db.addTrades(trades);
-		Account acct = new Account(trades);
+db.addTrades(0,trades);
+		Account acct = new Account("TODO",trades);
 		showAccount(acct);
 	}
 
@@ -284,7 +284,7 @@ db.addTrades(trades);
 	private void actionLoadTradeFile() {
 		HSQLDB_Loader db = new HSQLDB_Loader(dbUrl);
 //db.addTrades(trades);
-//		Account acct = new Account(trades);
+//		Account acct = new Account("TODO",trades);
 //		showAccount(acct);
 //		TradeList trades = TradeFileReader.loadTradeFile(tradeFile);
 
@@ -305,6 +305,11 @@ db.addTrades(trades);
 
 			System.out.println("user selected account " + tAccountName + ", id " + tAccountId);
 			System.out.println("user selected trade file " + tTradeFileName);
+
+TradeList trades = TradeFileReader.loadTradeFile(tTradeFileName);
+db.addTrades(tAccountId,trades);
+		Account acct = new Account(tAccountName,trades);
+		showAccount(acct);
 		}
 	}
 
@@ -331,7 +336,7 @@ db.addTrades(trades);
 	 * Creates a report of the specified type for the specified account.
 	 */
 	private void actionCreateReport(ReportType type) {
-		reportTabbedPane.addReport(type,displayAccount);
+		reportTabbedPane.addReport(displayAccount.getName(),type,displayAccount);
 	}
 
 	/**

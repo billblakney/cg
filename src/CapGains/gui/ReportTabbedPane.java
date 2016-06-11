@@ -19,9 +19,10 @@ public class ReportTabbedPane extends JTabbedPane {
 	 * @param type Type of report.
 	 * @param acct Account being reported.
 	 */
-	public void addReport(ReportType type, Account acct) {
+	public void addReport(String accountName,ReportType type, Account acct) {
 		JPanel newPanel = getReportPanel(type, acct);
-		addTab(type.toString(), newPanel);
+		String title = accountName + " - " + type.toString();
+		addTab(title, newPanel);
 		int index = indexOfComponent(newPanel);
 		setTabComponentAt(index, new ButtonTabComponent(this));
 	}

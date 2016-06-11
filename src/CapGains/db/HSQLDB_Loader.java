@@ -203,7 +203,7 @@ public class HSQLDB_Loader implements CapGainsDB
    /**
     * Get trades.
     */
-   public void addTrades(Vector<Trade> aTrades)
+   public void addTrades(int aAccountId,Vector<Trade> aTrades)
    {
       if (connectdb() == false){
     	  //TODO error msg
@@ -233,13 +233,13 @@ public class HSQLDB_Loader implements CapGainsDB
 "INSERT INTO trade (acct_id,seqnum,date,buysell,ticker,shares,price,commission,special_rule) VALUES (?,?,?,?,?,?,?,?,?)");
 //"INSERT INTO trade (acct,seqnum,date,buysell,ticker,shares,price,commission,special_rule) VALUES (?,?,?,?,?,?,?,?,?)");
 
-    	  int count = 4000;
+//    	  int count = 4000;
     	  for (Trade tTrade: aTrades)
     	  {
-    		  pstmt.setInt(1,0); //acct_id
+    		  pstmt.setInt(1,aAccountId); //acct_id
 
-//    		  pstmt.setInt(2,tTrade.uID);
-    		  pstmt.setInt(2,count++); //seqnum
+    		  pstmt.setInt(2,tTrade.uID);
+//    		  pstmt.setInt(2,count++); //seqnum
 
     		  pstmt.setDate(3, new Date(2016,6,7));
     		  

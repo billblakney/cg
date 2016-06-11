@@ -60,6 +60,6 @@ public class ReportSelectorPanel extends JPanel implements
 		// In that case, add the report to the tabbed pane.
 		ReportType type = ReportType.matchString(value);
 		if (type != ReportType.NO_REPORT)
-			reportTabbedPane.addReport(type, acct);
+			reportTabbedPane.addReport("TODO",type, acct);
 	}
 }

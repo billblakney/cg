@@ -35,17 +35,26 @@ public class Account extends Observable {
 	/**
 	 * Default constructor, which creates an empty account with default name.
 	 */
-	public Account() {
-		name = DEFAULT_ACCT_NAME;
+	public Account(String aName) {
+		name = aName;
 	}
 
 	/**
 	 * Constructor that creates a account and initializes it with a set of
 	 * trades and default name.
 	 */
-	public Account(TradeList trades) {
-		name = DEFAULT_ACCT_NAME;
+	public Account(String aName,TradeList trades) {
+		name = aName;
 		addTrades(trades);
+	}
+	
+	/**
+	 * Get the account name.
+	 * @return
+	 */
+	public String getName()
+	{
+	   return name;
 	}
 
 	/**
