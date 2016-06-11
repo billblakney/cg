@@ -270,35 +270,34 @@ System.out.println("dbUrl: " + dbUrl);
 	/**
 	 * Creates a new account and loads new trades into it.
 	 */
-	private void actionSelectFileAccount(String tradeFile) {
+	private void actionLegacyLoadAccountTradeFile(String tradeFile) {
 		TradeList trades = TradeFileReader.loadTradeFile(tradeFile);
-HSQLDB_Loader db = new HSQLDB_Loader(dbUrl);
-db.addTrades(0,trades);
-		Account acct = new Account("TODO",trades);
+		Account acct = new Account("LEGACY",trades);
 		showAccount(acct);
 	}
 
 	/**
-	 * Using this to test dialog box. TODO
+	 * TODO Using this routine to develop the DB capability.
 	 */
-	private void actionLoadTradeFile() {
+	private void actionLoadAccountTradeFile()
+	{
 		HSQLDB_Loader db = new HSQLDB_Loader(dbUrl);
-//db.addTrades(trades);
-//		Account acct = new Account("TODO",trades);
-//		showAccount(acct);
-//		TradeList trades = TradeFileReader.loadTradeFile(tradeFile);
 
+		// Get all accounts for dialog selection.
 		Vector<AccountInfo> tAccountInfo = db.getAccountInfoVector();
-		HSQLDB_Loader.printAccountInfoVector(tAccountInfo);
-		
 		Vector<String> tAccountNames = AccountInfo.getNames(tAccountInfo);
 
+		HSQLDB_Loader.printAccountInfoVector(tAccountInfo);
+
+		// Launch the load trade file dialog.
 		LoadTradeFileDialog tDialog = new LoadTradeFileDialog(
 				(JFrame)this,true,tAccountNames,dataDir,"Test Message");
+
 		if (tDialog.pressedOk())
 		{
 			System.out.println("user pressed ok");
 
+			// Get info selected by user in the dialog.
 			String tAccountName = tDialog.getAccountName();
 			int tAccountId = AccountInfo.getAccountId(tAccountInfo, tAccountName);
 			String tTradeFileName = tDialog.getTradeFileName();
@@ -306,10 +305,14 @@ db.addTrades(0,trades);
 			System.out.println("user selected account " + tAccountName + ", id " + tAccountId);
 			System.out.println("user selected trade file " + tTradeFileName);
 
-TradeList trades = TradeFileReader.loadTradeFile(tTradeFileName);
-db.addTrades(tAccountId,trades);
-		Account acct = new Account(tAccountName,trades);
-		showAccount(acct);
+			// Load the trades from the trade file and write them to the DB.
+			TradeList trades = TradeFileReader.loadTradeFile(tTradeFileName);
+			db.addTrades(tAccountId,trades);
+
+			// For now, show reports for the loaded trade file.
+			// TODO later, the reports will take data from the DB, but not yet.
+			Account acct = new Account(tAccountName,trades);
+			showAccount(acct);
 		}
 	}
 
@@ -356,10 +359,10 @@ db.addTrades(tAccountId,trades);
 		final String ADD_INVESTOR = "Add Investor";
 		final String SELECT_INVESTOR = "Select Investor";
 		final String SELECT_DB_ACCOUNT = "Select DB Account";
-		final String SELECT_FILE_ACCOUNT = "Select File Account";
+		final String LEGACY_LOAD_TRADE_FILE = "LEGACY Load Account Trade File";
+		final String LOAD_TRADE_FILE = "Load Account Trade File";
 		final String CLEAR_TRADES = "Clear Trades";
 		final String REMOVE_ALL_REPORTS = "Remove All Reports";
-		final String LOAD_TRADES_FROM_FILE = "Load Trades From File";
 
 		final String YEARLY_GAINS_SUMMARY_REPORT = "Yearly Gains Summary Report";
 		final String SECURITY_GAINS_SUMMARY_REPORT = "Security Gains Summary Report";
@@ -398,9 +401,14 @@ db.addTrades(tAccountId,trades);
 			fileMenu.add(itemSelectAccount);
 
 			// Add "Select File Account" menu item to the "File" menu.
-			JMenuItem itemSelectFileAccount = new JMenuItem(SELECT_FILE_ACCOUNT);
+			JMenuItem itemSelectFileAccount = new JMenuItem(LEGACY_LOAD_TRADE_FILE);
 			itemSelectFileAccount.addActionListener(this);
 			fileMenu.add(itemSelectFileAccount);
+
+			// Add "Load Trades From File" menu item to the "File" menu.
+			JMenuItem itemLoadTradeFile = new JMenuItem(LOAD_TRADE_FILE);
+			itemLoadTradeFile.addActionListener(this);
+			fileMenu.add(itemLoadTradeFile);
 
 			// Add "Clear Trades" menu item to the "File" menu.
 			JMenuItem itemClearTrades = new JMenuItem(CLEAR_TRADES);
@@ -411,11 +419,6 @@ db.addTrades(tAccountId,trades);
 			JMenuItem itemRemoveAllReports = new JMenuItem(REMOVE_ALL_REPORTS);
 			itemRemoveAllReports.addActionListener(this);
 			fileMenu.add(itemRemoveAllReports);
-
-			// Add "Load Trades From File" menu item to the "File" menu.
-			JMenuItem itemLoadTradeFile = new JMenuItem(LOAD_TRADES_FROM_FILE);
-			itemLoadTradeFile.addActionListener(this);
-			fileMenu.add(itemLoadTradeFile);
 
 			// Add the "File" menu to the menu bar.
 			add(fileMenu);
@@ -469,7 +472,7 @@ db.addTrades(tAccountId,trades);
 		public void actionPerformed(ActionEvent e) {
 
 			// Handle "Load Trades".
-			if (e.getActionCommand().equals(LOAD_TRADES_FROM_FILE)) {
+			if (e.getActionCommand().equals(LOAD_TRADE_FILE)) {
 				System.out.println("User selected \"Select Load Trades\"");
 
 //				JFileChooser chooser = new JFileChooser();
@@ -483,7 +486,7 @@ db.addTrades(tAccountId,trades);
 //				} else {
 //					System.out.println("File selection canceled");
 //				}
-				actionLoadTradeFile();
+				actionLoadAccountTradeFile();
 			}
 			// Handle "Clear Trades".
 			else if (e.getActionCommand().equals(CLEAR_TRADES)) {
@@ -510,19 +513,25 @@ db.addTrades(tAccountId,trades);
 				System.out.println("User selected \"Select DB Account\"");
 				actionSelectAccount();
 			}
-			// Handle "Select File Account"
-			else if (e.getActionCommand().equals(SELECT_FILE_ACCOUNT)) {
-				System.out.println("User selected \"Select File Account\"");
+			// Handle "LEGACY Select File Account"
+			else if (e.getActionCommand().equals(LEGACY_LOAD_TRADE_FILE)) {
+				System.out.println("User selected " + LEGACY_LOAD_TRADE_FILE);
 
+				// Use file choser to select trade file.
 				JFileChooser chooser = new JFileChooser();
 				chooser.setCurrentDirectory(new File(dataDir));
+
 				int option = chooser.showOpenDialog(this);
-				if (option == JFileChooser.APPROVE_OPTION) {
+				if (option == JFileChooser.APPROVE_OPTION)
+				{
 					String tradeFile = chooser.getSelectedFile().getPath();
 					System.out.println("File selected: " + tradeFile);
+
 					// load the trades
-					actionSelectFileAccount(tradeFile);
-				} else {
+					actionLegacyLoadAccountTradeFile(tradeFile);
+				}
+				else
+				{
 					System.out.println("File selection canceled");
 				}
 			}
