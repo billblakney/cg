@@ -9,3 +9,4 @@ data/EtMain/All
 db/dbl
 db/*/data
 all.sql
+/bin/
