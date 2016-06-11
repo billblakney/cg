@@ -19,5 +19,5 @@
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.hsqldb.server.Server"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--database.0 file:dbl --dbname.0 dbl"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="cg"/>
-<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${project_loc}/db/dbl/data"/>
+<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc}/cg/db/dbl/data"/>
 </launchConfiguration>

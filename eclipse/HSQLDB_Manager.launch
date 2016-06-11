@@ -17,7 +17,7 @@
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="false"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.hsqldb.util.DatabaseManagerSwing"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--rcFile ${project_loc}/db/sqltool.rc --urlid dbl"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--rcFile ${workspace_loc}/cg/db/sqltool.rc --urlid dbl"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="cg"/>
-<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${project_loc}/db/dbl/sql"/>
+<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc}/cg/db/dbl/sql"/>
 </launchConfiguration>
