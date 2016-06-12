@@ -1,7 +1,9 @@
 package CapGains;
 
-import java.text.*;
-import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * This class represents a trade date. It extends the GregorianCalendar class to
@@ -50,6 +52,15 @@ System.out.println("MILLISECOND: " + get(Calendar.MILLISECOND));
 	public SimpleDate(Date date) {
 		setTime(date);
 	}
+	
+	/**
+	 * Get the date as a Date instance.
+	 * @return
+	 */
+	public Date getDate()
+	{
+	   return getTime();
+	}
 
 	/**
 	 * Returns the year in string format. If this trade date holds an actual
@@ -65,6 +76,20 @@ System.out.println("MILLISECOND: " + get(Calendar.MILLISECOND));
 	 */
 	public int getYear() {
 		return get(Calendar.YEAR);
+	}
+
+	/**
+	 * Returns the month.
+	 */
+	public int getMonth() {
+		return get(Calendar.MONTH);
+	}
+
+	/**
+	 * Returns the month.
+	 */
+	public int getDayOfMonth() {
+	   return get(Calendar.DAY_OF_MONTH);
 	}
 
 	/**
