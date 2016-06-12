@@ -307,7 +307,7 @@ System.out.println("dbUrl: " + dbUrl);
 
 			// Load the trades from the trade file and write them to the DB.
 			TradeList trades = TradeFileReader.loadTradeFile(tTradeFileName);
-			db.addTrades(tAccountId,trades);
+			db.insertTrades(tAccountId,trades);
 
 			// For now, show reports for the loaded trade file.
 			// TODO later, the reports will take data from the DB, but not yet.

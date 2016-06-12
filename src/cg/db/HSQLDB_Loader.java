@@ -188,7 +188,7 @@ public class HSQLDB_Loader implements CapGainsDB
    /**
     * Get trades.
     */
-   public void addTrades(int aAccountId,Vector<Trade> aTrades)
+   public void insertTrades(int aAccountId,Vector<Trade> aTrades)
    {
       if (connectdb() == false){
     	  System.out.println("ERROR: failed to connect to db");
