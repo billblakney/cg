@@ -8,3 +8,4 @@
 #fi
 datadir=$CG_DB/dbl/data
 rm -rf $datadir
+mkdir $datadir

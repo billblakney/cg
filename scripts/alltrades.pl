@@ -45,6 +45,7 @@ my $directory = '.';
 #-------------------------
 msg("getting list of trade files from directory $directory\n");
 my @tradefiles = getTradeFiles();
+@tradefiles = sort @tradefiles;
 #printlist("tradefiles:",@tradefiles);
 
 #-------------------------
