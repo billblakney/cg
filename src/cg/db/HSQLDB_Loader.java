@@ -222,6 +222,13 @@ public class HSQLDB_Loader implements CapGainsDB
     	  {
     		  pstmt.setInt(1,aAccountId); //acct_id
 
+Statement tSql = _db.createStatement();
+ResultSet tResults = tSql.executeQuery("CALL NEXT VALUE FOR myseq");
+if (tResults != null){
+	tResults.next();
+System.out.println("NEXTVALUE: " + tResults.getInt(1));
+}
+
     		  pstmt.setInt(2,tTrade.uID);
 //    		  pstmt.setInt(2,count++); //seqnum
 
