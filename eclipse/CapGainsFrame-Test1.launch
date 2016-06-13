@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<stringAttribute key="bad_container_name" value="/cg/testRunConfig.tx"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/cg/src/cg/Test1.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<mapAttribute key="org.eclipse.debug.core.environmentVariables">
+<mapEntry key="CG_DATADIR" value="${workspace_loc}/cg/data/testacct"/>
+<mapEntry key="CG_TRADEFILE" value="t1trades.txt"/>
+<mapEntry key="HSQLDB_URL" value="jdbc:hsqldb:hsql://localhost${workspace_loc}/cg/db/dbl/data/dbl"/>
+</mapAttribute>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+</listAttribute>
+<booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="cg.Test1"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="cg"/>
+</launchConfiguration>

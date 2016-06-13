@@ -193,7 +193,7 @@ System.out.println("dbUrl: " + dbUrl);
 	 * 
 	 * @param acct Account to be displayed.
 	 */
-	private void showAccount(Account acct){
+	public void showAccount(Account acct){
 		displayAccount = acct;
 		reportTabbedPane.removeAll();
 		reportTabbedPane.addReport(acct.getName(),ReportType.SHARES_HELD,displayAccount);
