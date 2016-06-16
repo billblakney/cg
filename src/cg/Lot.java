@@ -5,8 +5,34 @@ import java.math.BigDecimal;
 
 /**
  */
-public class Lot {
+public class Lot
+{
+	public enum State
+	{
+		eOpen("Open"), eClosed("Closed");
 
+		private final String name;
+
+		private State(String name) {
+			this.name = name;
+		}
+
+		public String toString() {
+			return name;
+		}
+		
+		/*
+		 * TODO Need to throw exception if no match.
+		 */
+		static public State getEnumValue(String s)
+		{
+			if( s.equals(eOpen.toString() ))
+				return eOpen;
+			else
+				return eClosed;
+		}
+	}
+	
 	public int lotId;
 	public int parentId;
 	public int triggerTradeId;
@@ -15,9 +41,13 @@ public class Lot {
 	public int numShares;
 	public BigDecimal basis;
 	public BigDecimal proceeds;
-	public int createState; //TODO enum
+	public State state;
 	//public int term; //TODO enum
 	//public String note;
+
+	Lot()
+	{
+	}
 
 
 //	private LongCounter counter = new LongCounter();

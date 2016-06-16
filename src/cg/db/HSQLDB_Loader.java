@@ -14,6 +14,7 @@ import java.util.GregorianCalendar;
 
 import cg.AccountInfo;
 import cg.BuyTrade;
+import cg.Lot;
 import cg.SellTrade;
 import cg.SimpleDate;
 import cg.Trade;
@@ -32,6 +33,16 @@ public class HSQLDB_Loader implements CapGainsDB
 
    /** Database connection. */
    private Connection _db = null;
+   
+   private String _insertTradeSql =
+         "INSERT INTO trade "
+         + "(acct_id,seqnum,date,buysell,ticker,shares,price,commission,special_rule)"
+         + " VALUES (?,?,?,?,?,?,?,?,?)";
+   
+   private String _insertLotSql =
+         "INSERT INTO lot "
+         + "(parent_id,trigger_trade_id,buy_trade_id,sell_trade_id,num_shares,basis,proceeds,state)"
+         + " VALUES (?,?,?,?,?,?,?,?)";
 
    /**
     * Print accounts.
@@ -224,7 +235,7 @@ public class HSQLDB_Loader implements CapGainsDB
    }
 
    /**
-    * Get trades.
+    * Insert trades one-by-one.
     */
    private void insertTrades_OneByOne(int aAccountId,Vector<Trade> aTrades)
    {
@@ -236,8 +247,7 @@ public class HSQLDB_Loader implements CapGainsDB
       // run query
       try
       {
-    	  PreparedStatement pstmt = _db.prepareStatement(
-"INSERT INTO trade (acct_id,seqnum,date,buysell,ticker,shares,price,commission,special_rule) VALUES (?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+    	  PreparedStatement pstmt = _db.prepareStatement(_insertTradeSql,Statement.RETURN_GENERATED_KEYS);
 
     	  int tTradeIndex = 0;
     	  
@@ -308,8 +318,7 @@ public class HSQLDB_Loader implements CapGainsDB
       {
     	  _db.setAutoCommit(false);
     	  
-    	  PreparedStatement pstmt = _db.prepareStatement(
-"INSERT INTO trade (acct_id,seqnum,date,buysell,ticker,shares,price,commission,special_rule) VALUES (?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
+    	  PreparedStatement pstmt = _db.prepareStatement(_insertTradeSql,Statement.RETURN_GENERATED_KEYS);
 
     	  for (Trade tTrade: aTrades)
     	  {
@@ -361,6 +370,73 @@ public class HSQLDB_Loader implements CapGainsDB
       catch (Exception ex)
       {
          System.out.println("Exception writing trades to db:\n" + ex);
+         ex.printStackTrace();
+      }
+
+      closedb();
+   }
+
+
+   /**
+    * Insert lot.
+    * -> int lotId;
+    * -> int parentId;
+    * -> int triggerTradeId;
+	 * -> int buyTradeId;
+	 * -> int sellTradeId;
+	 * -> int numShares;
+	 * -> BigDecimal basis;
+	 * -> BigDecimal proceeds;
+	 * -> State state;
+    */
+   public void insertLot(Lot aLot)
+   {
+      if (connectdb() == false){
+    	  System.out.println("ERROR: failed to connect to db");
+    	  return;
+      }
+
+      // run query
+      try
+      {
+    	  PreparedStatement pstmt = _db.prepareStatement(_insertLotSql,Statement.RETURN_GENERATED_KEYS);
+
+    	  /*
+    	   * Build the prepared insert statement.
+    	   */
+    	  pstmt.setInt(1,aLot.parentId);
+    	  pstmt.setInt(2,aLot.triggerTradeId);
+    	  pstmt.setInt(3,aLot.buyTradeId);
+    	  pstmt.setInt(4,aLot.sellTradeId);
+    	  pstmt.setInt(5,aLot.numShares);
+    	  pstmt.setBigDecimal(6,aLot.basis);
+    	  pstmt.setBigDecimal(7,aLot.proceeds);
+    	  pstmt.setString(8,aLot.state.toString());
+
+    	  /*
+    	   * Execute the batch command to save the trades to database.
+    	   */
+    	  pstmt.executeUpdate();
+
+    	  /*
+    	   * Update the trades with their primary keys.
+    	   */
+    	  ResultSet genKeys = pstmt.getGeneratedKeys();
+    	  if (genKeys.next())
+    	  {
+    	     int tId = genKeys.getInt(1);
+    	     aLot.lotId = tId;
+    	  }
+    	  else
+    	  {
+    	     //TODO ERROR
+    	  }
+
+         pstmt.close();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("Exception writing lot to db:\n" + ex);
          ex.printStackTrace();
       }
 

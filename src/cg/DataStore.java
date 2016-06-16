@@ -1,5 +1,6 @@
 package cg;
 
+import java.math.BigDecimal;
 import cg.db.HSQLDB_Loader;
 
 /*
@@ -69,10 +70,22 @@ public class DataStore
       /*
        * Create a new buy lot.
        */
+      Lot tLot = new Lot();
+      //tLot.lotId;
+      tLot.parentId = -1;
+      tLot.triggerTradeId = aTrade.tradeId;
+      tLot.buyTradeId = aTrade.tradeId;
+      tLot.sellTradeId = -1;
+      tLot.numShares = aTrade.numShares.intValue(); //TODO change numShares to long?
+		float tBasis = ((float)aTrade.numShares) * aTrade.sharePrice + aTrade.comm.floatValue(); //TODO use method?
+      tLot.basis = new BigDecimal(tBasis); //TODO
+      tLot.proceeds = new BigDecimal(0.0);
+      tLot.state = Lot.State.eOpen;
 
       /*
        * Save the buy lot to the db.
        */
+      _db.insertLot(tLot);
    }
    
    /*

@@ -1,3 +1,4 @@
+truncate table lot;
 truncate table trade;
 truncate table acct;
 truncate table acct_type;
