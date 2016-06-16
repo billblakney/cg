@@ -1,6 +1,6 @@
 package cg;
 
-import java.util.*;
+import java.util.TreeSet;
 import java.math.BigDecimal;
 
 /**
@@ -9,7 +9,8 @@ import java.math.BigDecimal;
  */
 public class Trade implements Comparable {
 
-	public enum Type {
+	public enum Type
+	{
 		BUY("Buy"), SELL("Sell");
 
 		private final String name;
@@ -23,9 +24,10 @@ public class Trade implements Comparable {
 		}
 		
 		/*
-		 * TODO Need to through exception if no match
+		 * TODO Need to throw exception if no match.
 		 */
-		static public Type getEnumValue(String s){
+		static public Type getEnumValue(String s)
+		{
 			if( s.equals(BUY.toString() ))
 				return BUY;
 			else
@@ -33,7 +35,8 @@ public class Trade implements Comparable {
 		}
 	}
 
-	public enum SpecialInstruction {
+	public enum SpecialInstruction
+	{
 		NO_INSTRUCTION(""), NO_WASH("NO_WASH");
 
 		private final String name;
@@ -59,10 +62,9 @@ public class Trade implements Comparable {
 		}
 	}
 
-	public int uID; // user ID - provided by user
-	public String buySellId; // SecurityTrade List ID - should order trades in
-	// security trade list
-	public Long portID; // Account ID - should order trades in the account
+	public int tradeId; // primary key
+	/** TODO  SecurityTradeListID - should order trades in security trade list. Deprecate it? */
+	public String buySellId;
 	public SimpleDate date;
 	public Type tradeType;
 	public String ticker;
@@ -71,8 +73,8 @@ public class Trade implements Comparable {
 	public BigDecimal comm;
 	public SpecialInstruction instruction;
 	public String note;
-	public String history = new String();
 
+	public String history = new String();
 	public Long numSharesHeld;
 	public Long numSharesSold;
 	public String series;
@@ -91,29 +93,25 @@ public class Trade implements Comparable {
 	/**
 	 * Constructor that initializes all Trade data members. </p>
 	 * 
-	 * @param id
-	 *            This parameter is reserved for future use.
-	 * @param date
-	 *            The date of this trade.
-	 * @param tradeType
-	 *            Either Trade.BUY or Trade.SELL.
-	 * @param ticker
-	 *            The ticker symbol, e.g. CSCO.
-	 * @param numShares
-	 *            The number of shares.
-	 * @param sharePrice
-	 *            Price per share.
-	 * @param comm
-	 *            Commision.
-	 * @param note
-	 *            A note to be entered by the user.
-	 * TODO Need to better hide this constructor so only BuyTrade and SellTrade can use it.
+	 * @param tradeId Primary key for trade record. (Uses the sequence number
+	 *   from a trade file when the legacy trade files are used instead of the
+	 *   database.)
+	 * @param date Trade date.
+	 * @param tradeType Trade type (Either Trade.BUY or Trade.SELL.)
+	 * @param ticker The ticker symbol, e.g. CSCO.
+	 * @param numShares Number of shares.
+	 * @param sharePrice Share price.
+	 * @param comm Commision.
+	 * @param note User note.
+	 * 
+	 * TODO Need to better hide this constructor so only BuyTrade and SellTrade
+	 * can use it.
 	 */
-	protected Trade(int id, cg.SimpleDate date, Trade.Type tradeType,
+	protected Trade(int tradeId, cg.SimpleDate date, Trade.Type tradeType,
 			String ticker, long numShares, float sharePrice, BigDecimal comm,
 			Trade.SpecialInstruction instruction, String note) {
 
-		this.uID = id;
+		this.tradeId = tradeId;
 		this.date = date;
 		this.tradeType = tradeType;
 		this.ticker = ticker;
@@ -122,8 +120,6 @@ public class Trade implements Comparable {
 		this.comm = comm;
 		this.instruction = instruction;
 		this.note = note;
-
-		portID = new Long(0);
 	}
 
 	/**
@@ -147,9 +143,9 @@ public class Trade implements Comparable {
 		// First tiebreaker is trade ID.
 		// Note: Convert to integer for later integration with
 		// the compareTo() functions of the trade vectors.
-		if (uID < otherTrade.uID) {
+		if (tradeId < otherTrade.tradeId) {
 			return -1;
-		} else if (uID > otherTrade.uID) {
+		} else if (tradeId > otherTrade.tradeId) {
 			return 1;
 		}
 
@@ -193,7 +189,7 @@ public class Trade implements Comparable {
 	@Override
 	public String toString() {
 
-		String buf = tradeType + "," + buySellId + "," + uID + "," + date + ","
+		String buf = tradeType + "," + buySellId + "," + tradeId + "," + date + ","
 				+ ticker + "," + numShares + "," + sharePrice + "," + comm
 				+ "," + instruction + "," + note;
 		return buf.toString();

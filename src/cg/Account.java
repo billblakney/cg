@@ -66,7 +66,6 @@ public class Account extends Observable {
 	 *            List of trades to be added.
 	 */
 	public void addTrades(TradeList trades) {
-		setTradepIDs(trades);
 		allTrades.addTrades(trades);
 		allTrades.sortByDate();  // maybe not really needed; ...
 		addTradesToStockMgrs(trades); // will add trades to existing trades
@@ -252,11 +251,6 @@ public class Account extends Observable {
 		setChanged();
 		notifyObservers(new Integer(UPDATE_TABLES | UPDATE_TICKER_LIST
 				| UPDATE_YEAR_LIST));
-	}
-
-	private void setTradepIDs(TradeList trades){
-		for( int i = 0; i < trades.size(); i++ )
-			trades.elementAt(i).portID = ++tradeCount;
 	}
 	
 	/**

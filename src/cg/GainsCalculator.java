@@ -172,7 +172,7 @@ bLot.message = "removed shares from buy lot while processing sell trade"; // wil
        **********************************************************************/
       // Get all sell trades within 30 days of this buy trade.
       Vector<SellTrade> washableTrades = getPotentialWashSellTrades(bt);
-System.out.println("WASHABLE TRADES: " + washableTrades.size());
+//System.out.println("WASHABLE TRADES: " + washableTrades.size());
       for( int i = 0; i < washableTrades.size(); i++ ){
          SellTrade st = washableTrades.elementAt(i);
          LotSet sLotSet = st.lotSet;

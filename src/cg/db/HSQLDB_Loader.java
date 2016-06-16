@@ -82,7 +82,7 @@ public class HSQLDB_Loader implements CapGainsDB
             while (tResults.next())
             {
                AccountInfo acct = new AccountInfo();
-               acct.id = tResults.getInt("acct_id");
+               acct.acct_id = tResults.getInt("acct_id");
                acct.name = tResults.getString("name");
                acct.acct_type_id = tResults.getInt("acct_type_id");
                acct.investor_id = tResults.getInt("investor_id");
@@ -109,7 +109,7 @@ public class HSQLDB_Loader implements CapGainsDB
    /**
     * Get trades.
     */
-   public TradeList getTrades(String acct_shortname)
+   public TradeList getTrades(int aAccountId)
    {
 
       TradeList tlist = new TradeList();
@@ -121,20 +121,17 @@ public class HSQLDB_Loader implements CapGainsDB
       {
          Statement tSql = _db.createStatement();
 
-         System.out
-               .println("Now executing the command: "
-                     + "SELECT DISTINCT * FROM trade WHERE trade.acct = acct.shortname = acct_shortname ORDER BY trade.seqnum");
-
          ResultSet tResults = tSql.executeQuery(
-               "SELECT DISTINCT * FROM trade WHERE trade.acct='"
-                     + acct_shortname + "' ORDER BY trade.seqnum");
+               "SELECT DISTINCT * FROM trade WHERE trade.acct_id='"
+                     + aAccountId + "' ORDER BY trade.trade_id");
          if (tResults != null)
          {
 
             while (tResults.next())
             {
                // convert all fields from the db record
-               String acct = tResults.getString("acct");
+               int trade_id = tResults.getInt("trade_id");
+               int acct_id = tResults.getInt("acct_id");
                int seqnum = tResults.getInt("seqnum");
                /*
                 * GregorianCalendar refdate = new GregorianCalendar(); Date date
@@ -160,13 +157,13 @@ public class HSQLDB_Loader implements CapGainsDB
 
                if (tradeType == Trade.Type.BUY)
                {
-                  BuyTrade bt = new BuyTrade(seqnum, tdate, tradeType, ticker,
+                  BuyTrade bt = new BuyTrade(trade_id, tdate, tradeType, ticker,
                         shares, price, commission, instr, "");
                   tlist.add(bt);
                }
                else
                {
-                  SellTrade st = new SellTrade(seqnum, tdate, tradeType,
+                  SellTrade st = new SellTrade(trade_id, tdate, tradeType,
                         ticker, shares, price, commission, instr, "");
                   tlist.add(st);
                }
@@ -233,7 +230,7 @@ public class HSQLDB_Loader implements CapGainsDB
 //}
 
 //TODO change uID to trade_id and set with generated key
-    		  pstmt.setInt(2,tTrade.uID);
+    		  pstmt.setInt(2,tTrade.tradeId);
 //    		  pstmt.setInt(2,count++); //seqnum
 
     		  pstmt.setDate(3,new Date(tTrade.date.getDate().getTime()));
@@ -303,7 +300,7 @@ System.out.println("closing db...");
 //}
 
 //TODO change uID to trade_id and set with generated key
-    		  pstmt.setInt(2,tTrade.uID);
+    		  pstmt.setInt(2,tTrade.tradeId);
 //    		  pstmt.setInt(2,count++); //seqnum
 
     		  pstmt.setDate(3,new Date(tTrade.date.getDate().getTime()));

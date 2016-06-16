@@ -12,7 +12,7 @@ import java.util.Vector;
 //        	   FOREIGN KEY (broker_id) REFERENCES broker(broker_id));
 
 public class AccountInfo {
-	public int    id;
+	public int    acct_id;
 	public String name;
 	public int    acct_type_id;
 	public int    investor_id;
@@ -43,7 +43,7 @@ public class AccountInfo {
 		{
 			if (tInfo.name.equals(aName))
 			{
-				return tInfo.id;
+				return tInfo.acct_id;
 			}
 		}
 		return -1;
@@ -54,7 +54,7 @@ public class AccountInfo {
 	
 	public String toString() {
 		  return
-		      "id = " + id + ";"
+		      "id = " + acct_id + ";"
 			+ "name = " + name + ";"
 			+ "acct_type_id = " + acct_type_id + ";"
 			+ "investor_id = " + investor_id + ";"

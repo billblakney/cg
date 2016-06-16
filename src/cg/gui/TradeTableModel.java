@@ -86,7 +86,7 @@ public class TradeTableModel extends AbstractTableModel {
 		Trade trade = (Trade) row;
 
 		Vector v = new Vector();
-		v.addElement(trade.portID); //0
+		v.addElement(trade.tradeId); //0
 		v.addElement(trade.date); //1
 		v.addElement(trade.tradeType); //2
 		v.addElement(trade.ticker); //3

@@ -262,7 +262,7 @@ System.out.println("dbUrl: " + dbUrl);
 
 		System.out.println("Selected account: " + selected_acct.name);
 
-		TradeList trades = db.getTrades(selected_acct.name);
+		TradeList trades = db.getTrades(selected_acct.acct_id);
 		Account acct = new Account(selected_acct.name,trades);
 		showAccount(acct);
 	}

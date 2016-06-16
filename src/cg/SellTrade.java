@@ -1,6 +1,5 @@
 package cg;
 
-import java.util.*;
 import java.math.BigDecimal;
 
 /**
@@ -18,11 +17,11 @@ public class SellTrade extends Trade {
 	 */
 	TaxGain taxGain;
 
-	public SellTrade(int id, cg.SimpleDate date, Trade.Type tradeType,
+	public SellTrade(int tradeId, cg.SimpleDate date, Trade.Type tradeType,
 			String ticker, long numShares, float sharePrice, BigDecimal comm,
 			Trade.SpecialInstruction instruction, String note) {
 		
-		super(id, date, tradeType, ticker, numShares, sharePrice, comm,
+		super(tradeId, date, tradeType, ticker, numShares, sharePrice, comm,
 				instruction, note);
 		this.numSharesHeld = new Long(this.numShares);
 	}
