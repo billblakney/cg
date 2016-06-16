@@ -103,9 +103,9 @@ public class TradeList extends Vector<Trade> {
 	 * Get the tax gain lots for the specified year. Use "null" for year to get tax
 	 * gain lots for all years.
 	 */
-	public Vector<Lot> getGainLots(String year) {
+	public Vector<OldLot> getGainLots(String year) {
 
-		Vector<Lot> taxGainLots = new Vector<Lot>();
+		Vector<OldLot> taxGainLots = new Vector<OldLot>();
 
 		for (int i = 0; i < size(); i++) {
 			if (((Trade) elementAt(i)).tradeType != Trade.Type.SELL) {
@@ -118,7 +118,7 @@ public class TradeList extends Vector<Trade> {
 			if (year != null && (year.equals(date.getYearString())) == false) {
 				continue;
 			}
-			Vector<Lot> lots = gain.gainComps;
+			Vector<OldLot> lots = gain.gainComps;
 			for( int j = 0; j < lots.size(); j++ )
 				taxGainLots.addElement(lots.elementAt(j));
 		}
@@ -129,9 +129,9 @@ public class TradeList extends Vector<Trade> {
 	 * Get the held lots for the specified year. Use "null" for year to get held
 	 * lots for all years.
 	 */
-	public Vector<Lot> getHeldLots(String year) {
+	public Vector<OldLot> getHeldLots(String year) {
 
-		Vector<Lot> heldLots = new Vector<Lot>();
+		Vector<OldLot> heldLots = new Vector<OldLot>();
 
 		for (int i = 0; i < size(); i++) {
 			if (((Trade) elementAt(i)).tradeType != Trade.Type.BUY) {
@@ -143,7 +143,7 @@ public class TradeList extends Vector<Trade> {
 			if (year != null && (year.equals(date.getYearString())) == false) {
 				continue;
 			}
-			Vector<Lot> lots = buyTrade.lotSet.lots;
+			Vector<OldLot> lots = buyTrade.lotSet.lots;
 			for( int j = 0; j < lots.size(); j++ )
 				heldLots.addElement(lots.elementAt(j));
 		}

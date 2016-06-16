@@ -5,7 +5,7 @@ import java.util.Vector;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.RowFilter;
 
-import cg.Lot;
+import cg.OldLot;
 
 /*
  * Note: These three methods must be implemented to extend AbstractTableModel
@@ -70,7 +70,7 @@ public class LotsHeldTableModel extends AbstractTableModel {
 	 */
 	private Vector getDataRow(Object row) {
 		
-		Lot lot = (Lot) row;
+		OldLot lot = (OldLot) row;
 		Vector v = new Vector();
 		v.addElement(lot.ticker); //0
 		v.addElement(lot.buyDate); //1

@@ -100,7 +100,7 @@ public class LotsHeldPanel extends AccountReportPanel implements ActionListener 
 	 * updateReplace the currently displayed account with a new one.
 	 */
 	protected void updatePanel(Account acct) {
-		Vector<Lot> lots = acct.getHeldLots(null,null); //TODO null,null?
+		Vector<OldLot> lots = acct.getHeldLots(null,null); //TODO null,null?
 		table.setRows(lots);
 		tickerFilterBox.update(acct);
 	}

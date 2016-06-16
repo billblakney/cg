@@ -59,6 +59,11 @@ public class CapGainsFrame extends JFrame {
 	private String dbUrl = null;
 
 	/**
+	 * Uses startup test connection to db
+	 */
+	private boolean _dbOk = false;
+
+	/**
 	 * The account that is currently displayed.
 	 */
 	private Account displayAccount = null;
@@ -111,6 +116,13 @@ public class CapGainsFrame extends JFrame {
 		processEnvironmentVars();
 		
 		processCommandLine(args);
+		
+		if (dbUrl != null)
+		{
+		   HSQLDB_Loader db = new HSQLDB_Loader(dbUrl);
+		   boolean tCanConnect = db.canConnectToDb();
+		   _dbOk = ((tCanConnect==true)?true:false);
+		}
 
 if( tradeFile != null)
 {
@@ -398,6 +410,9 @@ System.out.println("dbUrl: " + dbUrl);
 			// Add "Select DB Account" menu item to the "File" menu.
 			JMenuItem itemSelectAccount = new JMenuItem(SELECT_DB_ACCOUNT);
 			itemSelectAccount.addActionListener(this);
+			if (_dbOk == false){
+			   itemSelectAccount.setEnabled(false);
+			}
 			fileMenu.add(itemSelectAccount);
 
 			// Add "Select File Account" menu item to the "File" menu.
@@ -474,18 +489,6 @@ System.out.println("dbUrl: " + dbUrl);
 			// Handle "Load Trades".
 			if (e.getActionCommand().equals(LOAD_TRADE_FILE)) {
 				System.out.println("User selected \"Select Load Trades\"");
-
-//				JFileChooser chooser = new JFileChooser();
-//				chooser.setCurrentDirectory(new File(dataDir));
-//				int option = chooser.showOpenDialog(this);
-//				if (option == JFileChooser.APPROVE_OPTION) {
-//					String tradeFile = chooser.getSelectedFile().getPath();
-//					System.out.println("File selected: " + tradeFile);
-//					// load the trades
-//					actionLoadTrades(tradeFile);
-//				} else {
-//					System.out.println("File selection canceled");
-//				}
 				actionLoadAccountTradeFile();
 			}
 			// Handle "Clear Trades".

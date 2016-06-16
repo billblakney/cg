@@ -24,12 +24,12 @@ public class LotSet{
    /**
     * The set of lots that belong to this lot set.
     */
-   public Vector<Lot> lots = new Vector<Lot>();
+   public Vector<OldLot> lots = new Vector<OldLot>();
 
    public LotSet() {
    }
 
-   void addLot(Lot lot){
+   void addLot(OldLot lot){
       lots.addElement(lot);
       numShares += lot.numShares;
    }
@@ -38,24 +38,24 @@ public class LotSet{
       lots.clear();
    }
 
-   Lot getFirstLot(){
+   OldLot getFirstLot(){
       if( lots.isEmpty() == true )
          return null;
       else
          return lots.firstElement();
    }
 
-   Lot getFirstLossLot(){
+   OldLot getFirstLossLot(){
       for( int i = 0; i < lots.size(); i++ ){
-         Lot lot = (Lot)(lots.elementAt(i));
+         OldLot lot = (OldLot)(lots.elementAt(i));
          if( lot.gain < 0.0 )
             return lot;
       }
       return null;
    }
 
-   Lot getLotAt(int i){
-      return (Lot)lots.elementAt(i);
+   OldLot getLotAt(int i){
+      return (OldLot)lots.elementAt(i);
    }
 
    int getNumLots(){
@@ -73,7 +73,7 @@ public class LotSet{
 
    void removeFirstShares(long numShares){
       while( numShares > 0 ){
-         Lot lot = lots.firstElement();
+         OldLot lot = lots.firstElement();
 
          // On this pass, process no more shares than are in the 1st lot
          long n = numShares;

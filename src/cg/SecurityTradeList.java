@@ -125,7 +125,7 @@ public class SecurityTradeList extends TradeList {
 			Trade t = elementAt(i);
 			if (t.tradeType != tradeType)
 				continue;
-			Lot lot = t.lotSet.getFirstLot();
+			OldLot lot = t.lotSet.getFirstLot();
 			if (lot != null)
 				return t;
 		} // end for

@@ -32,15 +32,6 @@ public class HSQLDB_Loader implements CapGainsDB
 
    /** Database connection. */
    private Connection _db = null;
-   
-   /**
-    * Constructor
-    * @param aDbUrl
-    */
-   public HSQLDB_Loader(String aDbUrl)
-   {
-      _dbUrl = aDbUrl;
-   }
 
    /**
     * Print accounts.
@@ -52,6 +43,36 @@ public class HSQLDB_Loader implements CapGainsDB
 	   {
 		   System.out.println(tInfo.toString());
 	   }
+   }
+   
+   /**
+    * Constructor
+    * @param aDbUrl
+    */
+   public HSQLDB_Loader(String aDbUrl)
+   {
+      _dbUrl = aDbUrl;
+   }
+   
+   /**
+    * Determine if a db connection can be made.
+    * This method attempts to make a connection, and if it is successful, the
+    * connection is then closed, and a value of true is returned. Otherwise,
+    * a value of false is returned.
+    * @return true if the test connection succeeds.
+    */
+   public boolean canConnectToDb()
+   {
+      boolean tConnected = connectdb();
+      if (tConnected == true)
+      {
+         closedb();
+         return true;
+      }
+      else
+      {
+         return false;
+      }
    }
 
    /**
@@ -218,20 +239,16 @@ public class HSQLDB_Loader implements CapGainsDB
     	  PreparedStatement pstmt = _db.prepareStatement(
 "INSERT INTO trade (acct_id,seqnum,date,buysell,ticker,shares,price,commission,special_rule) VALUES (?,?,?,?,?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
 
+    	  int tTradeIndex = 0;
+    	  
     	  for (Trade tTrade: aTrades)
     	  {
+    	     /*
+    	      * Build the prepared insert statement.
+    	      */
     		  pstmt.setInt(1,aAccountId); //acct_id
 
-//Statement tSql = _db.createStatement();
-//ResultSet tResults = tSql.executeQuery("CALL NEXT VALUE FOR myseq");
-//if (tResults != null){
-//	tResults.next();
-//System.out.println("NEXTVALUE: " + tResults.getInt(1));
-//}
-
-//TODO change uID to trade_id and set with generated key
     		  pstmt.setInt(2,tTrade.tradeId);
-//    		  pstmt.setInt(2,count++); //seqnum
 
     		  pstmt.setDate(3,new Date(tTrade.date.getDate().getTime()));
     		  
@@ -248,13 +265,20 @@ public class HSQLDB_Loader implements CapGainsDB
 
     		  pstmt.setString(9,"test");
 
+    		  /*
+    		   * Execute the batch command to save the trades to database.
+    		   */
     		  pstmt.executeUpdate();
 
+    		  /*
+    		   * Update the trades with their primary keys.
+    		   */
     		  ResultSet genKeys = pstmt.getGeneratedKeys();
-    		  int id;
-    		  if (genKeys.next()) {
-    		     id = genKeys.getInt(1);
-    		     System.out.println("=======================id: " + id);
+    		  if (genKeys.next())
+    		  {
+    		     int tTradeId = genKeys.getInt(1);
+    		     aTrades.elementAt(tTradeIndex).tradeId = tTradeId;
+    		     tTradeIndex++;
     		  }
     	  }
 
@@ -266,7 +290,6 @@ public class HSQLDB_Loader implements CapGainsDB
          ex.printStackTrace();
       }
 
-System.out.println("closing db...");
       closedb();
    }
 
@@ -290,18 +313,12 @@ System.out.println("closing db...");
 
     	  for (Trade tTrade: aTrades)
     	  {
-    		  pstmt.setInt(1,aAccountId); //acct_id
+    	     /*
+    	      * Build the prepared insert statement.
+    	      */
+    		  pstmt.setInt(1,aAccountId);
 
-//Statement tSql = _db.createStatement();
-//ResultSet tResults = tSql.executeQuery("CALL NEXT VALUE FOR myseq");
-//if (tResults != null){
-//	tResults.next();
-//System.out.println("NEXTVALUE: " + tResults.getInt(1));
-//}
-
-//TODO change uID to trade_id and set with generated key
     		  pstmt.setInt(2,tTrade.tradeId);
-//    		  pstmt.setInt(2,count++); //seqnum
 
     		  pstmt.setDate(3,new Date(tTrade.date.getDate().getTime()));
     		  
@@ -321,14 +338,22 @@ System.out.println("closing db...");
     		  pstmt.addBatch();
     	  }
 
+    	  /*
+    	   * Execute the batch command to save the trades to database.
+    	   */
     	  int[] updateCount = pstmt.executeBatch();
     	  _db.setAutoCommit(true); 
 
+    	  /*
+    	   * Update the trades with their primary keys.
+    	   */
     	  ResultSet genKeys = pstmt.getGeneratedKeys();
-    	  int id;
-    	  while (genKeys.next()) {
-    	     id = genKeys.getInt(1);
-    	     System.out.println("=======================id: " + id);
+    	  int tIndex = 0;
+    	  while (genKeys.next())
+    	  {
+    	     int tTradeId = genKeys.getInt(1);
+    	     aTrades.elementAt(tIndex).tradeId = tTradeId;
+    	     tIndex++;
     	  }
 
          pstmt.close();
@@ -339,7 +364,6 @@ System.out.println("closing db...");
          ex.printStackTrace();
       }
 
-System.out.println("closing db...");
       closedb();
    }
 

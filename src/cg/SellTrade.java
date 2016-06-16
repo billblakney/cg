@@ -31,7 +31,7 @@ public class SellTrade extends Trade {
 		taxGain = new TaxGain(ticker, date);
 
 		for (int j = 0; j < lotSet.getNumLots(); j++) {
-			Lot sLot = lotSet.getLotAt(j);
+			OldLot sLot = lotSet.getLotAt(j);
 
 			taxGain.addGainComp(sLot.buyDate, date, sLot.buyPrice, sLot.sellPrice,
 					sLot.numShares, sLot.basis, sLot.proceeds, sLot.proceeds - sLot.basis);
