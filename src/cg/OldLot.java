@@ -58,7 +58,7 @@ public class OldLot {
    /**
     * The number of shares associated with this lot.
     */
-   public long numShares;
+   public int numShares;
 
    /**
     * The basis for this lot.
@@ -128,7 +128,7 @@ public class OldLot {
                  SimpleDate sellDate,
                  float buyPrice,
                  float sellPrice,
-                 long numShares,
+                 int numShares,
                  float basis,
                  float proceeds,
                  float gain) {
@@ -145,7 +145,7 @@ public class OldLot {
       this.term = Term.computeTerm(buyDate,sellDate);
    }
 
-	public OldLot(String ticker, String id, long numShares,
+	public OldLot(String ticker, String id, int numShares,
 			SimpleDate buyDate, SimpleDate sellDate,
 			float buyPrice, float sellPrice, float basis, float proceeds) {
 		this.ticker = ticker;

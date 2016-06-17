@@ -68,7 +68,7 @@ public class Trade implements Comparable {
 	public SimpleDate date;
 	public Type tradeType;
 	public String ticker;
-	public Long numShares;
+	public int numShares;
 	public Float sharePrice;
 	public BigDecimal comm;
 	public SpecialInstruction instruction;
@@ -108,7 +108,7 @@ public class Trade implements Comparable {
 	 * can use it.
 	 */
 	protected Trade(int tradeId, cg.SimpleDate date, Trade.Type tradeType,
-			String ticker, long numShares, float sharePrice, BigDecimal comm,
+			String ticker, int numShares, float sharePrice, BigDecimal comm,
 			Trade.SpecialInstruction instruction, String note) {
 
 		this.tradeId = tradeId;

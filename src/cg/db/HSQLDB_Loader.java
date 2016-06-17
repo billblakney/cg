@@ -41,8 +41,8 @@ public class HSQLDB_Loader implements CapGainsDB
    
    private String _insertLotSql =
          "INSERT INTO lot "
-         + "(parent_id,trigger_trade_id,buy_trade_id,sell_trade_id,num_shares,basis,proceeds,state)"
-         + " VALUES (?,?,?,?,?,?,?,?)";
+         + "(parent_id,has_children,trigger_trade_id,buy_trade_id,sell_trade_id,num_shares,basis,proceeds,state)"
+         + " VALUES (?,?,?,?,?,?,?,?,?)";
 
    /**
     * Print accounts.
@@ -172,7 +172,7 @@ public class HSQLDB_Loader implements CapGainsDB
                Date date = tResults.getDate("date");
                String buysell = tResults.getString("buysell");
                String ticker = tResults.getString("ticker");
-               long shares = tResults.getLong("shares");
+               int shares = tResults.getInt("shares");
                float price = tResults.getFloat("price");
                BigDecimal commission = tResults.getBigDecimal("commission");
                String special_rule = tResults.getString("special_rule");
@@ -267,7 +267,7 @@ public class HSQLDB_Loader implements CapGainsDB
 
     		  pstmt.setString(5,tTrade.ticker);
 
-    		  pstmt.setInt(6,(int)tTrade.numShares.intValue());
+    		  pstmt.setInt(6,tTrade.numShares);
 
     		  pstmt.setBigDecimal(7,new BigDecimal(tTrade.sharePrice));
 
@@ -336,7 +336,7 @@ public class HSQLDB_Loader implements CapGainsDB
 
     		  pstmt.setString(5,tTrade.ticker);
 
-    		  pstmt.setInt(6,(int)tTrade.numShares.intValue());
+    		  pstmt.setInt(6,tTrade.numShares);
 
     		  pstmt.setBigDecimal(7,new BigDecimal(tTrade.sharePrice));
 
@@ -376,6 +376,12 @@ public class HSQLDB_Loader implements CapGainsDB
       closedb();
    }
 
+   /**
+    * TODO maybe create a class derived from PreparedStatement and add setIntOrNull
+    * @param aStatement
+    * @param aIndex
+    * @param aInteger
+    */
    protected void setIntOrNull(
          PreparedStatement aStatement,int aIndex,Integer aInteger)
    {
@@ -423,14 +429,16 @@ public class HSQLDB_Loader implements CapGainsDB
     	  /*
     	   * Build the prepared insert statement.
     	   */
-    	  setIntOrNull(pstmt, 1, aLot.parentId);
-    	  pstmt.setInt(2,aLot.triggerTradeId);
-    	  pstmt.setInt(3,aLot.buyTradeId);
-    	  setIntOrNull(pstmt,4,aLot.sellTradeId);
-    	  pstmt.setInt(5,aLot.numShares);
-    	  pstmt.setBigDecimal(6,aLot.basis);
-    	  pstmt.setBigDecimal(7,aLot.proceeds);
-    	  pstmt.setString(8,aLot.state.toString());
+    	  int tIdx = 1;
+    	  setIntOrNull(pstmt,tIdx++, aLot.parentId);
+    	  pstmt.setBoolean(tIdx++,aLot.hasChildren);
+    	  pstmt.setInt(tIdx++,aLot.triggerTradeId);
+    	  pstmt.setInt(tIdx++,aLot.buyTradeId);
+    	  setIntOrNull(pstmt,tIdx++,aLot.sellTradeId);
+    	  pstmt.setInt(tIdx++,aLot.numShares);
+    	  pstmt.setBigDecimal(tIdx++,aLot.basis);
+    	  pstmt.setBigDecimal(tIdx++,aLot.proceeds);
+    	  pstmt.setString(tIdx++,aLot.state.toString());
 
     	  /*
     	   * Execute the batch command to save the trades to database.

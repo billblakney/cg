@@ -18,7 +18,7 @@ public class SellTrade extends Trade {
 	TaxGain taxGain;
 
 	public SellTrade(int tradeId, cg.SimpleDate date, Trade.Type tradeType,
-			String ticker, long numShares, float sharePrice, BigDecimal comm,
+			String ticker, int numShares, float sharePrice, BigDecimal comm,
 			Trade.SpecialInstruction instruction, String note) {
 		
 		super(tradeId, date, tradeType, ticker, numShares, sharePrice, comm,
@@ -42,7 +42,7 @@ public class SellTrade extends Trade {
 		return ((float) numShares) * ((float) sharePrice) - comm.floatValue();
 	}
 
-	float getProceeds(long numShares) {
+	float getProceeds(int numShares) {
 		return ((float) numShares) / ((float) this.numShares) * getProceeds();
 	}
 

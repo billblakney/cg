@@ -75,7 +75,7 @@ public class TaxGain extends OldLot {
 	 * total cap gain of this SellTrade.
 	 */
 	protected void addGainComp(SimpleDate buyDate, SimpleDate sellDate,
-			float buyPrice, float sellPrice, long numShares,
+			float buyPrice, float sellPrice, int numShares,
 			float basis, float proceeds, float componentGain) {
 
 		// gc.numShares += gc.numShares; not used since we initialize with sell

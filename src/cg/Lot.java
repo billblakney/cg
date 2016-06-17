@@ -35,6 +35,7 @@ public class Lot
 	
 	public Integer lotId;
 	public Integer parentId;
+	public boolean hasChildren;
 	public Integer triggerTradeId;
 	public Integer buyTradeId;
 	public Integer sellTradeId;
@@ -49,6 +50,7 @@ public class Lot
 	{
 	   lotId = null;
 	   parentId = null;
+	   hasChildren = false;
 	   triggerTradeId = null;
 	   buyTradeId = null;
 	   sellTradeId = null;

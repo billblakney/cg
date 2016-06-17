@@ -86,7 +86,7 @@ class GainsCalculator {
       // by the amount of each lot brought forward each iteration through
       // this while loop.
       
-      long sharesToProcess = st.numShares; // process all shares of this sell
+      int sharesToProcess = st.numShares; // process all shares of this sell
       while ( sharesToProcess > 0 ){
 
          // Get the first buy trade that has remaining buy lots.
@@ -100,7 +100,7 @@ class GainsCalculator {
 
          // Figure out how many shares and how much basis will be transferred
          // from the buy lot to the new sell lot.
-         long n;  // num shares to be transferred
+         int n;  // num shares to be transferred
          float b; // basis to be transferred
          float p; // proceeds to be transferred
 
@@ -110,7 +110,7 @@ class GainsCalculator {
              p = bLot.proceeds;
         }
          else{ // can transfer some of the buy lot
-             n = new Long(sharesToProcess);
+             n = sharesToProcess;
              float frac = ((float)sharesToProcess) / ((float)bLot.numShares);
              b = frac * bLot.basis;
              p = frac * bLot.proceeds;
@@ -160,7 +160,7 @@ bLot.message = "removed shares from buy lot while processing sell trade"; // wil
    private void setLotsForBuyTrade(BuyTrade bt){
 
       // Set sharesToProcess to the total shares in this buy trade.
-      long buySharesToProcess = bt.numShares;
+      int buySharesToProcess = bt.numShares;
 
       // Get a reference to the buy lot set we will be loading.
       LotSet bLotSet = bt.lotSet;
@@ -186,7 +186,7 @@ bLot.message = "removed shares from buy lot while processing sell trade"; // wil
             // will be transferred from the sell lot to the buy lot.
 
             // First assume that we'll be able to use the whole lot.
-            long n = sLot.numShares;
+            int n = sLot.numShares;
             float b = sLot.basis;
             float p = sLot.proceeds;
 
