@@ -8,6 +8,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.RowFilter;
 import javax.swing.RowFilter.*;
 
+import cg.LotDataProvider;
 import cg.Term;
 
 public class LotsHeldTable extends JTable {
@@ -41,7 +42,7 @@ public class LotsHeldTable extends JTable {
 		 */
 	}
 
-	public void setRows(Vector lots) {
+	public void setRows(Vector<LotDataProvider> lots) {
 		model.setData(lots);
 		updateSharesHeld();
 	}

@@ -19,7 +19,7 @@ import util.IntegerCounter;
  * The SellTrade uses a Vector of GainComponents to store a set of cap
  * gain components.
  */
-public class OldLot {
+public class OldLot implements LotDataProvider {
 
 	public String id;
 	public String sequentialID;
@@ -161,6 +161,37 @@ public class OldLot {
 		this.gain = proceeds - gain;
 		this.term = Term.computeTerm(buyDate,sellDate);
 	}
+
+	@Override
+   public String getSymbol()
+	{
+	   return ticker;
+	}
+
+	@Override
+   public SimpleDate getBuyDate()
+	{
+	   return buyDate;
+	}
+
+	@Override
+   public Integer getNumShares()
+	{
+	   return numShares;
+	}
+
+	@Override
+   public float getBuyPrice()
+	{
+	   return buyPrice;
+	}
+
+	@Override
+   public Term getTerm()
+	{
+	   return term;
+	}
+
    
    public float getGain() {
 	   return gain;
