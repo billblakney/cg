@@ -33,11 +33,11 @@ public class Lot
 		}
 	}
 	
-	public int lotId;
-	public int parentId;
-	public int triggerTradeId;
-	public int buyTradeId;
-	public int sellTradeId;
+	public Integer lotId;
+	public Integer parentId;
+	public Integer triggerTradeId;
+	public Integer buyTradeId;
+	public Integer sellTradeId;
 	public int numShares;
 	public BigDecimal basis;
 	public BigDecimal proceeds;
@@ -47,6 +47,15 @@ public class Lot
 
 	Lot()
 	{
+	   lotId = null;
+	   parentId = null;
+	   triggerTradeId = null;
+	   buyTradeId = null;
+	   sellTradeId = null;
+	   numShares = 0;
+	   basis = new BigDecimal(0.0);
+	   proceeds = new BigDecimal(0.0);
+	   state = State.eOpen;
 	}
 
 

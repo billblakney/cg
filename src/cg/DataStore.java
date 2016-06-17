@@ -71,11 +71,11 @@ public class DataStore
        * Create a new buy lot.
        */
       Lot tLot = new Lot();
-      //tLot.lotId;
-      tLot.parentId = -1;
+      tLot.lotId = null;
+      tLot.parentId = null;
       tLot.triggerTradeId = aTrade.tradeId;
       tLot.buyTradeId = aTrade.tradeId;
-      tLot.sellTradeId = -1;
+      tLot.sellTradeId = null;
       tLot.numShares = aTrade.numShares.intValue(); //TODO change numShares to long?
 		float tBasis = ((float)aTrade.numShares) * aTrade.sharePrice + aTrade.comm.floatValue(); //TODO use method?
       tLot.basis = new BigDecimal(tBasis); //TODO

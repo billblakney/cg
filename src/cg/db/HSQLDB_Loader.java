@@ -376,6 +376,25 @@ public class HSQLDB_Loader implements CapGainsDB
       closedb();
    }
 
+   protected void setIntOrNull(
+         PreparedStatement aStatement,int aIndex,Integer aInteger)
+   {
+      try
+      {
+         if (aInteger == null)
+         {
+            aStatement.setNull(aIndex,java.sql.Types.INTEGER);
+         }
+         else
+         {
+            aStatement.setInt(aIndex,aInteger);
+         }
+      }
+      catch (Exception ex)
+      {
+         System.out.println("Exception in setIntIfPositive:\n" + ex);
+      }
+   }
 
    /**
     * Insert lot.
@@ -404,10 +423,10 @@ public class HSQLDB_Loader implements CapGainsDB
     	  /*
     	   * Build the prepared insert statement.
     	   */
-    	  pstmt.setInt(1,aLot.parentId);
+    	  setIntOrNull(pstmt, 1, aLot.parentId);
     	  pstmt.setInt(2,aLot.triggerTradeId);
     	  pstmt.setInt(3,aLot.buyTradeId);
-    	  pstmt.setInt(4,aLot.sellTradeId);
+    	  setIntOrNull(pstmt,4,aLot.sellTradeId);
     	  pstmt.setInt(5,aLot.numShares);
     	  pstmt.setBigDecimal(6,aLot.basis);
     	  pstmt.setBigDecimal(7,aLot.proceeds);
