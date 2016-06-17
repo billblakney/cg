@@ -195,7 +195,8 @@ System.out.println("creating one new lot from old");
          }
 
          tLot.hasChildren = true;
-         //_db.updateLot(...//TODO !!!
+
+         _db.updateLotHasChildren(tLot);
       }
       
       for (Lot tLot: tNewLots)

@@ -43,6 +43,9 @@ public class HSQLDB_Loader implements CapGainsDB
          "INSERT INTO lot "
          + "(parent_id,has_children,trigger_trade_id,buy_trade_id,sell_trade_id,num_shares,basis,proceeds,state)"
          + " VALUES (?,?,?,?,?,?,?,?,?)";
+   
+   private String _updateLotHasChildrenSql =
+         "UPDATE lot SET has_children = ? WHERE lot_id = ?";
 
    /**
     * Print accounts.
@@ -458,6 +461,42 @@ public class HSQLDB_Loader implements CapGainsDB
     	  {
     	     //TODO ERROR
     	  }
+
+         pstmt.close();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("Exception writing lot to db:\n" + ex);
+         ex.printStackTrace();
+      }
+
+      closedb();
+   }
+
+   /**
+    */
+   public void updateLotHasChildren(Lot aLot)
+   {
+      if (connectdb() == false){
+         System.out.println("ERROR: failed to connect to db");
+         return;
+      }
+
+      try
+      {
+         PreparedStatement pstmt = _db.prepareStatement(_updateLotHasChildrenSql);
+
+         /*
+          * Build the prepared update statement.
+          */
+
+         pstmt.setBoolean(1,aLot.hasChildren);
+         pstmt.setInt(2,aLot.lotId);
+
+         /*
+          * Execute the update.
+          */
+         pstmt.executeUpdate();
 
          pstmt.close();
       }
