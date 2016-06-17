@@ -13,3 +13,10 @@ CREATE VIEW OpenPositions as
      AND lot.has_children=false
      AND lot.state='Open'
    ORDER BY trade.ticker, lot.num_shares;
+CREATE VIEW LotReport as
+   SELECT DISTINCT trade.ticker "Symbol", trade.date "Buy Date", lot.num_shares "Shares", trade.price "Buy Price"
+   FROM trade, lot
+   WHERE lot.buy_trade_id=trade.trade_id
+     AND lot.has_children=false
+     AND lot.state='Open'
+   ORDER BY trade.ticker, lot.num_shares;
