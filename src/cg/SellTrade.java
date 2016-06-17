@@ -23,7 +23,7 @@ public class SellTrade extends Trade {
 		
 		super(tradeId, date, tradeType, ticker, numShares, sharePrice, comm,
 				instruction, note);
-		this.numSharesHeld = new Long(this.numShares);
+		this.numSharesHeld = new Integer(this.numShares);
 	}
 
 	void computeTaxGain() {

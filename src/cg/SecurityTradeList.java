@@ -204,8 +204,8 @@ public class SecurityTradeList extends TradeList {
 
 		for (int i = 0; i < size(); i++) {
 			Trade t = elementAt(i);
-			t.numSharesHeld = new Long(0);
-			t.numSharesSold = new Long(0);
+			t.numSharesHeld = new Integer(0);
+			t.numSharesSold = new Integer(0);
 		}
 	}
 }

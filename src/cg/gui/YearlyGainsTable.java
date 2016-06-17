@@ -27,7 +27,6 @@ public class YearlyGainsTable extends JTable {
 		 * YearlyGainsTableRenderer r = new YearlyGainsTableRenderer();
 		 * setDefaultRenderer(Object.class, r); setDefaultRenderer(Float.class,
 		 * r); setDefaultRenderer(Integer.class, r);
-		 * setDefaultRenderer(Long.class, r);
 		 */
 	}
 

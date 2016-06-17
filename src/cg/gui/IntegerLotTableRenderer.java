@@ -14,13 +14,13 @@ import javax.swing.table.TableRowSorter;
 /**
  * This class provides rendering for the cells in the trade table.
  */
-public class LongLotTableRenderer extends DefaultLotTableRenderer {
+public class IntegerLotTableRenderer extends DefaultLotTableRenderer {
 
 	private DecimalFormat numSharesFormat = new DecimalFormat(
 	"###,###,###,##0");
 	
 	
-	public LongLotTableRenderer(TableRowSorter<LotGainTableModel> s) {
+	public IntegerLotTableRenderer(TableRowSorter<LotGainTableModel> s) {
 		super(s);
 	}
 

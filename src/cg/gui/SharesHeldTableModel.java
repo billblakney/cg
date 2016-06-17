@@ -84,15 +84,15 @@ public class SharesHeldTableModel extends AbstractTableModel {
 		return v;
 	}
 	
-	public Long getSharesHeld(RowFilter<AbstractTableModel, Integer> filter) {
-		Long totalShares = new Long(0);
+	public Integer getSharesHeld(RowFilter<AbstractTableModel, Integer> filter) {
+		Integer totalShares = new Integer(0);
 		for (int i = 0; i < data.size(); i++) {
 			RowFilter.Entry<AbstractTableModel, Integer> entry = new TableModelFilterEntry(
 					(AbstractTableModel)this, i);
 			// pass over entry if filter.include() returns false
 			if ((filter != null) && (filter.include(entry) == false))
 				continue;
-			Long shares = (Long) entry.getValue(SharesHeldTableModel.COL_SHARES);
+			Integer shares = (Integer) entry.getValue(SharesHeldTableModel.COL_SHARES);
 			totalShares += shares;
 		}
 		return totalShares;

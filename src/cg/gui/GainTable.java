@@ -29,11 +29,10 @@ public class GainTable extends JTable {
 		setRowSorter(sorter);
 
 		DefaultGainTableRenderer r = new DefaultGainTableRenderer(sorter);
-		LongGainTableRenderer lr = new LongGainTableRenderer(sorter);
+		IntegerGainTableRenderer lr = new IntegerGainTableRenderer(sorter);
 		setDefaultRenderer(Object.class, r);
 		setDefaultRenderer(Float.class, r);
 		setDefaultRenderer(Integer.class, lr);
-		setDefaultRenderer(Long.class, lr);
 
 		totalGain = new TotalGain();
 	}

@@ -86,7 +86,7 @@ public class LotGainTableModel extends AbstractTableModel implements GainColumnF
 		OldLot lot = (OldLot) row;
 
 		Vector v = new Vector();
-		v.addElement(new Long(lot.numShares)); //0
+		v.addElement(new Integer(lot.numShares)); //0
 		v.addElement(lot.ticker); //1
 		v.addElement(lot.buyDate); //2
 		v.addElement(lot.buyPrice); //3

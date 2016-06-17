@@ -1,6 +1,6 @@
 package cg;
 
-import util.LongCounter;
+import util.IntegerCounter;
 
 /**
  * This class encapsulates information for a lot.
@@ -83,7 +83,7 @@ public class OldLot {
    public String message; // used by GainsCalculator to record/print info during
 	// processing
 
-	private LongCounter counter = new LongCounter();
+	private IntegerCounter counter = new IntegerCounter();
 	
 	/**
 	 * Creates a lot ID for a "fresh" buy lot, i.e. a buy lot that is not being

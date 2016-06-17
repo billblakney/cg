@@ -75,8 +75,8 @@ public class Trade implements Comparable {
 	public String note;
 
 	public String history = new String();
-	public Long numSharesHeld;
-	public Long numSharesSold;
+	public Integer numSharesHeld;
+	public Integer numSharesSold;
 	public String series;
 
 	/**

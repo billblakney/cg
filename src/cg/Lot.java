@@ -1,7 +1,7 @@
 package cg;
 
 import java.math.BigDecimal;
-//import util.LongCounter;
+//import util.IntegerCounter;
 
 /**
  */
@@ -61,7 +61,7 @@ public class Lot
 	}
 
 
-//	private LongCounter counter = new LongCounter();
+//	private IntegerCounter counter = new IntegerCounter();
 //	
 //	/**
 //	 * Creates a lot ID for a "fresh" buy lot, i.e. a buy lot that is not being

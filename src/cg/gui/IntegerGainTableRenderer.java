@@ -11,19 +11,16 @@ import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
-import cg.Trade;
-
-
 /**
  * This class provides rendering for the cells in the trade table.
  */
-public class LongTradeTableRenderer extends DefaultTradeTableRenderer {
+public class IntegerGainTableRenderer extends DefaultGainTableRenderer {
 
 	private DecimalFormat numSharesFormat = new DecimalFormat(
 	"###,###,###,##0");
 	
 	
-	public LongTradeTableRenderer(TableRowSorter<TradeTableModel> s) {
+	public IntegerGainTableRenderer(TableRowSorter<GainTableModel> s) {
 		super(s);
 	}
 

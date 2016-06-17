@@ -29,11 +29,10 @@ public class LotGainTable extends JTable {
 		setRowSorter(sorter);
 
 		DefaultLotTableRenderer r = new DefaultLotTableRenderer(sorter);
-		LongLotTableRenderer lr = new LongLotTableRenderer(sorter);
+		IntegerLotTableRenderer lr = new IntegerLotTableRenderer(sorter);
 		setDefaultRenderer(Object.class, r);
 		setDefaultRenderer(Float.class, r);
 		setDefaultRenderer(Integer.class, lr);
-		setDefaultRenderer(Long.class, lr);
 
 		totalGain = new TotalGain();
 	}
