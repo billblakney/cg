@@ -110,18 +110,57 @@ System.out.println("number to distrubute: " + tNumToDistribute);
       Iterator<Lot> tIterator = tLots.iterator();
 System.out.println("tLots.size: " + tLots.size());
 
+      Vector<Lot> tNewLots = new Vector<Lot>();
+      
       while (tIterator.hasNext() && tNumToDistribute > 0)
       {
          Lot tLot = tIterator.next();
          /*
-          * If the number left to distribute is less than the number
-          * of lot shares, then only part of the lot is consumed. This will
-          * produce two new lots: one sold and one open.
+          * This is the case where the lot is bigger than the number of
+          * shares left to be processed. This will produce two new lots:
+          * an open one that has the remaining shares available to sell,
+          * and a closed one representing the shares sold.
           */
          if (tNumToDistribute < tLot.numShares)
          {
             // two new lots and update old.hasChildren
 System.out.println("creating two new lots from old");
+
+            Lot tNewOpenLot = new Lot();
+            {
+            tNewOpenLot.parentId = tLot.lotId;
+            tNewOpenLot.hasChildren = false;
+            tNewOpenLot.triggerTradeId = aTrade.tradeId;
+            tNewOpenLot.buyTradeId = tLot.buyTradeId;
+            tNewOpenLot.sellTradeId = null;
+            tNewOpenLot.numShares = tLot.numShares - tNumToDistribute;
+            float tFactor = (float)tNewOpenLot.numShares/(float)tLot.numShares;
+            tNewOpenLot.basis = new BigDecimal(tFactor*tLot.basis.floatValue());
+            tNewOpenLot.proceeds = new BigDecimal(0.0);
+            tNewOpenLot.state = Lot.State.eOpen;
+            }
+
+            tNewLots.add(tNewOpenLot);
+            
+            Lot tNewClosedLot = new Lot();
+            {
+            tNewClosedLot.parentId = tLot.lotId;
+            tNewClosedLot.hasChildren = false;
+            tNewClosedLot.triggerTradeId = aTrade.tradeId;
+            tNewClosedLot.buyTradeId = tLot.buyTradeId;
+            tNewClosedLot.sellTradeId = aTrade.tradeId;
+            tNewClosedLot.numShares = tNumToDistribute;
+            float tFactor = (float)tNewClosedLot.numShares/(float)tLot.numShares;
+            tNewClosedLot.basis = new BigDecimal(tFactor*tLot.basis.floatValue());
+            float tProceeds = //TODO !!! factor?
+                  ((float)tNumToDistribute) * aTrade.sharePrice.floatValue()
+                     - aTrade.comm.floatValue();
+            tNewClosedLot.proceeds = new BigDecimal(tProceeds);
+            tNewClosedLot.state = Lot.State.eClosed;
+            }
+
+            tNewLots.add(tNewClosedLot);
+
             tNumToDistribute = 0;
          }
          /*
@@ -133,9 +172,37 @@ System.out.println("creating two new lots from old");
          {
             // new lot and update old.hasChildren
 System.out.println("creating one new lot from old");
+
+            Lot tNewClosedLot = new Lot();
+            {
+            tNewClosedLot.parentId = tLot.lotId;
+            tNewClosedLot.hasChildren = false;
+            tNewClosedLot.triggerTradeId = aTrade.tradeId;
+            tNewClosedLot.buyTradeId = tLot.buyTradeId;
+            tNewClosedLot.sellTradeId = aTrade.tradeId;
+            tNewClosedLot.numShares = tLot.numShares;
+            tNewClosedLot.basis = new BigDecimal(tLot.basis.floatValue());//TOOD check
+            float tProceeds = //TODO !!! factor?
+                  ((float)tNumToDistribute) * aTrade.sharePrice.floatValue()
+                     - aTrade.comm.floatValue();
+            tNewClosedLot.proceeds = new BigDecimal(tProceeds);
+            tNewClosedLot.state = Lot.State.eClosed;
+            }
+
+            tNewLots.add(tNewClosedLot);
+
             tNumToDistribute -= tLot.numShares;
          }
+
+         tLot.hasChildren = true;
+         //_db.updateLot(...//TODO !!!
+      }
+      
+      for (Lot tLot: tNewLots)
+      {
+         _db.insertLot(tLot);
          
+         _lots.add(tLot);
       }
    }
 
