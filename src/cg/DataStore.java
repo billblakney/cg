@@ -5,7 +5,7 @@ import java.sql.Connection;
 import java.util.Iterator;
 import java.util.Vector;
 import cg.db.ConnectionManager;
-import cg.db.HSQLDB_Loader;
+import cg.db.DatabaseInterface;
 
 /*
  * Singleton class that manages the storage of data for this app.
@@ -17,7 +17,7 @@ public class DataStore
    
    ConnectionManager _cm = null;
    
-   HSQLDB_Loader _dbi = null;
+   DatabaseInterface _dbi = null;
    
    Vector<Trade> _trades = new Vector<Trade>();
 
@@ -53,7 +53,7 @@ public class DataStore
       _cm = ConnectionManager.getInstance();
       _cm.setDbUrl(aDbUrl);
       
-      _dbi = HSQLDB_Loader.getInstance();
+      _dbi = DatabaseInterface.getInstance();
    }
 
    public TradeList getTrades(int aAccountId)

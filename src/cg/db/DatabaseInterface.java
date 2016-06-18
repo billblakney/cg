@@ -20,10 +20,10 @@ import cg.SimpleDate;
 import cg.Trade;
 import cg.TradeList;
 
-public class HSQLDB_Loader
+public class DatabaseInterface
 {
    /** Singleton of this class. */
-   static private HSQLDB_Loader _hsqldbLoader = null;
+   static private DatabaseInterface _hsqldbLoader = null;
    
    private String _insertTradeSql =
          "INSERT INTO trade "
@@ -42,7 +42,7 @@ public class HSQLDB_Loader
     * Constructor
     * @param aDbUrl
     */
-   private HSQLDB_Loader()
+   private DatabaseInterface()
    {
    }
    
@@ -50,11 +50,11 @@ public class HSQLDB_Loader
     * Get the singleton instance.
     * @return
     */
-   public static HSQLDB_Loader getInstance()
+   public static DatabaseInterface getInstance()
    {
       if (_hsqldbLoader == null)
       {
-         _hsqldbLoader = new HSQLDB_Loader();
+         _hsqldbLoader = new DatabaseInterface();
       }
       return _hsqldbLoader;
    }
