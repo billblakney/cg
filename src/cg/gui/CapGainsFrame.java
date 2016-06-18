@@ -58,12 +58,7 @@ public class CapGainsFrame extends JFrame {
 	 */
 	private String dbUrl = null;
 
-	private HSQLDB_Loader db = null;
-
-	/**
-	 * Uses startup test connection to db
-	 */
-	private boolean _dbOk = false;
+	private DataStore _dataStore = null;
 
 	/**
 	 * The account that is currently displayed.
@@ -121,15 +116,8 @@ public class CapGainsFrame extends JFrame {
 		
 		if (dbUrl != null)
 		{
-		   db = HSQLDB_Loader.getInstance();
-		   db.setDbUrl(dbUrl);
-		   db.connectdb();
-
-		   boolean tCanConnect = db.canConnectToDb();
-		   _dbOk = ((tCanConnect==true)?true:false);
-
-		   DataStore tDataStore = DataStore.getInstance();
-		   tDataStore.setDb(db);
+		   _dataStore = DataStore.getInstance();
+		   _dataStore.setDbUrl(dbUrl);
 		}
 
 if( tradeFile != null)
@@ -272,7 +260,7 @@ System.out.println("dbUrl: " + dbUrl);
 	 */
 	private void actionSelectAccount() {
 
-		Vector<AccountInfo> accts = db.getAccountInfoVector();
+		Vector<AccountInfo> accts = _dataStore.getAccountInfoVector();
 		Object[] choices = accts.toArray();
 
 		AccountInfo selected_acct = (AccountInfo) JOptionPane.showInputDialog(
@@ -281,7 +269,7 @@ System.out.println("dbUrl: " + dbUrl);
 
 		System.out.println("Selected account: " + selected_acct.name);
 
-		TradeList trades = db.getTrades(selected_acct.acct_id);
+		TradeList trades = _dataStore.getTrades(selected_acct.acct_id);
 		Account acct = new Account(selected_acct.name,trades);
 		showAccount(acct);
 	}
@@ -301,10 +289,10 @@ System.out.println("dbUrl: " + dbUrl);
 	private void actionLoadAccountTradeFile()
 	{
 		// Get all accounts for dialog selection.
-		Vector<AccountInfo> tAccountInfo = db.getAccountInfoVector();
+		Vector<AccountInfo> tAccountInfo = _dataStore.getAccountInfoVector();
 		Vector<String> tAccountNames = AccountInfo.getNames(tAccountInfo);
 
-		HSQLDB_Loader.printAccountInfoVector(tAccountInfo);
+		DataStore.printAccountInfoVector(tAccountInfo);
 
 		// Launch the load trade file dialog.
 		LoadTradeFileDialog tDialog = new LoadTradeFileDialog(
@@ -324,7 +312,7 @@ System.out.println("dbUrl: " + dbUrl);
 
 			// Load the trades from the trade file and write them to the DB.
 			TradeList trades = TradeFileReader.loadTradeFile(tTradeFileName);
-			db.insertTrades(tAccountId,trades);
+			_dataStore.addTrades(tAccountId,trades,true);
 
 			// For now, show reports for the loaded trade file.
 			// TODO later, the reports will take data from the DB, but not yet.
@@ -415,7 +403,7 @@ System.out.println("dbUrl: " + dbUrl);
 			// Add "Select DB Account" menu item to the "File" menu.
 			JMenuItem itemSelectAccount = new JMenuItem(SELECT_DB_ACCOUNT);
 			itemSelectAccount.addActionListener(this);
-			if (_dbOk == false){
+			if (dbUrl != null){
 			   itemSelectAccount.setEnabled(false);
 			}
 			fileMenu.add(itemSelectAccount);

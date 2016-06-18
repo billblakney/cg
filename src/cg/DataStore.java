@@ -1,8 +1,10 @@
 package cg;
 
 import java.math.BigDecimal;
+import java.sql.Connection;
 import java.util.Iterator;
 import java.util.Vector;
+import cg.db.ConnectionManager;
 import cg.db.HSQLDB_Loader;
 
 /*
@@ -13,11 +15,25 @@ public class DataStore
 {
    static DataStore _dataStore = null;
    
-   HSQLDB_Loader _db = null;
+   ConnectionManager _cm = null;
+   
+   HSQLDB_Loader _dbi = null;
    
    Vector<Trade> _trades = new Vector<Trade>();
 
    Vector<Lot> _lots = new Vector<Lot>();
+
+   /**
+    * Print accounts.
+    * TODO move, header?, etc
+    */
+   public static void printAccountInfoVector(Vector<AccountInfo> aAccounts)
+   {
+	   for (AccountInfo tInfo: aAccounts)
+	   {
+		   System.out.println(tInfo.toString());
+	   }
+   }
    
    private DataStore()
    {
@@ -32,17 +48,69 @@ public class DataStore
       return _dataStore;
    }
    
-   public void setDb(HSQLDB_Loader aDb)
+   public void setDbUrl(String aDbUrl)
    {
-	   _db = aDb;
+      _cm = ConnectionManager.getInstance();
+      _cm.setDbUrl(aDbUrl);
+      
+      _dbi = HSQLDB_Loader.getInstance();
+   }
+
+   public TradeList getTrades(int aAccountId)
+   {
+      TradeList tTradeList = null;
+
+      if (_cm != null)
+      {
+         Connection tConn = _cm.getConnection();
+         if (tConn != null)
+         {
+            tTradeList = _dbi.getTrades(tConn,aAccountId);
+            _cm.closeConnection(tConn);
+         }
+      }
+      else
+      {
+         //TODO
+      }
+
+      return tTradeList;
+   }
+
+   public Vector<AccountInfo> getAccountInfoVector()
+   {
+      Vector<AccountInfo> tAcctInfo = null;
+
+      if (_cm != null)
+      {
+         Connection tConn = _cm.getConnection();
+         if (tConn != null)
+         {
+            tAcctInfo = _dbi.getAccountInfoVector(tConn);
+            _cm.closeConnection(tConn);
+         }
+      }
+      else
+      {
+         //TODO
+      }
+
+      return tAcctInfo;
    }
    
    public void addTrades(
          int aAccountId,TradeList aTradeList,boolean aProcessThem)
    {
-      if (_db != null)
+      Connection tConn = null;
+
+      if (_cm != null)
       {
-         _db.insertTrades(aAccountId,aTradeList);
+         tConn = _cm.getConnection();
+      }
+      
+      if (tConn != null)
+      {
+         _dbi.insertTrades(tConn,aAccountId,aTradeList);
       }
 
       for (Trade tTrade: aTradeList)
@@ -51,19 +119,24 @@ public class DataStore
 
          if (tTrade.isBuyTrade())
          {
-            processBuyTrade((BuyTrade)tTrade);
+            processBuyTrade(tConn,(BuyTrade)tTrade);
          }
          else
          {
-            processSellTrade((SellTrade)tTrade);
+            processSellTrade(tConn,(SellTrade)tTrade);
          }
+      }
+
+      if (_cm != null)
+      {
+         _cm.closeConnection(tConn);
       }
    }
    
    /*
     * TODO is only for ntx accts now
     */
-   protected void processBuyTrade(BuyTrade aTrade)
+   private void processBuyTrade(Connection aConn,BuyTrade aTrade)
    {
       /*
        * Create a new buy lot.
@@ -85,7 +158,10 @@ public class DataStore
       /*
        * Save the lot to the db.
        */
-      _db.insertLot(tLot);
+      if (aConn != null)
+      {
+         _dbi.insertLot(aConn,tLot);
+      }
 
       /*
        * Save the lot to the cache.
@@ -96,7 +172,7 @@ public class DataStore
    /*
     * TODO is only for ntx accts now
     */
-   protected void processSellTrade(SellTrade aTrade)
+   private void processSellTrade(Connection aConn,SellTrade aTrade)
    {
       int tNumToDistribute = aTrade.numShares;
 
@@ -187,12 +263,18 @@ public class DataStore
 
          tLot.hasChildren = true;
 
-         _db.updateLotHasChildren(tLot);
+         if (aConn != null)
+         {
+            _dbi.updateLotHasChildren(aConn,tLot);
+         }
       }
       
       for (Lot tLot: tNewLots)
       {
-         _db.insertLot(tLot);
+         if (aConn != null)
+         {
+            _dbi.insertLot(aConn,tLot);
+         }
          
          _lots.add(tLot);
       }

@@ -1,7 +1,6 @@
 package cg;
 
 import java.util.Vector;
-import cg.db.HSQLDB_Loader;
 
 public class Test1
 {
@@ -33,20 +32,16 @@ public class Test1
 	
 	private void runTest()
 	{
-	   HSQLDB_Loader db = HSQLDB_Loader.getInstance();
-	   db.setDbUrl(_dbUrl);
-	   db.connectdb();
-
 	   DataStore tDataStore = DataStore.getInstance();
-	   tDataStore.setDb(db);
+	   tDataStore.setDbUrl(_dbUrl);
 
 	   /*
 	    * Get all accounts from the db. //TODO put to DataStore
 	    */
-	   Vector<AccountInfo> tAccountInfo = db.getAccountInfoVector();
+	   Vector<AccountInfo> tAccountInfo = tDataStore.getAccountInfoVector();
 //	   Vector<String> tAccountNames = AccountInfo.getNames(tAccountInfo);
 
-	   HSQLDB_Loader.printAccountInfoVector(tAccountInfo);
+	   DataStore.printAccountInfoVector(tAccountInfo);
 
 	   /*
 	    * Load the trades from the trade file.

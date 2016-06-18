@@ -20,22 +20,10 @@ import cg.SimpleDate;
 import cg.Trade;
 import cg.TradeList;
 
-public class HSQLDB_Loader implements CapGainsDB
+public class HSQLDB_Loader
 {
    /** Singleton of this class. */
    static private HSQLDB_Loader _hsqldbLoader = null;
-
-   /** Full path to the database. */
-   private String _dbUrl = null;
-
-   /** Database user. */
-   private String _dbUser = "SA";
-
-   /** Database user. */
-   private String _dbPwd = "";
-
-   /** Database connection. */
-   private Connection _db = null;
    
    private String _insertTradeSql =
          "INSERT INTO trade "
@@ -49,18 +37,6 @@ public class HSQLDB_Loader implements CapGainsDB
    
    private String _updateLotHasChildrenSql =
          "UPDATE lot SET has_children = ? WHERE lot_id = ?";
-
-   /**
-    * Print accounts.
-    * TODO move, header?, etc
-    */
-   public static void printAccountInfoVector(Vector<AccountInfo> aAccounts)
-   {
-	   for (AccountInfo tInfo: aAccounts)
-	   {
-		   System.out.println(tInfo.toString());
-	   }
-   }
    
    /**
     * Constructor
@@ -82,89 +58,14 @@ public class HSQLDB_Loader implements CapGainsDB
       }
       return _hsqldbLoader;
    }
-   
-   /**
-    * Set the database URL.
-    * Need to call this method to make the database operational (from the
-    * perspective of this process).
-    */
-   public void setDbUrl(String aDbUrl)
-   {
-      _dbUrl = aDbUrl;
-   }
-
-   /**
-    * Open connection to the database.
-    * @return
-    */
-   public boolean connectdb()
-   {
-      try
-      {
-         connectToDB();
-      }
-      catch (Exception ex)
-      {
-         System.out.println("Failed to connect to db:\n" + ex);
-         ex.printStackTrace();
-         return false;
-      }
-      return true;
-   }
-
-   /**
-    * Close connection to the dtabase.
-    * @return
-    */
-   public boolean closedb()
-   {
-      try
-      {
-         _db.close();
-         _db = null;
-      }
-      catch (Exception ex)
-      {
-         System.out.println("Failed to close db:\n" + ex);
-         return false;
-      }
-      return true;
-   }
-   
-   /**
-    * Determine if a db connection can be made.
-    * This method attempts to make a connection, and if it is successful, the
-    * connection is then closed, and a value of true is returned. Otherwise,
-    * a value of false is returned.
-    * @return true if the test connection succeeds.
-    */
-   public boolean canConnectToDb()
-   {
-      boolean tConnected = connectdb();
-      if (tConnected == true)
-      {
-         closedb();
-         return true;
-      }
-      else
-      {
-         return false;
-      }
-   }
 
    /**
     * Get accounts.
     */
-   public Vector<AccountInfo> getAccountInfoVector()
+   public Vector<AccountInfo> getAccountInfoVector(Connection aConn)
    {
       
       Vector<AccountInfo> accounts = new Vector<AccountInfo>();
-
-      if (_db == null)
-      {
-         System.out.println("ERROR: not connected to db");
-         return accounts;
-      }
 
       // run query
       try
@@ -172,7 +73,7 @@ public class HSQLDB_Loader implements CapGainsDB
          System.out.println("Now executing the command: "
                + "select * from acct");
 
-         Statement tSql = _db.createStatement();
+         Statement tSql = aConn.createStatement();
 
          ResultSet tResults = tSql.executeQuery("select * from acct");
 
@@ -197,7 +98,6 @@ public class HSQLDB_Loader implements CapGainsDB
       catch (Exception ex)
       {
          System.out.println("ERROR:\n" + ex);
-         ex.printStackTrace();
       }
 
       return accounts;
@@ -206,21 +106,14 @@ public class HSQLDB_Loader implements CapGainsDB
    /**
     * Get trades.
     */
-   public TradeList getTrades(int aAccountId)
+   public TradeList getTrades(Connection aConn,int aAccountId)
    {
-
       TradeList tlist = new TradeList();
-
-      if (_db == null)
-      {
-         System.out.println("ERROR: not connected to db");
-         return tlist;
-      }
 
       // run query
       try
       {
-         Statement tSql = _db.createStatement();
+         Statement tSql = aConn.createStatement();
 
          ResultSet tResults = tSql.executeQuery(
                "SELECT DISTINCT * FROM trade WHERE trade.acct_id='"
@@ -276,7 +169,6 @@ public class HSQLDB_Loader implements CapGainsDB
       catch (Exception ex)
       {
          System.out.println("***Exception:\n" + ex);
-         ex.printStackTrace();
       }
 
       return tlist;
@@ -295,28 +187,21 @@ public class HSQLDB_Loader implements CapGainsDB
     * -> commission REAL NOT NULL,
     * -> special_rule varchar(10),
     */
-   public void insertTrades(int aAccountId,Vector<Trade> aTrades)
+   public void insertTrades(Connection aConn,int aAccountId,Vector<Trade> aTrades)
    {
-      insertTrades_Batch(aAccountId,aTrades);
-//      insertTrades_OneByOne(aAccountId,aTrades);
-
+      insertTrades_Batch(aConn,aAccountId,aTrades);
+//      insertTrades_OneByOne(aConn,aAccountId,aTrades);
    }
 
    /**
     * Insert trades one-by-one.
     */
-   private void insertTrades_OneByOne(int aAccountId,Vector<Trade> aTrades)
+   private void insertTrades_OneByOne(Connection aConn,int aAccountId,Vector<Trade> aTrades)
    {
-      if (_db == null)
-      {
-         System.out.println("ERROR: not connected to db");
-         return;
-      }
-
       // run query
       try
       {
-    	  PreparedStatement pstmt = _db.prepareStatement(_insertTradeSql,Statement.RETURN_GENERATED_KEYS);
+    	  PreparedStatement pstmt = aConn.prepareStatement(_insertTradeSql,Statement.RETURN_GENERATED_KEYS);
 
     	  int tTradeIndex = 0;
     	  
@@ -366,27 +251,20 @@ public class HSQLDB_Loader implements CapGainsDB
       catch (Exception ex)
       {
          System.out.println("Exception writing trades to db:\n" + ex);
-         ex.printStackTrace();
       }
    }
 
    /**
     * Get trades.
     */
-   private void insertTrades_Batch(int aAccountId,Vector<Trade> aTrades)
+   private void insertTrades_Batch(Connection aConn,int aAccountId,Vector<Trade> aTrades)
    {
-      if (_db == null)
-      {
-         System.out.println("ERROR: not connected to db");
-         return;
-      }
-
       // run query
       try
       {
-    	  _db.setAutoCommit(false);
+    	  aConn.setAutoCommit(false);
     	  
-    	  PreparedStatement pstmt = _db.prepareStatement(_insertTradeSql,Statement.RETURN_GENERATED_KEYS);
+    	  PreparedStatement pstmt = aConn.prepareStatement(_insertTradeSql,Statement.RETURN_GENERATED_KEYS);
 
     	  for (Trade tTrade: aTrades)
     	  {
@@ -419,7 +297,7 @@ public class HSQLDB_Loader implements CapGainsDB
     	   * Execute the batch command to save the trades to database.
     	   */
     	  int[] updateCount = pstmt.executeBatch();
-    	  _db.setAutoCommit(true); 
+    	  aConn.setAutoCommit(true); 
 
     	  /*
     	   * Update the trades with their primary keys.
@@ -438,33 +316,6 @@ public class HSQLDB_Loader implements CapGainsDB
       catch (Exception ex)
       {
          System.out.println("Exception writing trades to db:\n" + ex);
-         ex.printStackTrace();
-      }
-   }
-
-   /**
-    * TODO maybe create a class derived from PreparedStatement and add setIntOrNull
-    * @param aStatement
-    * @param aIndex
-    * @param aInteger
-    */
-   protected void setIntOrNull(
-         PreparedStatement aStatement,int aIndex,Integer aInteger)
-   {
-      try
-      {
-         if (aInteger == null)
-         {
-            aStatement.setNull(aIndex,java.sql.Types.INTEGER);
-         }
-         else
-         {
-            aStatement.setInt(aIndex,aInteger);
-         }
-      }
-      catch (Exception ex)
-      {
-         System.out.println("Exception in setIntIfPositive:\n" + ex);
       }
    }
 
@@ -480,18 +331,11 @@ public class HSQLDB_Loader implements CapGainsDB
 	 * -> BigDecimal proceeds;
 	 * -> State state;
     */
-   public void insertLot(Lot aLot)
+   public void insertLot(Connection aConn,Lot aLot)
    {
-      if (_db == null)
-      {
-         System.out.println("ERROR: not connected to db");
-         return;
-      }
-
-      // run query
       try
       {
-    	  PreparedStatement pstmt = _db.prepareStatement(_insertLotSql,Statement.RETURN_GENERATED_KEYS);
+    	  PreparedStatement pstmt = aConn.prepareStatement(_insertLotSql,Statement.RETURN_GENERATED_KEYS);
 
     	  /*
     	   * Build the prepared insert statement.
@@ -531,23 +375,16 @@ public class HSQLDB_Loader implements CapGainsDB
       catch (Exception ex)
       {
          System.out.println("Exception writing lot to db:\n" + ex);
-         ex.printStackTrace();
       }
    }
 
    /**
     */
-   public void updateLotHasChildren(Lot aLot)
+   public void updateLotHasChildren(Connection aConn,Lot aLot)
    {
-      if (_db == null)
-      {
-         System.out.println("ERROR: not connected to db");
-         return;
-      }
-
       try
       {
-         PreparedStatement pstmt = _db.prepareStatement(_updateLotHasChildrenSql);
+         PreparedStatement pstmt = aConn.prepareStatement(_updateLotHasChildrenSql);
 
          /*
           * Build the prepared update statement.
@@ -566,49 +403,32 @@ public class HSQLDB_Loader implements CapGainsDB
       catch (Exception ex)
       {
          System.out.println("Exception writing lot to db:\n" + ex);
-         ex.printStackTrace();
       }
    }
 
    /**
-    * Obtain a connection to the database.
+    * TODO maybe create a class derived from PreparedStatement and add setIntOrNull
+    * @param aStatement
+    * @param aIndex
+    * @param aInteger
     */
-   private void connectToDB()
+   private void setIntOrNull(
+         PreparedStatement aStatement,int aIndex,Integer aInteger)
    {
-      /*
-       * Verify that the driver is registered.
-       */
       try
       {
-         Class.forName("org.hsqldb.jdbcDriver");
+         if (aInteger == null)
+         {
+            aStatement.setNull(aIndex,java.sql.Types.INTEGER);
+         }
+         else
+         {
+            aStatement.setInt(aIndex,aInteger);
+         }
       }
-      catch (ClassNotFoundException ex)
+      catch (Exception ex)
       {
-         System.out.println("Couldn't find the driver!\n" + ex);
-         System.exit(1);
-      }
-
-      try
-      {
-         // The second and third arguments are the username and password,
-         // respectively. They should be whatever is necessary to connect
-         // to the database.
-         _db = DriverManager.getConnection(_dbUrl,_dbUser,_dbPwd);
-      }
-      catch (SQLException ex)
-      {
-         System.out.println("Couldn't connect:\n" + ex);
-         System.exit(1);
-      }
-
-      if (_db != null)
-      {
-         System.out.println("Connected to the database.");
-      }
-      else
-      {
-         System.out.println("ERROR: null database connection");
-         System.exit(1);
+         System.out.println("Exception in setIntIfPositive:\n" + ex);
       }
    }
 }
