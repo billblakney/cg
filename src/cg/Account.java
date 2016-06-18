@@ -12,7 +12,7 @@ import java.util.*;
  * StockMgr maintains all of the trades for a particular stock (e.g. CSCO).
  */
 
-public class Account extends Observable {
+public class Account extends AccountData implements AccountDataProvider {
 
 	public final String DEFAULT_ACCT_NAME = "Default Account";
 	String name;
@@ -86,6 +86,7 @@ public class Account extends Observable {
 	/**
 	 * Get the list of tickers for all stocks in this account.
 	 */
+	@Override
 	public TreeSet<String> getTickers() {
 		return allTrades.getTickers();
 	}
@@ -93,6 +94,7 @@ public class Account extends Observable {
 	/**
 	 * Get the list of years for all stocks in this account.
 	 */
+	@Override
 	public TreeSet<Integer> getYears(Boolean includeIdleYears) {
 		return allTrades.getYears(includeIdleYears);
 	}
@@ -100,6 +102,7 @@ public class Account extends Observable {
 	/**
 	 * Get a list of all trades.
 	 */
+	@Override
 	public TradeList getTradeList() {
 		return allTrades;
 	}
@@ -125,6 +128,7 @@ public class Account extends Observable {
 	 * 'null' for 'ticker' gets gains for all tickers. A value of 'null' for
 	 * 'year' gets gains for all years.
 	 */
+	@Override
 	public Vector getSharesHeldStats() {
 	
 		Vector stats = new Vector();
@@ -143,6 +147,7 @@ public class Account extends Observable {
 	 * 'null' for 'ticker' gets gains for all tickers. A value of 'null' for
 	 * 'year' gets gains for all years.
 	 */
+	@Override
 	public Vector getTaxGains(String ticker, String year) {
 	
 		Vector gains = new Vector();
@@ -164,6 +169,7 @@ public class Account extends Observable {
 	 * 'null' for 'ticker' gets gain lots for all tickers. A value of 'null' for
 	 * 'year' gets gain lots for all years.
 	 */
+	@Override
 	public Vector getTaxGainLots(String ticker, String year) {
 	
 		Vector gainLots = new Vector();
@@ -180,14 +186,11 @@ public class Account extends Observable {
 		return gainLots;
 	}
 
-	/**
-	 * Get lots held for the specified ticker and year. A value of
-	 * 'null' for 'ticker' gets held lots for all tickers. A value of 'null' for
-	 * 'year' gets held lots for all years.
-	 */
-	public Vector getHeldLots(String ticker, String year) {
+	@Override
+	public Vector<LotDataProvider>
+	getHeldLots(String ticker, String year) {
 	
-		Vector heldLots = new Vector();
+		Vector<LotDataProvider> heldLots = new Vector<LotDataProvider>();
 
 		Iterator<Map.Entry<String,SecurityTradeList>> i = mgrs.entrySet().iterator();
 		while( i.hasNext() ){
@@ -205,6 +208,7 @@ public class Account extends Observable {
 	 * Get a summary of capital tax gains for each year.
 	 * Begin with the year that corresponds to the first trade.
 	 */
+	@Override
 	public Vector getYearlyGains() {
 
 		Vector gains = new Vector();
@@ -226,6 +230,7 @@ public class Account extends Observable {
 	/**
 	 * Get a summary of capital tax gains for each security.
 	 */
+	@Override
 	public Vector getSecurityGains() {
 		
 		Vector gains = new Vector();

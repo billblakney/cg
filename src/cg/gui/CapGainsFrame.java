@@ -318,6 +318,10 @@ System.out.println("dbUrl: " + dbUrl);
 			// TODO later, the reports will take data from the DB, but not yet.
 			Account acct = new Account(tAccountName,trades);
 			showAccount(acct);
+
+//			actionCreateReport(ReportType.LOTS_HELD);
+			reportTabbedPane.addReport("FROMDB",ReportType.LOTS_HELD,
+			      _dataStore); //TODO individual accounts
 		}
 	}
 

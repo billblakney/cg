@@ -1,9 +1,7 @@
 package cg.gui;
 
 import javax.swing.JPanel;
-
-import cg.Account;
-
+import cg.AccountData;
 import java.awt.Dimension;
 import java.util.*;
 
@@ -12,7 +10,7 @@ public abstract class AccountReportPanel extends JPanel implements Observer {
 	/**
 	 * Replace the currently displayed account with a new one and register for account changes.
 	 */
-	public void setAccount(Account acct) {
+	public void setAccount(AccountData acct) {
 		acct.addObserver(this);
 		updatePanel(acct);
 	}
@@ -20,7 +18,7 @@ public abstract class AccountReportPanel extends JPanel implements Observer {
 	/**
 	 * Update the panel to display the account.
 	 */
-	abstract protected void updatePanel(Account acct);
+	abstract protected void updatePanel(AccountData acct);
 
 	@Override
 	public Dimension getMinimumSize() {

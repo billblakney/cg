@@ -53,7 +53,7 @@ public class TradePanel extends AccountReportPanel implements ActionListener {
 		init();
 	}
 	
-	public TradePanel(Account acct) {
+	public TradePanel(AccountData acct) {
 		init();
 		setAccount(acct);
 	}
@@ -117,7 +117,7 @@ public class TradePanel extends AccountReportPanel implements ActionListener {
 	/**
 	 * updateReplace the currently displayed account with a new one.
 	 */
-	protected void updatePanel(Account acct) {
+	protected void updatePanel(AccountData acct) {
 		TradeList tradeList = acct.getTradeList();
 		table.setRows(tradeList);
 		yearFilterBox.update(acct);
@@ -125,12 +125,13 @@ public class TradePanel extends AccountReportPanel implements ActionListener {
 	}
 
 	/**
-	 * Handle the update notification from Account.
+	 * Handle the update notification from AccountData.
 	 */
 	public void update(Observable ov, Object obj) {
 
-		if( ov.getClass() == Account.class ){
-			updatePanel((Account)ov);
+//		if( ov.getClass() == Account.class ){
+		if( ov instanceof AccountData ){
+			updatePanel((AccountData)ov);
 		}
 		else if( ov.getClass() == SharesHeld.class ){
 			sharesLabel.update((Integer)obj);

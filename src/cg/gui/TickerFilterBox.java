@@ -5,7 +5,7 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 
-import cg.Account;
+import cg.AccountData;
 
 public class TickerFilterBox extends JComboBox {
 
@@ -25,7 +25,7 @@ public class TickerFilterBox extends JComboBox {
 			return item;
 	}
 	
-	public void update(Account acct) {
+	public void update(AccountData acct) {
 		Vector list = new Vector();
 		list.addElement(ALL_STOCKS_STRING);
 		list.addAll(acct.getTickers());

@@ -48,7 +48,7 @@ public class LotsHeldPanel extends AccountReportPanel implements ActionListener 
 		init();
 	}
 	
-	public LotsHeldPanel(Account acct) {
+	public LotsHeldPanel(AccountData acct) {
 		init();
 		setAccount(acct);
 	}
@@ -99,19 +99,19 @@ public class LotsHeldPanel extends AccountReportPanel implements ActionListener 
 	/**
 	 * updateReplace the currently displayed account with a new one.
 	 */
-	protected void updatePanel(Account acct) {
+	protected void updatePanel(AccountData acct) {
 		Vector<LotDataProvider> lots = acct.getHeldLots(null,null); //TODO null,null?
 		table.setRows(lots);
 		tickerFilterBox.update(acct);
 	}
 
 	/**
-	 * Handle the update notification from Account.
+	 * Handle the update notification from AccountData.
 	 */
 	public void update(Observable ov, Object obj) {
 
-		if( ov.getClass() == Account.class ){
-			updatePanel((Account)ov);
+		if( ov instanceof AccountData ){
+			updatePanel((AccountData)ov);
 		}
 		else if( ov.getClass() == SharesHeld.class ){
 			sharesLabel.update((Integer)obj);

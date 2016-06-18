@@ -1,5 +1,6 @@
 package cg;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Vector;
 import java.util.TreeSet;
@@ -129,9 +130,9 @@ public class TradeList extends Vector<Trade> {
 	 * Get the held lots for the specified year. Use "null" for year to get held
 	 * lots for all years.
 	 */
-	public Vector<OldLot> getHeldLots(String year) {
+	public Collection<LotDataProvider> getHeldLots(String year) {
 
-		Vector<OldLot> heldLots = new Vector<OldLot>();
+		Vector<LotDataProvider> heldLots = new Vector<LotDataProvider>();
 
 		for (int i = 0; i < size(); i++) {
 			if (((Trade) elementAt(i)).tradeType != Trade.Type.BUY) {
@@ -145,7 +146,7 @@ public class TradeList extends Vector<Trade> {
 			}
 			Vector<OldLot> lots = buyTrade.lotSet.lots;
 			for( int j = 0; j < lots.size(); j++ )
-				heldLots.addElement(lots.elementAt(j));
+				heldLots.addElement((LotDataProvider)lots.elementAt(j));
 		}
 		return heldLots;
 	}

@@ -11,12 +11,14 @@ import java.sql.Statement;
 import java.util.Collections;
 import java.util.Vector;
 import java.util.GregorianCalendar;
-
 import cg.AccountInfo;
 import cg.BuyTrade;
 import cg.Lot;
+import cg.LotData;
+import cg.LotDataProvider;
 import cg.SellTrade;
 import cg.SimpleDate;
+import cg.Term;
 import cg.Trade;
 import cg.TradeList;
 
@@ -67,12 +69,8 @@ public class DatabaseInterface
       
       Vector<AccountInfo> accounts = new Vector<AccountInfo>();
 
-      // run query
       try
       {
-         System.out.println("Now executing the command: "
-               + "select * from acct");
-
          Statement tSql = aConn.createStatement();
 
          ResultSet tResults = tSql.executeQuery("select * from acct");
@@ -101,6 +99,44 @@ public class DatabaseInterface
       }
 
       return accounts;
+   }
+
+   /**
+    * Get lot report rows.
+    */
+   public Vector<LotDataProvider> getLotData(Connection aConn,int aAccountId)
+   {
+      Vector<LotDataProvider> tLotDatas = new Vector<LotDataProvider>();
+
+      try
+      {
+         Statement tSql = aConn.createStatement();
+
+         ResultSet tResults = tSql.executeQuery("select * from LotReport");
+
+         if (tResults != null)
+         {
+            while (tResults.next())
+            {
+               LotData tLotData = new LotData();
+               tLotData.set_symbol(tResults.getString(1));
+               tLotData.set_buyDate(new SimpleDate(tResults.getDate(2)));
+               tLotData.set_numShares(tResults.getInt(3));
+               tLotData.set_buyPrice(tResults.getFloat(4));
+               tLotData.set_term(Term.MIXED);//TODO
+
+               tLotDatas.add(tLotData);
+            }
+         }
+         tResults.close();
+         tSql.close();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("***Exception:\n" + ex);
+      }
+      
+      return tLotDatas;
    }
 
    /**

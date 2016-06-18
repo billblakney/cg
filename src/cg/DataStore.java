@@ -3,6 +3,8 @@ package cg;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.Iterator;
+import java.util.Observable;
+import java.util.TreeSet;
 import java.util.Vector;
 import cg.db.ConnectionManager;
 import cg.db.DatabaseInterface;
@@ -11,7 +13,7 @@ import cg.db.DatabaseInterface;
  * Singleton class that manages the storage of data for this app.
  * To use the database, a call must be made to setDbUrl.
  */
-public class DataStore
+public class DataStore extends AccountData
 {
    static DataStore _dataStore = null;
    
@@ -76,6 +78,48 @@ public class DataStore
 
       return tTradeList;
    }
+   
+   @Override
+	public TradeList getTradeList()
+   {
+	   return null;
+   }
+
+	public TreeSet<Integer> getYears(Boolean includeIdleYears)
+   {
+	   return null;
+   }
+
+	public TreeSet<String> getTickers()
+   {
+	   return new TreeSet<String>();
+   }
+
+	public Vector getSharesHeldStats()
+   {
+	   return null;
+   }
+
+	public Vector getTaxGains(String ticker, String year)
+   {
+	   return null;
+   }
+
+	public Vector getTaxGainLots(String ticker, String year)
+   {
+	   return null;
+   }
+
+	public Vector getSecurityGains()
+   {
+	   return null;
+   }
+
+	public Vector getYearlyGains()
+   {
+	   return null;
+   }
+
 
    public Vector<AccountInfo> getAccountInfoVector()
    {
@@ -97,6 +141,39 @@ public class DataStore
 
       return tAcctInfo;
    }
+
+	@Override
+	public Vector<LotDataProvider>
+	getHeldLots(String ticker, String year)
+	{
+		Vector<LotDataProvider> tHeldLots = new Vector<LotDataProvider>();
+
+      if (_cm != null)
+      {
+         Connection tConn = _cm.getConnection();
+         if (tConn != null)
+         {
+            tHeldLots = _dbi.getLotData(tConn, 0);
+            _cm.closeConnection(tConn);
+         }
+      }
+      else
+      {
+         //TODO
+      }
+
+      return tHeldLots;
+//		Iterator<Map.Entry<String,SecurityTradeList>> i = mgrs.entrySet().iterator();
+//		while( i.hasNext() ){
+//			Map.Entry<String,SecurityTradeList> e = i.next();
+//			SecurityTradeList mgr = e.getValue();
+//			if (ticker != null && (ticker.equals(mgr.ticker)) == false) {
+//				continue;
+//			}
+//			heldLots.addAll(mgr.getHeldLots(year));
+//		}
+//		return heldLots;
+	}
    
    public void addTrades(
          int aAccountId,TradeList aTradeList,boolean aProcessThem)
