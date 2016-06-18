@@ -122,7 +122,7 @@ public class TradeFileReader extends VectorFileReader {
 			int tradeID = 0;
 			Trade.Type tradeType = Trade.Type.BUY;
 			String ticker = new String();
-			long numShares = 0;
+			int numShares = 0;
 			float sharePrice;
 			BigDecimal comm;
 			Trade.SpecialInstruction instruction = Trade.SpecialInstruction.NO_INSTRUCTION;
@@ -148,7 +148,7 @@ public class TradeFileReader extends VectorFileReader {
 			ticker = tok.nextToken();
 
 			// num shares
-			numShares = Integer.valueOf(tok.nextToken()).longValue();
+			numShares = Integer.valueOf(tok.nextToken()).intValue();
 
 			// share price
 			sharePrice = stringToSharePrice(tok.nextToken());

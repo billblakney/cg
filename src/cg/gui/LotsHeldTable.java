@@ -8,6 +8,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.RowFilter;
 import javax.swing.RowFilter.*;
 
+import cg.LotDataProvider;
 import cg.Term;
 
 public class LotsHeldTable extends JTable {
@@ -37,11 +38,11 @@ public class LotsHeldTable extends JTable {
 		 * SharesHeldTableRenderer r = new SharesHeldTableRenderer();
 		 * setDefaultRenderer(Object.class, r); setDefaultRenderer(Float.class,
 		 * r); setDefaultRenderer(Integer.class, r);
-		 * setDefaultRenderer(Long.class, r);
+		 * setDefaultRenderer(Integer.class, r);
 		 */
 	}
 
-	public void setRows(Vector lots) {
+	public void setRows(Vector<LotDataProvider> lots) {
 		model.setData(lots);
 		updateSharesHeld();
 	}
@@ -80,7 +81,7 @@ public class LotsHeldTable extends JTable {
 	}
 
 	private void updateSharesHeld() {
-		Long shares = model.getSharesHeld(rowFilter);
+		Integer shares = model.getSharesHeld(rowFilter);
 		sharesHeld.setValue(shares);
 	}
 

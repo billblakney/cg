@@ -14,6 +14,7 @@ import java.util.GregorianCalendar;
 
 import cg.AccountInfo;
 import cg.BuyTrade;
+import cg.Lot;
 import cg.SellTrade;
 import cg.SimpleDate;
 import cg.Trade;
@@ -33,14 +34,18 @@ public class HSQLDB_Loader implements CapGainsDB
    /** Database connection. */
    private Connection _db = null;
    
-   /**
-    * Constructor
-    * @param aDbUrl
-    */
-   public HSQLDB_Loader(String aDbUrl)
-   {
-      _dbUrl = aDbUrl;
-   }
+   private String _insertTradeSql =
+         "INSERT INTO trade "
+         + "(acct_id,seqnum,date,buysell,ticker,shares,price,commission,special_rule)"
+         + " VALUES (?,?,?,?,?,?,?,?,?)";
+   
+   private String _insertLotSql =
+         "INSERT INTO lot "
+         + "(parent_id,has_children,trigger_trade_id,buy_trade_id,sell_trade_id,num_shares,basis,proceeds,state)"
+         + " VALUES (?,?,?,?,?,?,?,?,?)";
+   
+   private String _updateLotHasChildrenSql =
+         "UPDATE lot SET has_children = ? WHERE lot_id = ?";
 
    /**
     * Print accounts.
@@ -52,6 +57,36 @@ public class HSQLDB_Loader implements CapGainsDB
 	   {
 		   System.out.println(tInfo.toString());
 	   }
+   }
+   
+   /**
+    * Constructor
+    * @param aDbUrl
+    */
+   public HSQLDB_Loader(String aDbUrl)
+   {
+      _dbUrl = aDbUrl;
+   }
+   
+   /**
+    * Determine if a db connection can be made.
+    * This method attempts to make a connection, and if it is successful, the
+    * connection is then closed, and a value of true is returned. Otherwise,
+    * a value of false is returned.
+    * @return true if the test connection succeeds.
+    */
+   public boolean canConnectToDb()
+   {
+      boolean tConnected = connectdb();
+      if (tConnected == true)
+      {
+         closedb();
+         return true;
+      }
+      else
+      {
+         return false;
+      }
    }
 
    /**
@@ -82,7 +117,7 @@ public class HSQLDB_Loader implements CapGainsDB
             while (tResults.next())
             {
                AccountInfo acct = new AccountInfo();
-               acct.id = tResults.getInt("acct_id");
+               acct.acct_id = tResults.getInt("acct_id");
                acct.name = tResults.getString("name");
                acct.acct_type_id = tResults.getInt("acct_type_id");
                acct.investor_id = tResults.getInt("investor_id");
@@ -109,7 +144,7 @@ public class HSQLDB_Loader implements CapGainsDB
    /**
     * Get trades.
     */
-   public TradeList getTrades(String acct_shortname)
+   public TradeList getTrades(int aAccountId)
    {
 
       TradeList tlist = new TradeList();
@@ -121,20 +156,17 @@ public class HSQLDB_Loader implements CapGainsDB
       {
          Statement tSql = _db.createStatement();
 
-         System.out
-               .println("Now executing the command: "
-                     + "SELECT DISTINCT * FROM trade WHERE trade.acct = acct.shortname = acct_shortname ORDER BY trade.seqnum");
-
          ResultSet tResults = tSql.executeQuery(
-               "SELECT DISTINCT * FROM trade WHERE trade.acct='"
-                     + acct_shortname + "' ORDER BY trade.seqnum");
+               "SELECT DISTINCT * FROM trade WHERE trade.acct_id='"
+                     + aAccountId + "' ORDER BY trade.trade_id");
          if (tResults != null)
          {
 
             while (tResults.next())
             {
                // convert all fields from the db record
-               String acct = tResults.getString("acct");
+               int trade_id = tResults.getInt("trade_id");
+               int acct_id = tResults.getInt("acct_id");
                int seqnum = tResults.getInt("seqnum");
                /*
                 * GregorianCalendar refdate = new GregorianCalendar(); Date date
@@ -143,7 +175,7 @@ public class HSQLDB_Loader implements CapGainsDB
                Date date = tResults.getDate("date");
                String buysell = tResults.getString("buysell");
                String ticker = tResults.getString("ticker");
-               long shares = tResults.getLong("shares");
+               int shares = tResults.getInt("shares");
                float price = tResults.getFloat("price");
                BigDecimal commission = tResults.getBigDecimal("commission");
                String special_rule = tResults.getString("special_rule");
@@ -160,13 +192,13 @@ public class HSQLDB_Loader implements CapGainsDB
 
                if (tradeType == Trade.Type.BUY)
                {
-                  BuyTrade bt = new BuyTrade(seqnum, tdate, tradeType, ticker,
+                  BuyTrade bt = new BuyTrade(trade_id, tdate, tradeType, ticker,
                         shares, price, commission, instr, "");
                   tlist.add(bt);
                }
                else
                {
-                  SellTrade st = new SellTrade(seqnum, tdate, tradeType,
+                  SellTrade st = new SellTrade(trade_id, tdate, tradeType,
                         ticker, shares, price, commission, instr, "");
                   tlist.add(st);
                }
@@ -187,8 +219,97 @@ public class HSQLDB_Loader implements CapGainsDB
 
    /**
     * Get trades.
+    * -> trade_id INT GENERATED BY DEFAULT AS IDENTITY (START WITH 0) PRIMARY KEY,
+    * -> acct_id INT NOT NULL,
+    * -> seqnum INT NOT NULL,
+    * -> date DATE NOT NULL,
+    * -> buysell varchar(4) NOT NULL,
+    * -> ticker varchar(6) NOT NULL,
+    * -> shares INT NOT NULL,
+    * -> price REAL NOT NULL,
+    * -> commission REAL NOT NULL,
+    * -> special_rule varchar(10),
     */
    public void insertTrades(int aAccountId,Vector<Trade> aTrades)
+   {
+      insertTrades_Batch(aAccountId,aTrades);
+//      insertTrades_OneByOne(aAccountId,aTrades);
+
+   }
+
+   /**
+    * Insert trades one-by-one.
+    */
+   private void insertTrades_OneByOne(int aAccountId,Vector<Trade> aTrades)
+   {
+      if (connectdb() == false){
+    	  System.out.println("ERROR: failed to connect to db");
+    	  return;
+      }
+
+      // run query
+      try
+      {
+    	  PreparedStatement pstmt = _db.prepareStatement(_insertTradeSql,Statement.RETURN_GENERATED_KEYS);
+
+    	  int tTradeIndex = 0;
+    	  
+    	  for (Trade tTrade: aTrades)
+    	  {
+    	     /*
+    	      * Build the prepared insert statement.
+    	      */
+    		  pstmt.setInt(1,aAccountId); //acct_id
+
+    		  pstmt.setInt(2,tTrade.tradeId);
+
+    		  pstmt.setDate(3,new Date(tTrade.date.getDate().getTime()));
+    		  
+    		  String tBuySell = (tTrade.isBuyTrade() ? "Buy":"Sell");
+    		  pstmt.setString(4,tBuySell);
+
+    		  pstmt.setString(5,tTrade.ticker);
+
+    		  pstmt.setInt(6,tTrade.numShares);
+
+    		  pstmt.setBigDecimal(7,new BigDecimal(tTrade.sharePrice));
+
+    		  pstmt.setBigDecimal(8,tTrade.comm);
+
+    		  pstmt.setString(9,"test");
+
+    		  /*
+    		   * Execute the batch command to save the trades to database.
+    		   */
+    		  pstmt.executeUpdate();
+
+    		  /*
+    		   * Update the trades with their primary keys.
+    		   */
+    		  ResultSet genKeys = pstmt.getGeneratedKeys();
+    		  if (genKeys.next())
+    		  {
+    		     int tTradeId = genKeys.getInt(1);
+    		     aTrades.elementAt(tTradeIndex).tradeId = tTradeId;
+    		     tTradeIndex++;
+    		  }
+    	  }
+
+         pstmt.close();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("Exception writing trades to db:\n" + ex);
+         ex.printStackTrace();
+      }
+
+      closedb();
+   }
+
+   /**
+    * Get trades.
+    */
+   private void insertTrades_Batch(int aAccountId,Vector<Trade> aTrades)
    {
       if (connectdb() == false){
     	  System.out.println("ERROR: failed to connect to db");
@@ -200,37 +321,16 @@ public class HSQLDB_Loader implements CapGainsDB
       {
     	  _db.setAutoCommit(false);
     	  
-//    	   trade_id INT GENERATED BY DEFAULT AS IDENTITY (START WITH 0) PRIMARY KEY,
-//    	   acct_id INT NOT NULL,
-//    	   seqnum INT NOT NULL,
-//    	   date DATE NOT NULL,
-//    	   buysell varchar(4) NOT NULL,
-//    	   ticker varchar(6) NOT NULL,
-//    	   shares INT NOT NULL,
-//    	   price REAL NOT NULL,
-//    	   commission REAL NOT NULL,
-//    	   special_rule varchar(10),
-//    	   FOREIGN KEY (acct_id) REFERENCES acct(acct_id));
+    	  PreparedStatement pstmt = _db.prepareStatement(_insertTradeSql,Statement.RETURN_GENERATED_KEYS);
 
-    	  //INSERT INTO trade VALUES ('Main(ET)',1,'2000-04-10','Buy','NEOP',3000,1.0,19.95,null);
-    	  PreparedStatement pstmt = _db.prepareStatement(
-"INSERT INTO trade (acct_id,seqnum,date,buysell,ticker,shares,price,commission,special_rule) VALUES (?,?,?,?,?,?,?,?,?)");
-//"INSERT INTO trade (acct,seqnum,date,buysell,ticker,shares,price,commission,special_rule) VALUES (?,?,?,?,?,?,?,?,?)");
-
-//    	  int count = 4000;
     	  for (Trade tTrade: aTrades)
     	  {
-    		  pstmt.setInt(1,aAccountId); //acct_id
+    	     /*
+    	      * Build the prepared insert statement.
+    	      */
+    		  pstmt.setInt(1,aAccountId);
 
-Statement tSql = _db.createStatement();
-ResultSet tResults = tSql.executeQuery("CALL NEXT VALUE FOR myseq");
-if (tResults != null){
-	tResults.next();
-System.out.println("NEXTVALUE: " + tResults.getInt(1));
-}
-
-    		  pstmt.setInt(2,tTrade.uID);
-//    		  pstmt.setInt(2,count++); //seqnum
+    		  pstmt.setInt(2,tTrade.tradeId);
 
     		  pstmt.setDate(3,new Date(tTrade.date.getDate().getTime()));
     		  
@@ -239,7 +339,7 @@ System.out.println("NEXTVALUE: " + tResults.getInt(1));
 
     		  pstmt.setString(5,tTrade.ticker);
 
-    		  pstmt.setInt(6,(int)tTrade.numShares.intValue());
+    		  pstmt.setInt(6,tTrade.numShares);
 
     		  pstmt.setBigDecimal(7,new BigDecimal(tTrade.sharePrice));
 
@@ -250,8 +350,23 @@ System.out.println("NEXTVALUE: " + tResults.getInt(1));
     		  pstmt.addBatch();
     	  }
 
+    	  /*
+    	   * Execute the batch command to save the trades to database.
+    	   */
     	  int[] updateCount = pstmt.executeBatch();
     	  _db.setAutoCommit(true); 
+
+    	  /*
+    	   * Update the trades with their primary keys.
+    	   */
+    	  ResultSet genKeys = pstmt.getGeneratedKeys();
+    	  int tIndex = 0;
+    	  while (genKeys.next())
+    	  {
+    	     int tTradeId = genKeys.getInt(1);
+    	     aTrades.elementAt(tIndex).tradeId = tTradeId;
+    	     tIndex++;
+    	  }
 
          pstmt.close();
       }
@@ -261,7 +376,136 @@ System.out.println("NEXTVALUE: " + tResults.getInt(1));
          ex.printStackTrace();
       }
 
-System.out.println("closing db...");
+      closedb();
+   }
+
+   /**
+    * TODO maybe create a class derived from PreparedStatement and add setIntOrNull
+    * @param aStatement
+    * @param aIndex
+    * @param aInteger
+    */
+   protected void setIntOrNull(
+         PreparedStatement aStatement,int aIndex,Integer aInteger)
+   {
+      try
+      {
+         if (aInteger == null)
+         {
+            aStatement.setNull(aIndex,java.sql.Types.INTEGER);
+         }
+         else
+         {
+            aStatement.setInt(aIndex,aInteger);
+         }
+      }
+      catch (Exception ex)
+      {
+         System.out.println("Exception in setIntIfPositive:\n" + ex);
+      }
+   }
+
+   /**
+    * Insert lot.
+    * -> int lotId;
+    * -> int parentId;
+    * -> int triggerTradeId;
+	 * -> int buyTradeId;
+	 * -> int sellTradeId;
+	 * -> int numShares;
+	 * -> BigDecimal basis;
+	 * -> BigDecimal proceeds;
+	 * -> State state;
+    */
+   public void insertLot(Lot aLot)
+   {
+      if (connectdb() == false){
+    	  System.out.println("ERROR: failed to connect to db");
+    	  return;
+      }
+
+      // run query
+      try
+      {
+    	  PreparedStatement pstmt = _db.prepareStatement(_insertLotSql,Statement.RETURN_GENERATED_KEYS);
+
+    	  /*
+    	   * Build the prepared insert statement.
+    	   */
+    	  int tIdx = 1;
+    	  setIntOrNull(pstmt,tIdx++, aLot.parentId);
+    	  pstmt.setBoolean(tIdx++,aLot.hasChildren);
+    	  pstmt.setInt(tIdx++,aLot.triggerTradeId);
+    	  pstmt.setInt(tIdx++,aLot.buyTradeId);
+    	  setIntOrNull(pstmt,tIdx++,aLot.sellTradeId);
+    	  pstmt.setInt(tIdx++,aLot.numShares);
+    	  pstmt.setBigDecimal(tIdx++,aLot.basis);
+    	  pstmt.setBigDecimal(tIdx++,aLot.proceeds);
+    	  pstmt.setString(tIdx++,aLot.state.toString());
+
+    	  /*
+    	   * Execute the batch command to save the trades to database.
+    	   */
+    	  pstmt.executeUpdate();
+
+    	  /*
+    	   * Update the trades with their primary keys.
+    	   */
+    	  ResultSet genKeys = pstmt.getGeneratedKeys();
+    	  if (genKeys.next())
+    	  {
+    	     int tId = genKeys.getInt(1);
+    	     aLot.lotId = tId;
+    	  }
+    	  else
+    	  {
+    	     //TODO ERROR
+    	  }
+
+         pstmt.close();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("Exception writing lot to db:\n" + ex);
+         ex.printStackTrace();
+      }
+
+      closedb();
+   }
+
+   /**
+    */
+   public void updateLotHasChildren(Lot aLot)
+   {
+      if (connectdb() == false){
+         System.out.println("ERROR: failed to connect to db");
+         return;
+      }
+
+      try
+      {
+         PreparedStatement pstmt = _db.prepareStatement(_updateLotHasChildrenSql);
+
+         /*
+          * Build the prepared update statement.
+          */
+
+         pstmt.setBoolean(1,aLot.hasChildren);
+         pstmt.setInt(2,aLot.lotId);
+
+         /*
+          * Execute the update.
+          */
+         pstmt.executeUpdate();
+
+         pstmt.close();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("Exception writing lot to db:\n" + ex);
+         ex.printStackTrace();
+      }
+
       closedb();
    }
 

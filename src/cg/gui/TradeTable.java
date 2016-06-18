@@ -43,11 +43,10 @@ public class TradeTable extends JTable {
 		sharesHeld = new SharesHeld();
 
 		DefaultTradeTableRenderer r = new DefaultTradeTableRenderer(sorter);
-		LongTradeTableRenderer lr = new LongTradeTableRenderer(sorter);
+		IntegerTradeTableRenderer lr = new IntegerTradeTableRenderer(sorter);
 		setDefaultRenderer(Object.class, r);
 		setDefaultRenderer(Float.class, r);
 		setDefaultRenderer(Integer.class, r);
-		setDefaultRenderer(Long.class, lr);
 		setDefaultRenderer(cg.Trade.Type.class,r);
 		setDefaultRenderer(cg.Trade.SpecialInstruction.class,r);
 	}
@@ -103,7 +102,7 @@ public class TradeTable extends JTable {
 	}
 
 	private void updateSharesHeld() {
-		Long shares = model.getSharesHeld(rowFilter);
+		Integer shares = model.getSharesHeld(rowFilter);
 		sharesHeld.setValue(shares);
 	}
 

@@ -22,7 +22,7 @@ public class TradeIsOpenPositionFilter extends RowFilter<AbstractTableModel,Inte
 		   if( apply == false )
 			   return true;
 		   if( entry.getStringValue(TradeTableModel.COL_BUYSELL).startsWith("Buy") ){ // if its a buy trade
-			   Long sharesHeld = (Long)entry.getValue(TradeTableModel.COL_SHARESHELD);
+			   Integer sharesHeld = (Integer)entry.getValue(TradeTableModel.COL_SHARESHELD);
 			   if( sharesHeld > 0 )  // and some shares are held
 				   return true;
 			   else

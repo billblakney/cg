@@ -86,7 +86,7 @@ class GainsCalculator {
       // by the amount of each lot brought forward each iteration through
       // this while loop.
       
-      long sharesToProcess = st.numShares; // process all shares of this sell
+      int sharesToProcess = st.numShares; // process all shares of this sell
       while ( sharesToProcess > 0 ){
 
          // Get the first buy trade that has remaining buy lots.
@@ -95,12 +95,12 @@ class GainsCalculator {
 
          // Get the first buy lot available.
          bLotSet = bt.lotSet;
-         Lot bLot = bLotSet.getFirstLot();
+         OldLot bLot = bLotSet.getFirstLot();
 
 
          // Figure out how many shares and how much basis will be transferred
          // from the buy lot to the new sell lot.
-         long n;  // num shares to be transferred
+         int n;  // num shares to be transferred
          float b; // basis to be transferred
          float p; // proceeds to be transferred
 
@@ -110,7 +110,7 @@ class GainsCalculator {
              p = bLot.proceeds;
         }
          else{ // can transfer some of the buy lot
-             n = new Long(sharesToProcess);
+             n = sharesToProcess;
              float frac = ((float)sharesToProcess) / ((float)bLot.numShares);
              b = frac * bLot.basis;
              p = frac * bLot.proceeds;
@@ -119,8 +119,8 @@ class GainsCalculator {
          // Create a new sell lot to hold the shares from the buy lot,
          // and add it to the sell lot.
          //
-         String sLotID = Lot.createSellLotID(bLot.id,st);
-         Lot sLot = new Lot(
+         String sLotID = OldLot.createSellLotID(bLot.id,st);
+         OldLot sLot = new OldLot(
             st.ticker,             // ticker
             sLotID,                // id
             n           ,          // numShares
@@ -160,7 +160,7 @@ bLot.message = "removed shares from buy lot while processing sell trade"; // wil
    private void setLotsForBuyTrade(BuyTrade bt){
 
       // Set sharesToProcess to the total shares in this buy trade.
-      long buySharesToProcess = bt.numShares;
+      int buySharesToProcess = bt.numShares;
 
       // Get a reference to the buy lot set we will be loading.
       LotSet bLotSet = bt.lotSet;
@@ -172,21 +172,21 @@ bLot.message = "removed shares from buy lot while processing sell trade"; // wil
        **********************************************************************/
       // Get all sell trades within 30 days of this buy trade.
       Vector<SellTrade> washableTrades = getPotentialWashSellTrades(bt);
-System.out.println("WASHABLE TRADES: " + washableTrades.size());
+//System.out.println("WASHABLE TRADES: " + washableTrades.size());
       for( int i = 0; i < washableTrades.size(); i++ ){
          SellTrade st = washableTrades.elementAt(i);
          LotSet sLotSet = st.lotSet;
 
          // Continue processing while there are still more shares to process
          // and the sell trade has some lots left.
-         Lot sLot = sLotSet.getFirstLossLot();
+         OldLot sLot = sLotSet.getFirstLossLot();
 
          while( buySharesToProcess > 0 && (sLot != null) )  {
             // Figure out how many shares and how much basis and proceeds
             // will be transferred from the sell lot to the buy lot.
 
             // First assume that we'll be able to use the whole lot.
-            long n = sLot.numShares;
+            int n = sLot.numShares;
             float b = sLot.basis;
             float p = sLot.proceeds;
 
@@ -198,8 +198,8 @@ System.out.println("WASHABLE TRADES: " + washableTrades.size());
             }
             // Create a new buy lot to hold the shares from the sell lot,
             // and add it to the buy lot.
-            String washLotID = Lot.createWashBuyLotID(sLot.id,bt);
-            Lot bLot = new Lot(
+            String washLotID = OldLot.createWashBuyLotID(sLot.id,bt);
+            OldLot bLot = new OldLot(
                bt.ticker,          // ticker
                washLotID,          // id
                n,                  // numShares
@@ -244,8 +244,8 @@ sLot.message = "removed shares from wash sale lot while processing buy trade";
       // Put any remaining (non-wash) shares in a new lot.
       if( buySharesToProcess > 0 ){
          // Create one lot to hold the remaining shares.
-          String freshBuyLotID = Lot.createFreshBuyLotID(bt);
-         Lot bLot = new Lot(
+          String freshBuyLotID = OldLot.createFreshBuyLotID(bt);
+         OldLot bLot = new OldLot(
             bt.ticker,          // ticker
         	freshBuyLotID,           // id
             buySharesToProcess,      // numShares

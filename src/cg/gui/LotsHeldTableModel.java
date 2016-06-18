@@ -5,7 +5,7 @@ import java.util.Vector;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.RowFilter;
 
-import cg.Lot;
+import cg.LotDataProvider;
 
 /*
  * Note: These three methods must be implemented to extend AbstractTableModel
@@ -29,10 +29,12 @@ public class LotsHeldTableModel extends AbstractTableModel {
 		data = new Vector(0);
 	}
 
+	@Override
 	public int getColumnCount() {
 		return columnNames.length;
 	}
 
+	@Override
 	public int getRowCount() {
 		return data.size();
 	}
@@ -51,6 +53,7 @@ public class LotsHeldTableModel extends AbstractTableModel {
 			return Object.class;
 	}
 
+	@Override
 	public Object getValueAt(int arg0, int arg1) {
 		if (arg0 > data.size() || arg1 > columnNames.length)
 			throw new ArrayIndexOutOfBoundsException();
@@ -58,7 +61,7 @@ public class LotsHeldTableModel extends AbstractTableModel {
 			return ((Vector) (data.elementAt(arg0))).elementAt(arg1);
 	}
 
-	public void setData(Vector stats){
+	public void setData(Vector<LotDataProvider> stats){
 		data = new Vector();
 		for (int i = 0; i < stats.size(); i++)
 			data.addElement(getDataRow(stats.elementAt(i)));
@@ -70,25 +73,25 @@ public class LotsHeldTableModel extends AbstractTableModel {
 	 */
 	private Vector getDataRow(Object row) {
 		
-		Lot lot = (Lot) row;
+		LotDataProvider lot = (LotDataProvider) row;
 		Vector v = new Vector();
-		v.addElement(lot.ticker); //0
-		v.addElement(lot.buyDate); //1
-		v.addElement(lot.numShares); //2
-		v.addElement(lot.buyPrice); //3
-		v.addElement(lot.term); //4
+		v.addElement(lot.getSymbol()); //0
+		v.addElement(lot.getBuyDate()); //1
+		v.addElement(lot.getNumShares()); //2
+		v.addElement(lot.getBuyPrice()); //3
+		v.addElement(lot.getTerm()); //4
 		return v;
 	}
 	
-	public Long getSharesHeld(RowFilter<AbstractTableModel, Integer> filter) {
-		Long totalShares = new Long(0);
+	public Integer getSharesHeld(RowFilter<AbstractTableModel, Integer> filter) {
+		Integer totalShares = new Integer(0);
 		for (int i = 0; i < data.size(); i++) {
 			RowFilter.Entry<AbstractTableModel, Integer> entry = new TableModelFilterEntry(
 					(AbstractTableModel)this, i);
 			// pass over entry if filter.include() returns false
 			if ((filter != null) && (filter.include(entry) == false))
 				continue;
-			Long shares = (Long) entry.getValue(LotsHeldTableModel.COL_SHARES);
+			Integer shares = (Integer) entry.getValue(LotsHeldTableModel.COL_SHARES);
 			totalShares += shares;
 		}
 		return totalShares;

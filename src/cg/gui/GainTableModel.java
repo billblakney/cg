@@ -83,7 +83,7 @@ public class GainTableModel extends AbstractTableModel implements GainColumnFind
 		TaxGain taxGain = (TaxGain) row;
 
 		Vector v = new Vector();
-		v.addElement(new Long(taxGain.numShares)); //0
+		v.addElement(new Integer(taxGain.numShares)); //0
 		v.addElement(taxGain.ticker); //1
 		v.addElement(taxGain.buyDateRange); //2
 		v.addElement(taxGain.sellDate); //3

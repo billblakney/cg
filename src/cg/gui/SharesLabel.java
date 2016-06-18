@@ -9,7 +9,7 @@ public class SharesLabel extends JLabel {
 	private DecimalFormat numSharesFormat = new DecimalFormat(
 	"###,###,###,##0");
 
-	public void update(Long value) {
+	public void update(Integer value) {
 		setText("Shares: " + numSharesFormat.format(value));
 	}
 }

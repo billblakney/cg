@@ -10,11 +10,11 @@ import java.math.BigDecimal;
  */
 public class BuyTrade extends Trade {
 
-	public BuyTrade(int id, cg.SimpleDate date, Trade.Type tradeType,
-			String ticker, long numShares, float sharePrice, BigDecimal comm,
+	public BuyTrade(int tradeId, cg.SimpleDate date, Trade.Type tradeType,
+			String ticker, int numShares, float sharePrice, BigDecimal comm,
 			Trade.SpecialInstruction instruction, String note) {
 
-		super(id, date, tradeType, ticker, numShares, sharePrice, comm,
+		super(tradeId, date, tradeType, ticker, numShares, sharePrice, comm,
 				instruction, note);
 	}
 
@@ -29,7 +29,7 @@ public class BuyTrade extends Trade {
 		return ((float) numShares) * ((float) sharePrice) + comm.floatValue();
 	}
 
-	public float getBasis(long numShares) {
+	public float getBasis(int numShares) {
 		return ((float) numShares) / ((float) this.numShares) * getBasis();
 	}
 

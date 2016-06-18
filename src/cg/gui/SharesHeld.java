@@ -4,17 +4,17 @@ import java.util.Observable;
 
 public class SharesHeld extends Observable {
 
-	private Long value;
+	private Integer value;
 
 	public SharesHeld() {
-		setValue(new Long(0));
+		setValue(new Integer(0));
 	}
 
-	public Long getValue() {
+	public Integer getValue() {
 		return value;
 	}
 
-	public void setValue(Long value) {
+	public void setValue(Integer value) {
 		this.value = value;
 		setChanged();
 		notifyObservers(getValue());

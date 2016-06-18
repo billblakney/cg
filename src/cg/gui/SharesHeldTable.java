@@ -38,7 +38,7 @@ public class SharesHeldTable extends JTable {
 		 * SharesHeldTableRenderer r = new SharesHeldTableRenderer();
 		 * setDefaultRenderer(Object.class, r); setDefaultRenderer(Float.class,
 		 * r); setDefaultRenderer(Integer.class, r);
-		 * setDefaultRenderer(Long.class, r);
+		 * setDefaultRenderer(Integer.class, r);
 		 */
 	}
 
@@ -81,7 +81,7 @@ public class SharesHeldTable extends JTable {
 	}
 
 	private void updateSharesHeld() {
-		Long shares = model.getSharesHeld(rowFilter);
+		Integer shares = model.getSharesHeld(rowFilter);
 		sharesHeld.setValue(shares);
 	}
 

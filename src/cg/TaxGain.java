@@ -7,7 +7,7 @@ import java.util.*;
  * This class represents a single record of the cap gains for a sell trade. The
  * record corresponds to an entry that would be entered in a tax filing.
  */
-public class TaxGain extends Lot {
+public class TaxGain extends OldLot {
 
 	/**
 	 * The date of the most recent buy corresponding to this tax gain. The date
@@ -35,7 +35,7 @@ public class TaxGain extends Lot {
 	/**
 	 * The gain components for this trade.
 	 */
-	protected Vector<Lot> gainComps = new Vector<Lot>();
+	protected Vector<OldLot> gainComps = new Vector<OldLot>();
 
 	/**
 	 * Constructor.
@@ -59,7 +59,7 @@ public class TaxGain extends Lot {
 		proceeds = (float) 0.0;
 		basis = (float) 0.0;
 		gain = (float) 0.0;
-		gainComps = new Vector<Lot>();
+		gainComps = new Vector<OldLot>();
 	}
 
 	public float getGain() {
@@ -75,7 +75,7 @@ public class TaxGain extends Lot {
 	 * total cap gain of this SellTrade.
 	 */
 	protected void addGainComp(SimpleDate buyDate, SimpleDate sellDate,
-			float buyPrice, float sellPrice, long numShares,
+			float buyPrice, float sellPrice, int numShares,
 			float basis, float proceeds, float componentGain) {
 
 		// gc.numShares += gc.numShares; not used since we initialize with sell
@@ -85,7 +85,7 @@ public class TaxGain extends Lot {
 		this.basis += basis;
 		this.gain += componentGain;
 
-		Lot gc = new Lot(ticker, buyDate,sellDate,buyPrice,sellPrice,
+		OldLot gc = new OldLot(ticker, buyDate,sellDate,buyPrice,sellPrice,
 				numShares, basis, proceeds, componentGain);
 		gainComps.addElement(gc);
 

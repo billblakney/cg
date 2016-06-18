@@ -1,6 +1,5 @@
 package cg;
 
-import java.util.*;
 import java.math.BigDecimal;
 
 /**
@@ -18,13 +17,13 @@ public class SellTrade extends Trade {
 	 */
 	TaxGain taxGain;
 
-	public SellTrade(int id, cg.SimpleDate date, Trade.Type tradeType,
-			String ticker, long numShares, float sharePrice, BigDecimal comm,
+	public SellTrade(int tradeId, cg.SimpleDate date, Trade.Type tradeType,
+			String ticker, int numShares, float sharePrice, BigDecimal comm,
 			Trade.SpecialInstruction instruction, String note) {
 		
-		super(id, date, tradeType, ticker, numShares, sharePrice, comm,
+		super(tradeId, date, tradeType, ticker, numShares, sharePrice, comm,
 				instruction, note);
-		this.numSharesHeld = new Long(this.numShares);
+		this.numSharesHeld = new Integer(this.numShares);
 	}
 
 	void computeTaxGain() {
@@ -32,7 +31,7 @@ public class SellTrade extends Trade {
 		taxGain = new TaxGain(ticker, date);
 
 		for (int j = 0; j < lotSet.getNumLots(); j++) {
-			Lot sLot = lotSet.getLotAt(j);
+			OldLot sLot = lotSet.getLotAt(j);
 
 			taxGain.addGainComp(sLot.buyDate, date, sLot.buyPrice, sLot.sellPrice,
 					sLot.numShares, sLot.basis, sLot.proceeds, sLot.proceeds - sLot.basis);
@@ -43,7 +42,7 @@ public class SellTrade extends Trade {
 		return ((float) numShares) * ((float) sharePrice) - comm.floatValue();
 	}
 
-	float getProceeds(long numShares) {
+	float getProceeds(int numShares) {
 		return ((float) numShares) / ((float) this.numShares) * getProceeds();
 	}
 

@@ -35,7 +35,6 @@ public class SecurityGainsTable extends JTable {
 		 * SecurityGainsTableRenderer r = new SecurityGainsTableRenderer();
 		 * setDefaultRenderer(Object.class, r); setDefaultRenderer(Float.class,
 		 * r); setDefaultRenderer(Integer.class, r);
-		 * setDefaultRenderer(Long.class, r);
 		 */
 	}
 

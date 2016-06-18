@@ -86,7 +86,7 @@ public class TradeTableModel extends AbstractTableModel {
 		Trade trade = (Trade) row;
 
 		Vector v = new Vector();
-		v.addElement(trade.portID); //0
+		v.addElement(trade.tradeId); //0
 		v.addElement(trade.date); //1
 		v.addElement(trade.tradeType); //2
 		v.addElement(trade.ticker); //3
@@ -108,15 +108,15 @@ public class TradeTableModel extends AbstractTableModel {
 		return v;
 	}
 	
-	public Long getSharesHeld(RowFilter<AbstractTableModel, Integer> filter) {
-		Long ttlShares = new Long(0);
+	public Integer getSharesHeld(RowFilter<AbstractTableModel, Integer> filter) {
+		Integer ttlShares = new Integer(0);
 		for (int i = 0; i < data.size(); i++) {
 			RowFilter.Entry<AbstractTableModel, Integer> entry = new TableModelFilterEntry(
 					(AbstractTableModel)this, i);
 			// pass over entry if filter.include() returns false
 			if ((filter != null) && (filter.include(entry) == false))
 				continue;
-			Long n = (Long) entry.getValue(TradeTableModel.COL_SHARESHELD);
+			Integer n = (Integer) entry.getValue(TradeTableModel.COL_SHARESHELD);
 			ttlShares += n;
 		}
 		return ttlShares;
