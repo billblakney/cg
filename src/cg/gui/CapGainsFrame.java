@@ -58,6 +58,8 @@ public class CapGainsFrame extends JFrame {
 	 */
 	private String dbUrl = null;
 
+	private HSQLDB_Loader db = null;
+
 	/**
 	 * Uses startup test connection to db
 	 */
@@ -119,9 +121,15 @@ public class CapGainsFrame extends JFrame {
 		
 		if (dbUrl != null)
 		{
-		   HSQLDB_Loader db = new HSQLDB_Loader(dbUrl);
+		   db = HSQLDB_Loader.getInstance();
+		   db.setDbUrl(dbUrl);
+		   db.connectdb();
+
 		   boolean tCanConnect = db.canConnectToDb();
 		   _dbOk = ((tCanConnect==true)?true:false);
+
+		   DataStore tDataStore = DataStore.getInstance();
+		   tDataStore.setDb(db);
 		}
 
 if( tradeFile != null)
@@ -264,7 +272,6 @@ System.out.println("dbUrl: " + dbUrl);
 	 */
 	private void actionSelectAccount() {
 
-		HSQLDB_Loader db = new HSQLDB_Loader(dbUrl);
 		Vector<AccountInfo> accts = db.getAccountInfoVector();
 		Object[] choices = accts.toArray();
 
@@ -293,8 +300,6 @@ System.out.println("dbUrl: " + dbUrl);
 	 */
 	private void actionLoadAccountTradeFile()
 	{
-		HSQLDB_Loader db = new HSQLDB_Loader(dbUrl);
-
 		// Get all accounts for dialog selection.
 		Vector<AccountInfo> tAccountInfo = db.getAccountInfoVector();
 		Vector<String> tAccountNames = AccountInfo.getNames(tAccountInfo);

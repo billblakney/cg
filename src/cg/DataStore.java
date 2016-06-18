@@ -32,14 +32,9 @@ public class DataStore
       return _dataStore;
    }
    
-   public void setDbUrl(String dbUrl)
+   public void setDb(HSQLDB_Loader aDb)
    {
-	   _db = new HSQLDB_Loader(dbUrl);
-	   if (!_db.canConnectToDb())
-	   {
-	      System.out.println("ERROR: Can't connect to db with url " + dbUrl);
-	      System.exit(0);
-	   }
+	   _db = aDb;
    }
    
    public void addTrades(
@@ -104,11 +99,9 @@ public class DataStore
    protected void processSellTrade(SellTrade aTrade)
    {
       int tNumToDistribute = aTrade.numShares;
-System.out.println("number to distrubute: " + tNumToDistribute);
 
       Vector<Lot> tLots = getActiveOpenLots(aTrade.ticker,aTrade.numShares);
       Iterator<Lot> tIterator = tLots.iterator();
-System.out.println("tLots.size: " + tLots.size());
 
       Vector<Lot> tNewLots = new Vector<Lot>();
       
@@ -124,7 +117,6 @@ System.out.println("tLots.size: " + tLots.size());
          if (tNumToDistribute < tLot.numShares)
          {
             // two new lots and update old.hasChildren
-System.out.println("creating two new lots from old");
             
             Lot tNewClosedLot = new Lot();
             {
@@ -171,7 +163,6 @@ System.out.println("creating two new lots from old");
          else
          {
             // new lot and update old.hasChildren
-System.out.println("creating one new lot from old");
 
             Lot tNewClosedLot = new Lot();
             {
@@ -216,7 +207,6 @@ System.out.println("creating one new lot from old");
       for (Lot tLot: _lots)
       {
          if (tLot.hasChildren || tLot.state != Lot.State.eOpen){
-System.out.println("has children or not open!!!!!!!!!");
             continue;
          }
 
@@ -227,11 +217,9 @@ System.out.println("has children or not open!!!!!!!!!");
          }
 
          if (!tTrade.ticker.equals(aTicker)) {
-System.out.println("wrong ticker!!!!!!!!!");
             continue;
          }
          
-System.out.println("=======> adding lot");
          tLots.add(tLot);
 
          tQuantityFound += tLot.numShares;

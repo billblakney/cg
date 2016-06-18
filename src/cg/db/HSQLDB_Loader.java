@@ -22,6 +22,9 @@ import cg.TradeList;
 
 public class HSQLDB_Loader implements CapGainsDB
 {
+   /** Singleton of this class. */
+   static private HSQLDB_Loader _hsqldbLoader = null;
+
    /** Full path to the database. */
    private String _dbUrl = null;
 
@@ -63,9 +66,69 @@ public class HSQLDB_Loader implements CapGainsDB
     * Constructor
     * @param aDbUrl
     */
-   public HSQLDB_Loader(String aDbUrl)
+   private HSQLDB_Loader()
+   {
+   }
+   
+   /**
+    * Get the singleton instance.
+    * @return
+    */
+   public static HSQLDB_Loader getInstance()
+   {
+      if (_hsqldbLoader == null)
+      {
+         _hsqldbLoader = new HSQLDB_Loader();
+      }
+      return _hsqldbLoader;
+   }
+   
+   /**
+    * Set the database URL.
+    * Need to call this method to make the database operational (from the
+    * perspective of this process).
+    */
+   public void setDbUrl(String aDbUrl)
    {
       _dbUrl = aDbUrl;
+   }
+
+   /**
+    * Open connection to the database.
+    * @return
+    */
+   public boolean connectdb()
+   {
+      try
+      {
+         connectToDB();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("Failed to connect to db:\n" + ex);
+         ex.printStackTrace();
+         return false;
+      }
+      return true;
+   }
+
+   /**
+    * Close connection to the dtabase.
+    * @return
+    */
+   public boolean closedb()
+   {
+      try
+      {
+         _db.close();
+         _db = null;
+      }
+      catch (Exception ex)
+      {
+         System.out.println("Failed to close db:\n" + ex);
+         return false;
+      }
+      return true;
    }
    
    /**
@@ -97,8 +160,9 @@ public class HSQLDB_Loader implements CapGainsDB
       
       Vector<AccountInfo> accounts = new Vector<AccountInfo>();
 
-      if (connectdb() == false)
+      if (_db == null)
       {
+         System.out.println("ERROR: not connected to db");
          return accounts;
       }
 
@@ -136,8 +200,6 @@ public class HSQLDB_Loader implements CapGainsDB
          ex.printStackTrace();
       }
 
-      closedb();
-
       return accounts;
    }
 
@@ -149,7 +211,11 @@ public class HSQLDB_Loader implements CapGainsDB
 
       TradeList tlist = new TradeList();
 
-      if (connectdb() == false) return tlist;
+      if (_db == null)
+      {
+         System.out.println("ERROR: not connected to db");
+         return tlist;
+      }
 
       // run query
       try
@@ -213,7 +279,6 @@ public class HSQLDB_Loader implements CapGainsDB
          ex.printStackTrace();
       }
 
-      closedb();
       return tlist;
    }
 
@@ -242,9 +307,10 @@ public class HSQLDB_Loader implements CapGainsDB
     */
    private void insertTrades_OneByOne(int aAccountId,Vector<Trade> aTrades)
    {
-      if (connectdb() == false){
-    	  System.out.println("ERROR: failed to connect to db");
-    	  return;
+      if (_db == null)
+      {
+         System.out.println("ERROR: not connected to db");
+         return;
       }
 
       // run query
@@ -302,8 +368,6 @@ public class HSQLDB_Loader implements CapGainsDB
          System.out.println("Exception writing trades to db:\n" + ex);
          ex.printStackTrace();
       }
-
-      closedb();
    }
 
    /**
@@ -311,9 +375,10 @@ public class HSQLDB_Loader implements CapGainsDB
     */
    private void insertTrades_Batch(int aAccountId,Vector<Trade> aTrades)
    {
-      if (connectdb() == false){
-    	  System.out.println("ERROR: failed to connect to db");
-    	  return;
+      if (_db == null)
+      {
+         System.out.println("ERROR: not connected to db");
+         return;
       }
 
       // run query
@@ -375,8 +440,6 @@ public class HSQLDB_Loader implements CapGainsDB
          System.out.println("Exception writing trades to db:\n" + ex);
          ex.printStackTrace();
       }
-
-      closedb();
    }
 
    /**
@@ -419,9 +482,10 @@ public class HSQLDB_Loader implements CapGainsDB
     */
    public void insertLot(Lot aLot)
    {
-      if (connectdb() == false){
-    	  System.out.println("ERROR: failed to connect to db");
-    	  return;
+      if (_db == null)
+      {
+         System.out.println("ERROR: not connected to db");
+         return;
       }
 
       // run query
@@ -469,16 +533,15 @@ public class HSQLDB_Loader implements CapGainsDB
          System.out.println("Exception writing lot to db:\n" + ex);
          ex.printStackTrace();
       }
-
-      closedb();
    }
 
    /**
     */
    public void updateLotHasChildren(Lot aLot)
    {
-      if (connectdb() == false){
-         System.out.println("ERROR: failed to connect to db");
+      if (_db == null)
+      {
+         System.out.println("ERROR: not connected to db");
          return;
       }
 
@@ -505,46 +568,6 @@ public class HSQLDB_Loader implements CapGainsDB
          System.out.println("Exception writing lot to db:\n" + ex);
          ex.printStackTrace();
       }
-
-      closedb();
-   }
-
-   /**
-    * Open connection to the database.
-    * @return
-    */
-   private boolean connectdb()
-   {
-      try
-      {
-         connectToDB();
-      }
-      catch (Exception ex)
-      {
-         System.out.println("Failed to connect to db:\n" + ex);
-         ex.printStackTrace();
-         return false;
-      }
-      return true;
-   }
-
-   /**
-    * Close connection to the dtabase.
-    * @return
-    */
-   private boolean closedb()
-   {
-      try
-      {
-         _db.close();
-      }
-      catch (Exception ex)
-      {
-         System.out.println("Failed to close db:\n" + ex);
-         ex.printStackTrace();
-         return false;
-      }
-      return true;
    }
 
    /**

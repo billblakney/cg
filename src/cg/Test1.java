@@ -33,10 +33,12 @@ public class Test1
 	
 	private void runTest()
 	{
-	   HSQLDB_Loader db = new HSQLDB_Loader(_dbUrl);//TODO remove later
+	   HSQLDB_Loader db = HSQLDB_Loader.getInstance();
+	   db.setDbUrl(_dbUrl);
+	   db.connectdb();
 
 	   DataStore tDataStore = DataStore.getInstance();
-	   tDataStore.setDbUrl(_dbUrl);
+	   tDataStore.setDb(db);
 
 	   /*
 	    * Get all accounts from the db. //TODO put to DataStore
