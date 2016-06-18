@@ -1,0 +1,2 @@
+* seqnum: trade reorder capability, getting next seqnum from db
+* midnight task for updating term and ?lot status
