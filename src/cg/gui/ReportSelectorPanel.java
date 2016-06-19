@@ -21,23 +21,64 @@ public class ReportSelectorPanel extends JPanel implements
 	 * 
 	 * @param pane
 	 */
-	ReportSelectorPanel(ReportTabbedPane pane,Vector<String> tAccounts) {
+	ReportSelectorPanel(ReportTabbedPane pane,Vector<String> tAccounts)
+	{
 		reportTabbedPane = pane;
+
+		/*
+		 * Create the panel label.
+		 */
+		JLabel treeTitle = new JLabel("Tree Table");
+		
+		/*
+		 * Create the account combobox.
+		 */
+		JComboBox tComboBox = new JComboBox(tAccounts);
+		
+		/*
+		 * Create the report tree and its scroll pane.
+		 */
 		reportTree = new ReportTree();
 		reportTree.addTreeSelectionListener(this);
 
 		JScrollPane treePane = new JScrollPane(reportTree);
-
-		JLabel treeTitle = new JLabel("Tree Table");
 		
-		JComboBox tComboBox = new JComboBox(tAccounts);
-		JPanel tWorkAroundPanel = new JPanel();
-		tWorkAroundPanel.add(tComboBox);
+		/*
+		 * 
+		 */
+		JPanel tPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 
-		setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
-		add(treeTitle);
-		add(tWorkAroundPanel);
-		add(treePane);
+      // settings for title
+      c.gridx = 0;
+      c.gridy = 0;
+		c.fill = GridBagConstraints.HORIZONTAL;
+//      c.insets = new Insets(5 + tXTop, 5+ tXLeft, 5, 5);
+      tPanel.add(treeTitle, c);
+
+      // settings for combobox
+      c.gridx = 0;
+      c.gridy = 1;
+		c.fill = GridBagConstraints.HORIZONTAL;
+//      c.insets = new Insets(5 + tXTop, 5+ tXLeft, 5, 5);
+      tPanel.add(tComboBox, c);
+
+      // settings for tree
+      c.gridx = 0;
+      c.gridy = 2;
+		c.fill = GridBagConstraints.VERTICAL;
+//      c.insets = new Insets(5 + tXTop, 5+ tXLeft, 5, 5);
+      tPanel.add(treePane, c);
+
+      add(tPanel);
+		/*
+		 * Add the components to the layout.
+		 */
+//		setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
+//		add(treeTitle);
+//		add(tComboBox);
+//		add(treePane);
+
 //		add(Box.createVerticalGlue());
 ////		add(treeTitle, "North");
 ////		add(treePane, "Center");
