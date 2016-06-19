@@ -23,7 +23,7 @@ public class LotGainPanel extends AccountReportPanel implements ActionListener {
 	 * Selection box for filtering by ticker. The list of selectable tickers is
 	 * provided by the displayed account.
 	 */
-	TickerFilterBox tickerFilterBox;
+	ColumnValuesComboBox tickerFilterBox;
 
 	/*
 	 * Selection box for filtering by year. The list of selectable years is
@@ -65,7 +65,7 @@ public class LotGainPanel extends AccountReportPanel implements ActionListener {
 		JScrollPane gainTablePane = new JScrollPane(table);
 
 		// create the ticker filter combo box
-		tickerFilterBox = new TickerFilterBox(table,LotGainTableModel.COL_TICKER);
+		tickerFilterBox = new ColumnValuesComboBox(table,LotGainTableModel.COL_TICKER);
 		tickerFilterBox.addActionListener(this);
 
 		// create the year filter combo box
@@ -127,7 +127,7 @@ public class LotGainPanel extends AccountReportPanel implements ActionListener {
 
 		// handle filter by ticker requests
 		if (box == tickerFilterBox) {
-			TickerFilterBox tickerbox = (TickerFilterBox)box;
+			ColumnValuesComboBox tickerbox = (ColumnValuesComboBox)box;
 			table.filterOnTicker(tickerbox.getSelectedTicker());
 		}
 		// handle filter by year requests

@@ -8,18 +8,25 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import cg.AbstractAccountData;
 
-public class TickerFilterBox extends JComboBox {
+public class ColumnValuesComboBox extends JComboBox {
 
-	private final String ALL_STOCKS_STRING = "All Stocks";
+	private String _allItem = "-All-";
 	
 	private JTable _table = null;
 	
 	private int _column = -1;
 
-	public TickerFilterBox(JTable aTable,int aColumn)
+	public ColumnValuesComboBox(JTable aTable,int aColumn)
 	{
 	   _table = aTable;
 	   _column = aColumn;
+	}
+
+	public ColumnValuesComboBox(JTable aTable,int aColumn,String aAllItem)
+	{
+	   _table = aTable;
+	   _column = aColumn;
+	   _allItem = aAllItem;
 	}
 	
 	/**
@@ -27,7 +34,7 @@ public class TickerFilterBox extends JComboBox {
 	 */
 	public String getSelectedTicker(){
 		String item = (String)getSelectedItem();
-		if (item.equals(ALL_STOCKS_STRING))
+		if (item.equals(_allItem))
 			return null;
 		else
 			return item;
@@ -36,7 +43,7 @@ public class TickerFilterBox extends JComboBox {
 	public void update()
 	{
 	   Vector list = new Vector();
-		list.addElement(ALL_STOCKS_STRING);
+		list.addElement(_allItem);
 		list.addAll(TableModelUtil.getColumnValues(_table.getModel(),_column));
 		DefaultComboBoxModel model = new DefaultComboBoxModel(list);
 		setModel(model);

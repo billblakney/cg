@@ -23,7 +23,7 @@ public class GainPanel extends AccountReportPanel implements ActionListener {
 	 * Selection box for filtering by ticker. The list of selectable tickers is
 	 * provided by the displayed account.
 	 */
-	TickerFilterBox tickerFilterBox;
+	ColumnValuesComboBox tickerFilterBox;
 
 	/*
 	 * Selection box for filtering by year. The list of selectable years is
@@ -70,7 +70,7 @@ public class GainPanel extends AccountReportPanel implements ActionListener {
 		totalGain.addObserver(this);
 
 		// create the ticker filter combo box
-		tickerFilterBox = new TickerFilterBox(table,GainTableModel.COL_TICKER);
+		tickerFilterBox = new ColumnValuesComboBox(table,GainTableModel.COL_TICKER);
 		tickerFilterBox.addActionListener(this);
 
 		// create the year filter combo box
@@ -127,7 +127,7 @@ public class GainPanel extends AccountReportPanel implements ActionListener {
 
 		// handle filter by ticker requests
 		if (box == tickerFilterBox) {
-			TickerFilterBox tickerbox = (TickerFilterBox)box;
+			ColumnValuesComboBox tickerbox = (ColumnValuesComboBox)box;
 			table.filterOnTicker(tickerbox.getSelectedTicker());
 		}
 		// handle filter by year requests
