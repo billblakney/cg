@@ -27,7 +27,8 @@ public class SharesHeldPanel extends AccountReportPanel implements ActionListene
 	 * Selection box for filtering by year. The list of selectable years is
 	 * provided by the displayed account.
 	 */
-	TermFilterBox termFilterBox;
+//	TermFilterBox termFilterBox;
+	ColumnValuesComboBox termFilterBox;
 
 	/*
 	 * Label to display the total number of shares held.
@@ -70,7 +71,8 @@ public class SharesHeldPanel extends AccountReportPanel implements ActionListene
 		tickerFilterBox.addActionListener(this);
 
 		// create term filter combo box
-		termFilterBox = new TermFilterBox();
+		termFilterBox = new ColumnValuesComboBox(
+		      table,SharesHeldTableModel.COL_TERM,"-All Terms-");
 		termFilterBox.addActionListener(this);
 		
 		// create the top panel, add items
@@ -104,6 +106,7 @@ public class SharesHeldPanel extends AccountReportPanel implements ActionListene
 		Vector<SharesHeldStat> statList = acct.getSharesHeldStats();
 		table.setRows(statList);
 		tickerFilterBox.update();
+		termFilterBox.update();
 	}
 
 	/**
@@ -134,8 +137,8 @@ public class SharesHeldPanel extends AccountReportPanel implements ActionListene
 		}
 		// handle filter by year requests
 		else if (box == termFilterBox) {
-			TermFilterBox termbox = (TermFilterBox)box;
-			table.filterOnTerm(termbox.getTerm());
+			ColumnValuesComboBox  termbox = (ColumnValuesComboBox)box;
+			table.filterOnTerm(termbox.getSelectedTicker());
 		}
 	}
 }

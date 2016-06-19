@@ -16,9 +16,9 @@ public class SharesHeldTable extends JTable {
 	private TableRowSorter<SharesHeldTableModel> sorter = null;
 
 	/** Default filter for Term. */
-	private Term filterTerm = Term.BOTH;
+	private String filterTerm = Term.BOTH.toString();
 
-	final private String ANY_TICKER = ".*";
+	final private String ANY_TICKER = ".*"; //TODO rename
 	/** Default filter for Ticker. */
 	private String tickerRegEx = ANY_TICKER;
 
@@ -56,8 +56,11 @@ public class SharesHeldTable extends JTable {
 		setRowFilter();
 	}
 
-	public void filterOnTerm(Term term) {
-		filterTerm = term;
+	public void filterOnTerm(String term) {
+	   if (null == term)
+	      filterTerm = ANY_TICKER;
+	   else
+	      filterTerm = term;
 		setRowFilter();
 	}
 
@@ -70,7 +73,10 @@ public class SharesHeldTable extends JTable {
 		filters.add(tf);
 
 		// term filter
-		filters.add(new CGTermFilter(filterTerm,SharesHeldTableModel.COL_TERM));
+		RowFilter<AbstractTableModel, Integer> tf2 = RowFilter.regexFilter( //TODO name tf2
+				filterTerm, SharesHeldTableModel.COL_TERM);
+		filters.add(tf2);
+//		filters.add(new CGTermFilter(filterTerm,SharesHeldTableModel.COL_TERM));//TODOrm
 
 		sorter.setRowFilter(null);
 		

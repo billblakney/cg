@@ -11,6 +11,7 @@ public class TableModelUtil
       
       for (int i = 0; i < aModel.getRowCount(); i++)
       {
+System.out.println(aModel.getValueAt(i, aCol).toString());
          tValues.add(aModel.getValueAt(i, aCol).toString());
       }
       return tValues;
