@@ -34,13 +34,12 @@ public class SimpleDate extends GregorianCalendar {
 	public SimpleDate(int year, int month, int day) {
 		clear();
 		set(year, month, day);
-/*
-System.out.println("HOUR: " + get(Calendar.HOUR));
-System.out.println("HOUR_OF_DAY: " + get(Calendar.HOUR_OF_DAY));
-System.out.println("MINUTE: " + get(Calendar.MINUTE));
-System.out.println("HOUR: " + get(Calendar.HOUR));
-System.out.println("MILLISECOND: " + get(Calendar.MILLISECOND));
-*/
+
+//System.out.println("HOUR: " + get(Calendar.HOUR));
+//System.out.println("HOUR_OF_DAY: " + get(Calendar.HOUR_OF_DAY));
+//System.out.println("MINUTE: " + get(Calendar.MINUTE));
+//System.out.println("HOUR: " + get(Calendar.HOUR));
+//System.out.println("MILLISECOND: " + get(Calendar.MILLISECOND));
 	}
 
 	/**

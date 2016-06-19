@@ -131,12 +131,12 @@ public class SharesHeldPanel extends AccountReportPanel implements ActionListene
 		// handle filter by ticker requests
 		if (box == tickerFilterBox) {
 			ColumnValuesComboBox tbox = (ColumnValuesComboBox)box;
-			table.filterOnTicker(tbox.getSelectedTicker());
+			table.filterOnTicker(tbox.getFilter());
 		}
 		// handle filter by year requests
 		else if (box == termFilterBox) {
-			ColumnValuesComboBox  termbox = (ColumnValuesComboBox)box;
-			table.filterOnTerm(termbox.getSelectedTicker());
+			ColumnValuesComboBox tbox = (ColumnValuesComboBox)box;
+			table.filterOnTerm(tbox.getFilter());
 		}
 	}
 }

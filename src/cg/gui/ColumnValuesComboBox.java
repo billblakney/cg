@@ -4,6 +4,8 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
+import javax.swing.table.AbstractTableModel;
 
 public class ColumnValuesComboBox extends JComboBox {
 
@@ -35,6 +37,17 @@ public class ColumnValuesComboBox extends JComboBox {
 			return null;
 		else
 			return item;
+	}
+
+	RowFilter<AbstractTableModel,Integer> getFilter()
+	{
+		String tItem = (String)getSelectedItem();
+
+		if (tItem.equals(_allItem))
+		{
+			tItem = ".*";
+		}
+		return RowFilter.regexFilter(tItem,_column);
 	}
 	
 	public void update()
