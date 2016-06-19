@@ -130,7 +130,6 @@ public class TradePanel extends AccountReportPanel implements ActionListener {
 	 */
 	public void update(Observable ov, Object obj) {
 
-//		if( ov.getClass() == Account.class ){
 		if( ov instanceof AbstractAccountData ){
 			updatePanel((AbstractAccountData)ov);
 		}

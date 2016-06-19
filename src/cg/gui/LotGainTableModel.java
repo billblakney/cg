@@ -14,7 +14,7 @@ import cg.OldLot;
  *   public Object getValueAt(int row, int column);
  *   TODO remove computed and tax year?
  */
-public class LotGainTableModel extends AbstractTableModel implements SymbolColumnFinder, GainColumnFinder {
+public class LotGainTableModel extends AbstractTableModel implements GainColumnFinder {
 
 	private String[] columnNames = { "Shares", "Ticker", "Buy Date", "Buy Price",
 			"Sell Date", "Sell Price", "Gross", "Basis", "Gain", "Term"/*zzz,
@@ -37,11 +37,6 @@ public class LotGainTableModel extends AbstractTableModel implements SymbolColum
 	
 	LotGainTableModel() {
 		data = new Vector(0);
-	}
-
-	@Override
-	public int getSymbolColumn(){
-		return COL_TICKER;
 	}
 
 	@Override

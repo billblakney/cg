@@ -90,7 +90,7 @@ public class SecurityGainsPanel extends AccountReportPanel implements ActionList
 		if( ov instanceof AbstractAccountData){
 			updatePanel((AbstractAccountData)ov);
 		}
-		else if( ov.getClass() == SecurityGainsTable.TotalGain.class ){
+		else if( ov instanceof SecurityGainsTable.TotalGain){
 			gainLabel.update((Integer)obj);
 		}
 	}

@@ -13,7 +13,7 @@ import cg.SharesHeldStat;
  *   public int getColumnCount();
  *   public Object getValueAt(int row, int column);
  */
-public class SharesHeldTableModel extends AbstractTableModel implements SymbolColumnFinder {
+public class SharesHeldTableModel extends AbstractTableModel {
 
 	private String[] columnNames = { "Ticker", "Term", "Shares", "Cost", "Lo Price", "Hi Price", "Av Price" };
 
@@ -29,11 +29,6 @@ public class SharesHeldTableModel extends AbstractTableModel implements SymbolCo
 
 	SharesHeldTableModel() {
 		data = new Vector(0);
-	}
-
-	@Override
-	public int getSymbolColumn(){
-		return COL_TICKER;
 	}
 
 	public int getColumnCount() {

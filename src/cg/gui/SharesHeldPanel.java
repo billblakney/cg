@@ -27,7 +27,6 @@ public class SharesHeldPanel extends AccountReportPanel implements ActionListene
 	 * Selection box for filtering by year. The list of selectable years is
 	 * provided by the displayed account.
 	 */
-//	TermFilterBox termFilterBox;
 	ColumnValuesComboBox termFilterBox;
 
 	/*
@@ -114,8 +113,7 @@ public class SharesHeldPanel extends AccountReportPanel implements ActionListene
 	 */
 	public void update(Observable ov, Object obj) {
 
-//		if( ov.getClass() == Account.class ){ //TODO rm everywhere
-		if( ov.getClass() == AbstractAccountData.class ){
+		if( ov instanceof AbstractAccountData){
 			updatePanel((AbstractAccountData)ov);
 		}
 		else if( ov.getClass() == SharesHeld.class ){

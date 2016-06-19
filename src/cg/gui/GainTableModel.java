@@ -13,7 +13,7 @@ import cg.TaxGain;
  *   public int getColumnCount();
  *   public Object getValueAt(int row, int column);
  */
-public class GainTableModel extends AbstractTableModel implements SymbolColumnFinder, GainColumnFinder {
+public class GainTableModel extends AbstractTableModel implements GainColumnFinder {
 
 	private String[] columnNames = { "Shares", "Ticker", "Buy Date",
 			"Sell Date", "Gross", "Basis", "Gain", "Term", "Computed Tax Year",
@@ -34,11 +34,6 @@ public class GainTableModel extends AbstractTableModel implements SymbolColumnFi
 	
 	GainTableModel() {
 		data = new Vector(0);
-	}
-
-	@Override
-	public int getSymbolColumn(){
-		return COL_TICKER;
 	}
 
 	@Override

@@ -17,7 +17,7 @@ import cg.Trade;
  *   public int getColumnCount();
  *   public Object getValueAt(int row, int column);
  */
-public class TradeTableModel extends AbstractTableModel implements SymbolColumnFinder {
+public class TradeTableModel extends AbstractTableModel {
 
 	private String[] columnNames = { "ID", "Date", "Buy/Sell", "Ticker",
 			"Shares", "Shares Held", "Shares Sold", "Share Price", "Commission", "Tax Year",
@@ -41,11 +41,6 @@ public class TradeTableModel extends AbstractTableModel implements SymbolColumnF
 	
 	TradeTableModel() {
 		data = new Vector(0);
-	}
-
-	@Override
-	public int getSymbolColumn(){
-		return COL_TICKER;
 	}
 
 	public int getColumnCount() {

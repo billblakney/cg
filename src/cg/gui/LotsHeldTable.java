@@ -16,7 +16,7 @@ public class LotsHeldTable extends JTable {
 	private LotsHeldTableModel model;
 	private TableRowSorter<LotsHeldTableModel> sorter = null;
 
-	private Term filterTerm;
+	private String filterTerm = ".*";
 
 	final private String ANY_TICKER = ".*";
 	private String tickerRegEx = ANY_TICKER;
@@ -55,7 +55,7 @@ public class LotsHeldTable extends JTable {
 		setRowFilter();
 	}
 
-	public void filterOnTerm(Term term) {
+	public void filterOnTerm(String term) {
 		filterTerm = term;
 		setRowFilter();
 	}
