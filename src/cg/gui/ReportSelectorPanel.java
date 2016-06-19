@@ -21,7 +21,7 @@ public class ReportSelectorPanel extends JPanel implements
 	 * 
 	 * @param pane
 	 */
-	ReportSelectorPanel(ReportTabbedPane pane) {
+	ReportSelectorPanel(ReportTabbedPane pane,Vector<String> tAccounts) {
 		reportTabbedPane = pane;
 		reportTree = new ReportTree();
 		reportTree.addTreeSelectionListener(this);
@@ -30,11 +30,7 @@ public class ReportSelectorPanel extends JPanel implements
 
 		JLabel treeTitle = new JLabel("Tree Table");
 		
-		Vector<String> tAccts = new Vector<String>();
-		tAccts.add("choice1");
-		tAccts.add("choice2");
-
-		JComboBox tComboBox = new JComboBox(tAccts);
+		JComboBox tComboBox = new JComboBox(tAccounts);
 		JPanel tWorkAroundPanel = new JPanel();
 		tWorkAroundPanel.add(tComboBox);
 

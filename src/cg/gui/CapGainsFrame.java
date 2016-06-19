@@ -106,9 +106,6 @@ public class CapGainsFrame extends JFrame {
 	 */
 	public CapGainsFrame(String[] args) {
 		super("CapGains");
-
-		// construct the frame and set its properties
-		initFrame();
 		
 		processEnvironmentVars();
 		
@@ -119,6 +116,9 @@ public class CapGainsFrame extends JFrame {
 		   _dataStore = DataStore.getInstance();
 		   _dataStore.setDbUrl(dbUrl);
 		}
+
+		// construct the frame and set its properties
+		initFrame();
 
 if( tradeFile != null)
 {
@@ -225,7 +225,18 @@ System.out.println("dbUrl: " + dbUrl);
 		reportTabbedPane = new ReportTabbedPane();
 
 		// create the report tree panel
-		reportSelectorPanel = new ReportSelectorPanel(reportTabbedPane);
+		Vector<String> tAccountNames = new Vector<String>();
+		if (_dataStore != null)
+		{
+		   // TODO kind of ugly; add method to get names directly
+		   Vector<AccountInfo> tAccounts = _dataStore.getAccountInfoVector();
+		   tAccountNames = AccountInfo.getNames(tAccounts);
+		}
+		else
+		{
+		   tAccountNames.add("No Account");
+		}
+		reportSelectorPanel = new ReportSelectorPanel(reportTabbedPane,tAccountNames);
 
 		// add panels to split panes
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
