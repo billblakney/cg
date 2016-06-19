@@ -1,10 +1,9 @@
 package cg.gui;
 
 import java.awt.*;
-
+import java.util.Vector;
 import javax.swing.*;
 import javax.swing.event.*;
-
 import cg.*;
 
 public class ReportSelectorPanel extends JPanel implements
@@ -30,9 +29,22 @@ public class ReportSelectorPanel extends JPanel implements
 		JScrollPane treePane = new JScrollPane(reportTree);
 
 		JLabel treeTitle = new JLabel("Tree Table");
-		setLayout(new BorderLayout());
-		add(treeTitle, "North");
-		add(treePane, "Center");
+		
+		Vector<String> tAccts = new Vector<String>();
+		tAccts.add("choice1");
+		tAccts.add("choice2");
+
+		JComboBox tComboBox = new JComboBox(tAccts);
+		JPanel tWorkAroundPanel = new JPanel();
+		tWorkAroundPanel.add(tComboBox);
+
+		setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
+		add(treeTitle);
+		add(tWorkAroundPanel);
+		add(treePane);
+//		add(Box.createVerticalGlue());
+////		add(treeTitle, "North");
+////		add(treePane, "Center");
 	}
 
 	/**
