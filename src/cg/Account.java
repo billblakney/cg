@@ -12,7 +12,7 @@ import java.util.*;
  * StockMgr maintains all of the trades for a particular stock (e.g. CSCO).
  */
 
-public class Account extends AccountData implements AccountDataProvider {
+public class Account extends AbstractAccountData implements AccountDataProvider {
 
 	public final String DEFAULT_ACCT_NAME = "Default Account";
 	String name;

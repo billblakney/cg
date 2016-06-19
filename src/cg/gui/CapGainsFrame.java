@@ -203,7 +203,7 @@ System.out.println("dbUrl: " + dbUrl);
 	 */
 	public void showAccount(Account acct){
 		displayAccount = acct;
-		reportTabbedPane.removeAll();
+//		reportTabbedPane.removeAll();
 		reportTabbedPane.addReport(acct.getName(),ReportType.SHARES_HELD,displayAccount);
 		reportTabbedPane.addReport(acct.getName(),ReportType.ALL_TRADES,displayAccount);
 		reportTabbedPane.addReport(acct.getName(),ReportType.TAX_GAINS,displayAccount);
@@ -291,8 +291,7 @@ System.out.println("dbUrl: " + dbUrl);
 		// Get all accounts for dialog selection.
 		Vector<AccountInfo> tAccountInfo = _dataStore.getAccountInfoVector();
 		Vector<String> tAccountNames = AccountInfo.getNames(tAccountInfo);
-
-		DataStore.printAccountInfoVector(tAccountInfo);
+//		DataStore.printAccountInfoVector(tAccountInfo);
 
 		// Launch the load trade file dialog.
 		LoadTradeFileDialog tDialog = new LoadTradeFileDialog(
@@ -321,7 +320,7 @@ System.out.println("dbUrl: " + dbUrl);
 
 //			actionCreateReport(ReportType.LOTS_HELD);
 			reportTabbedPane.addReport("FROMDB",ReportType.LOTS_HELD,
-			      _dataStore); //TODO individual accounts
+			      _dataStore.getAccountDataProvider(tAccountId)); //TODO individual accounts
 		}
 	}
 

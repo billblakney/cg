@@ -5,7 +5,7 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 
-import cg.AccountData;
+import cg.AbstractAccountData;
 
 public class YearFilterBox extends JComboBox {
 
@@ -28,7 +28,7 @@ public class YearFilterBox extends JComboBox {
 		return year;
 	}
 	
-	public void update(AccountData acct) {
+	public void update(AbstractAccountData acct) {
 		Vector list = new Vector();
 		list.addElement(ALL_YEARS_STRING);
 		list.addAll(acct.getYears(true));

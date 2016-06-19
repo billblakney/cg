@@ -4,7 +4,7 @@ import java.util.Observable;
 import java.util.Vector;
 
 //TODO can make abstract?
-public abstract class AccountData extends Observable implements AccountDataProvider
+public abstract class AbstractAccountData extends Observable implements AccountDataProvider
 {
 
 //   @Override

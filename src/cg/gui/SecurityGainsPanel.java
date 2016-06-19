@@ -38,7 +38,7 @@ public class SecurityGainsPanel extends AccountReportPanel implements ActionList
 		init();
 	}
 
-	public SecurityGainsPanel(AccountData acct) {
+	public SecurityGainsPanel(AbstractAccountData acct) {
 		init();
 		setAccount(acct);
 	}
@@ -76,19 +76,19 @@ public class SecurityGainsPanel extends AccountReportPanel implements ActionList
 	/**
 	 * updateReplace the currently displayed account with a new one.
 	 */
-	protected void updatePanel(AccountData acct) {
+	protected void updatePanel(AbstractAccountData acct) {
 		Vector gains = acct.getSecurityGains(); //zzz
 		table.setRows(gains);
 		//table.packColumns(2);
 	}
 
 	/**
-	 * Handle the update notification from AccountData.
+	 * Handle the update notification from AbstractAccountData.
 	 */
 	public void update(Observable ov, Object obj) {
 
-		if( ov instanceof AccountData){
-			updatePanel((AccountData)ov);
+		if( ov instanceof AbstractAccountData){
+			updatePanel((AbstractAccountData)ov);
 		}
 		else if( ov.getClass() == SecurityGainsTable.TotalGain.class ){
 			gainLabel.update((Integer)obj);

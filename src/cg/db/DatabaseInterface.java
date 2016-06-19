@@ -40,6 +40,9 @@ public class DatabaseInterface
    private String _updateLotHasChildrenSql =
          "UPDATE lot SET has_children = ? WHERE lot_id = ?";
    
+   private String _selectLotDataSql =
+         "SELECT symbol, buy_date, shares, buy_price FROM lotreport WHERE acct_id = ?";
+   
    /**
     * Constructor
     * @param aDbUrl
@@ -110,9 +113,11 @@ public class DatabaseInterface
 
       try
       {
-         Statement tSql = aConn.createStatement();
+         PreparedStatement tSql = aConn.prepareStatement(_selectLotDataSql);
+         
+         tSql.setInt(1,aAccountId);
 
-         ResultSet tResults = tSql.executeQuery("select * from LotReport");
+         ResultSet tResults = tSql.executeQuery();
 
          if (tResults != null)
          {

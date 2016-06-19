@@ -51,7 +51,7 @@ public class GainPanel extends AccountReportPanel implements ActionListener {
 		init();
 	}
 
-	public GainPanel(AccountData acct) {
+	public GainPanel(AbstractAccountData acct) {
 		init();
 		setAccount(acct);
 	}
@@ -99,7 +99,7 @@ public class GainPanel extends AccountReportPanel implements ActionListener {
 	/**
 	 * updateReplace the currently displayed account with a new one.
 	 */
-	protected void updatePanel(AccountData acct) {
+	protected void updatePanel(AbstractAccountData acct) {
 		Vector gains = acct.getTaxGains(null,null); //zzz
 		table.setRows(gains);
 		tickerFilterBox.update(acct);
@@ -107,12 +107,12 @@ public class GainPanel extends AccountReportPanel implements ActionListener {
 	}
 
 	/**
-	 * Handle the update notification from AccountData.
+	 * Handle the update notification from AbstractAccountData.
 	 */
 	public void update(Observable ov, Object obj) {
 
-		if( ov instanceof AccountData){
-			updatePanel((AccountData)ov);
+		if( ov instanceof AbstractAccountData){
+			updatePanel((AbstractAccountData)ov);
 		}
 		else if( ov.getClass() == GainTable.TotalGain.class ){
 			gainLabel.update((Integer)obj);

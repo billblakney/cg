@@ -38,7 +38,7 @@ public class YearlyGainsPanel extends AccountReportPanel implements ActionListen
 		init();
 	}
 
-	public YearlyGainsPanel(AccountData acct) {
+	public YearlyGainsPanel(AbstractAccountData acct) {
 		init();
 		setAccount(acct);
 	}
@@ -76,18 +76,18 @@ public class YearlyGainsPanel extends AccountReportPanel implements ActionListen
 	/**
 	 * updateReplace the currently displayed account with a new one.
 	 */
-	protected void updatePanel(AccountData acct) {
+	protected void updatePanel(AbstractAccountData acct) {
 		Vector gains = acct.getYearlyGains(); //zzz
 		table.setRows(gains);
 	}
 
 	/**
-	 * Handle the update notification from AccountData.
+	 * Handle the update notification from AbstractAccountData.
 	 */
 	public void update(Observable ov, Object obj) {
 
-		if( ov instanceof AccountData){
-			updatePanel((AccountData)ov);
+		if( ov instanceof AbstractAccountData){
+			updatePanel((AbstractAccountData)ov);
 		}
 		else if( ov.getClass() == YearlyGainsTable.TotalGain.class ){
 			gainLabel.update((Integer)obj);

@@ -13,7 +13,7 @@ import cg.db.DatabaseInterface;
  * Singleton class that manages the storage of data for this app.
  * To use the database, a call must be made to setDbUrl.
  */
-public class DataStore extends AccountData
+public class DataStore
 {
    static DataStore _dataStore = null;
    
@@ -57,6 +57,11 @@ public class DataStore extends AccountData
       
       _dbi = DatabaseInterface.getInstance();
    }
+   
+   public AbstractAccountData getAccountDataProvider(int aAccountId)
+   {
+      return new AccountDataProxy(this,aAccountId);
+   }
 
    public TradeList getTrades(int aAccountId)
    {
@@ -79,46 +84,46 @@ public class DataStore extends AccountData
       return tTradeList;
    }
    
-   @Override
-	public TradeList getTradeList()
-   {
-	   return null;
-   }
-
-	public TreeSet<Integer> getYears(Boolean includeIdleYears)
-   {
-	   return null;
-   }
-
-	public TreeSet<String> getTickers()
-   {
-	   return new TreeSet<String>();
-   }
-
-	public Vector getSharesHeldStats()
-   {
-	   return null;
-   }
-
-	public Vector getTaxGains(String ticker, String year)
-   {
-	   return null;
-   }
-
-	public Vector getTaxGainLots(String ticker, String year)
-   {
-	   return null;
-   }
-
-	public Vector getSecurityGains()
-   {
-	   return null;
-   }
-
-	public Vector getYearlyGains()
-   {
-	   return null;
-   }
+//   @Override
+//	public TradeList getTradeList()
+//   {
+//	   return null;
+//   }
+//
+//	public TreeSet<Integer> getYears(Boolean includeIdleYears)
+//   {
+//	   return null;
+//   }
+//
+//	public TreeSet<String> getTickers()
+//   {
+//	   return new TreeSet<String>();
+//   }
+//
+//	public Vector getSharesHeldStats()
+//   {
+//	   return null;
+//   }
+//
+//	public Vector getTaxGains(String ticker, String year)
+//   {
+//	   return null;
+//   }
+//
+//	public Vector getTaxGainLots(String ticker, String year)
+//   {
+//	   return null;
+//   }
+//
+//	public Vector getSecurityGains()
+//   {
+//	   return null;
+//   }
+//
+//	public Vector getYearlyGains()
+//   {
+//	   return null;
+//   }
 
 
    public Vector<AccountInfo> getAccountInfoVector()
@@ -142,9 +147,9 @@ public class DataStore extends AccountData
       return tAcctInfo;
    }
 
-	@Override
-	public Vector<LotDataProvider>
-	getHeldLots(String ticker, String year)
+   //TODO don't really want this public, its only for AccountDataProxy use
+	protected Vector<LotDataProvider>
+	getHeldLots(int aAccountId,String ticker, String year)
 	{
 		Vector<LotDataProvider> tHeldLots = new Vector<LotDataProvider>();
 
@@ -153,7 +158,7 @@ public class DataStore extends AccountData
          Connection tConn = _cm.getConnection();
          if (tConn != null)
          {
-            tHeldLots = _dbi.getLotData(tConn, 0);
+            tHeldLots = _dbi.getLotData(tConn, aAccountId);
             _cm.closeConnection(tConn);
          }
       }

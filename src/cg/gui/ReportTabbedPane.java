@@ -19,7 +19,7 @@ public class ReportTabbedPane extends JTabbedPane {
 	 * @param type Type of report.
 	 * @param acct Account being reported.
 	 */
-	public void addReport(String accountName,ReportType type, AccountData acct) {
+	public void addReport(String accountName,ReportType type, AbstractAccountData acct) {
 		JPanel newPanel = getReportPanel(type, acct);
 		String title = accountName + " - " + type.toString();
 		addTab(title, newPanel);
@@ -34,7 +34,7 @@ public class ReportTabbedPane extends JTabbedPane {
 //	 * @param type Type of report.
 //	 * @param acct Account being reported.
 //	 */
-//	public void addReport(String accountName,ReportType type, AccountData acct) {
+//	public void addReport(String accountName,ReportType type, AbstractAccountData acct) {
 //		JPanel newPanel = getReportPanel(type, acct);
 //		String title = accountName + " - " + type.toString();
 //		addTab(title, newPanel);
@@ -46,7 +46,7 @@ public class ReportTabbedPane extends JTabbedPane {
 	 * Change the account displayed by all the report tabs.
 	 * @param acct
 	 */
-	public void changeAccount(AccountData acct){
+	public void changeAccount(AbstractAccountData acct){
 		int count = getTabCount();
 		for( int i = 0; i < count; i++ ){
 			AccountReportPanel panel = (AccountReportPanel)getComponentAt(i);
@@ -55,11 +55,11 @@ public class ReportTabbedPane extends JTabbedPane {
 	}
 
 //	/** TODO POC */
-//	private JPanel getReportPanel(ReportType type,AccountData acct){
+//	private JPanel getReportPanel(ReportType type,AbstractAccountData acct){
 //			return new LotsHeldPanel(acct);
 //	}
 
-	private JPanel getReportPanel(ReportType type,AccountData acct){
+	private JPanel getReportPanel(ReportType type,AbstractAccountData acct){
 		if( type == ReportType.ALL_TRADES )
 			return new TradePanel(acct);
 		else if( type == ReportType.SHARES_HELD )

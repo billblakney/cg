@@ -48,7 +48,7 @@ public class SharesHeldPanel extends AccountReportPanel implements ActionListene
 		init();
 	}
 	
-	public SharesHeldPanel(AccountData acct) {
+	public SharesHeldPanel(AbstractAccountData acct) {
 		init();
 		setAccount(acct);
 	}
@@ -99,20 +99,20 @@ public class SharesHeldPanel extends AccountReportPanel implements ActionListene
 	/**
 	 * updateReplace the currently displayed account with a new one.
 	 */
-	protected void updatePanel(AccountData acct) {
+	protected void updatePanel(AbstractAccountData acct) {
 		Vector<SharesHeldStat> statList = acct.getSharesHeldStats();
 		table.setRows(statList);
 		tickerFilterBox.update(acct);
 	}
 
 	/**
-	 * Handle the update notification from AccountData.
+	 * Handle the update notification from AbstractAccountData.
 	 */
 	public void update(Observable ov, Object obj) {
 
 //		if( ov.getClass() == Account.class ){ //TODO rm everywhere
-		if( ov.getClass() == AccountData.class ){
-			updatePanel((AccountData)ov);
+		if( ov.getClass() == AbstractAccountData.class ){
+			updatePanel((AbstractAccountData)ov);
 		}
 		else if( ov.getClass() == SharesHeld.class ){
 			sharesLabel.update((Integer)obj);
