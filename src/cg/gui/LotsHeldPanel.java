@@ -102,7 +102,7 @@ public class LotsHeldPanel extends AccountReportPanel implements ActionListener 
 	protected void updatePanel(AbstractAccountData acct) {
 		Vector<LotDataProvider> lots = acct.getHeldLots(null,null); //TODO null,null?
 		table.setRows(lots);
-		tickerFilterBox.update(acct);
+		tickerFilterBox.update(table.getModel());
 	}
 
 	/**

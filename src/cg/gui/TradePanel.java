@@ -121,7 +121,7 @@ public class TradePanel extends AccountReportPanel implements ActionListener {
 		TradeList tradeList = acct.getTradeList();
 		table.setRows(tradeList);
 		yearFilterBox.update(acct);
-		tickerFilterBox.update(acct);
+		tickerFilterBox.update(table.getModel());
 	}
 
 	/**

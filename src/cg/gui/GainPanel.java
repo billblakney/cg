@@ -102,7 +102,7 @@ public class GainPanel extends AccountReportPanel implements ActionListener {
 	protected void updatePanel(AbstractAccountData acct) {
 		Vector gains = acct.getTaxGains(null,null); //zzz
 		table.setRows(gains);
-		tickerFilterBox.update(acct);
+		tickerFilterBox.update(table.getModel());
 		yearFilterBox.update(acct);
 	}
 

@@ -1,11 +1,11 @@
 package cg.gui;
 
 import java.util.TreeSet;
-import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 
 public class TableModelUtil
 {
-   static TreeSet<String> getColumnValues(AbstractTableModel aModel,int aCol)
+   static TreeSet<String> getColumnValues(TableModel aModel,int aCol)
    {
       TreeSet<String> tValues = new TreeSet<String>();
       

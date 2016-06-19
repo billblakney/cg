@@ -13,7 +13,7 @@ import cg.LotDataProvider;
  *   public int getColumnCount();
  *   public Object getValueAt(int row, int column);
  */
-public class LotsHeldTableModel extends AbstractTableModel {
+public class LotsHeldTableModel extends AbstractTableModel implements SymbolColumnFinder {
 
 	private String[] columnNames = { "Ticker", "Buy Date", "Shares", "Buy Price", "Term" };
 
@@ -27,6 +27,11 @@ public class LotsHeldTableModel extends AbstractTableModel {
 
 	LotsHeldTableModel() {
 		data = new Vector(0);
+	}
+
+	@Override
+	public int getSymbolColumn(){
+		return COL_TICKER;
 	}
 
 	@Override

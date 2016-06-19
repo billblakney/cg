@@ -1,17 +1,18 @@
 package cg.gui;
 
 import java.util.Vector;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
-
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 import cg.AbstractAccountData;
 
 public class TickerFilterBox extends JComboBox {
 
 	private final String ALL_STOCKS_STRING = "All Stocks";
 	
-	public TickerFilterBox(){
+	public TickerFilterBox()
+	{
 	}
 	
 	/**
@@ -24,11 +25,24 @@ public class TickerFilterBox extends JComboBox {
 		else
 			return item;
 	}
+//	
+//	public void update(AbstractAccountData acct) {
+//		Vector list = new Vector();
+//		list.addElement(ALL_STOCKS_STRING);
+//		list.addAll(acct.getTickers());
+//		DefaultComboBoxModel model = new DefaultComboBoxModel(list);
+//		setModel(model);
+//	}
 	
-	public void update(AbstractAccountData acct) {
+	public void update(TableModel aModel) {
 		Vector list = new Vector();
 		list.addElement(ALL_STOCKS_STRING);
-		list.addAll(acct.getTickers());
+		if (aModel instanceof SymbolColumnFinder)
+		{
+		   SymbolColumnFinder tFinder = (SymbolColumnFinder)aModel;
+		   int tColumn = tFinder.getSymbolColumn();
+		   list.addAll(TableModelUtil.getColumnValues(aModel, tColumn));
+		}
 		DefaultComboBoxModel model = new DefaultComboBoxModel(list);
 		setModel(model);
 	}

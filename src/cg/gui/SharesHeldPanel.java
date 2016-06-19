@@ -102,7 +102,7 @@ public class SharesHeldPanel extends AccountReportPanel implements ActionListene
 	protected void updatePanel(AbstractAccountData acct) {
 		Vector<SharesHeldStat> statList = acct.getSharesHeldStats();
 		table.setRows(statList);
-		tickerFilterBox.update(acct);
+		tickerFilterBox.update(table.getModel());
 	}
 
 	/**
