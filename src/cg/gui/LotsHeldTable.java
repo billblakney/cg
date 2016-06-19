@@ -69,7 +69,9 @@ public class LotsHeldTable extends JTable {
 		filters.add(tf);
 
 		// term filter
-		filters.add(new CGTermFilter(filterTerm,LotsHeldTableModel.COL_TERM));
+		RowFilter<AbstractTableModel, Integer> tf2 = RowFilter.regexFilter(
+				tickerRegEx, LotsHeldTableModel.COL_TERM);
+		filters.add(tf2);//TODO tf2
 
 		sorter.setRowFilter(null);
 		

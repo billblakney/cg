@@ -76,7 +76,6 @@ public class SharesHeldTable extends JTable {
 		RowFilter<AbstractTableModel, Integer> tf2 = RowFilter.regexFilter( //TODO name tf2
 				filterTerm, SharesHeldTableModel.COL_TERM);
 		filters.add(tf2);
-//		filters.add(new CGTermFilter(filterTerm,SharesHeldTableModel.COL_TERM));//TODOrm
 
 		sorter.setRowFilter(null);
 		

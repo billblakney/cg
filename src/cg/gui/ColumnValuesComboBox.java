@@ -4,9 +4,6 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
-import cg.AbstractAccountData;
 
 public class ColumnValuesComboBox extends JComboBox {
 
