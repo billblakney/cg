@@ -60,8 +60,17 @@ public class GainPanel extends AccountReportPanel implements ActionListener {
 		// create title
 		JLabel gainTitle = new JLabel("Cap Gains Table");
 
+		// create the center panel
+		table = new GainTable();
+		JScrollPane gainTablePane = new JScrollPane(table);
+
+		// create the widgets for the bottom panel
+		gainLabel = new GainLabel();
+		GainTable.TotalGain totalGain = table.getTotalGain();
+		totalGain.addObserver(this);
+
 		// create the ticker filter combo box
-		tickerFilterBox = new TickerFilterBox();
+		tickerFilterBox = new TickerFilterBox(table,GainTableModel.COL_TICKER);
 		tickerFilterBox.addActionListener(this);
 
 		// create the year filter combo box
@@ -73,15 +82,6 @@ public class GainPanel extends AccountReportPanel implements ActionListener {
 		topPanel.add(gainTitle);
 		topPanel.add(tickerFilterBox);
 		topPanel.add(yearFilterBox);
-
-		// create the center panel
-		table = new GainTable();
-		JScrollPane gainTablePane = new JScrollPane(table);
-
-		// create the widgets for the bottom panel
-		gainLabel = new GainLabel();
-		GainTable.TotalGain totalGain = table.getTotalGain();
-		totalGain.addObserver(this);
 
 		// create the bottom panel, add items
 		JPanel bottomPanel = new JPanel();
@@ -102,7 +102,7 @@ public class GainPanel extends AccountReportPanel implements ActionListener {
 	protected void updatePanel(AbstractAccountData acct) {
 		Vector gains = acct.getTaxGains(null,null); //zzz
 		table.setRows(gains);
-		tickerFilterBox.update(table.getModel());
+		tickerFilterBox.update();
 		yearFilterBox.update(acct);
 	}
 

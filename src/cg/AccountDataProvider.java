@@ -14,7 +14,6 @@ public interface AccountDataProvider
 
 	public TradeList getTradeList();
 	public TreeSet<Integer> getYears(Boolean includeIdleYears);
-	public TreeSet<String> getTickers();
 	public Vector getSharesHeldStats(); //TODO change raw vector?
 	public Vector getTaxGains(String ticker, String year); //TODO raw vec?
 	public Vector getTaxGainLots(String ticker, String year); //TODO raw vec?

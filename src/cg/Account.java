@@ -84,14 +84,6 @@ public class Account extends AbstractAccountData implements AccountDataProvider 
 	}
 
 	/**
-	 * Get the list of tickers for all stocks in this account.
-	 */
-	@Override
-	public TreeSet<String> getTickers() {
-		return allTrades.getTickers();
-	}
-
-	/**
 	 * Get the list of years for all stocks in this account.
 	 */
 	@Override

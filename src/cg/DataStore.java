@@ -95,11 +95,6 @@ public class DataStore
 //	   return null;
 //   }
 //
-//	public TreeSet<String> getTickers()
-//   {
-//	   return new TreeSet<String>();
-//   }
-//
 //	public Vector getSharesHeldStats()
 //   {
 //	   return null;

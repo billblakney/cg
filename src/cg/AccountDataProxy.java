@@ -45,13 +45,6 @@ public class AccountDataProxy extends AbstractAccountData
    }
 
    @Override
-   public TreeSet<String> getTickers()
-   {
-      // TODO
-      return new TreeSet<String>();
-   }
-
-   @Override
    public Vector getSharesHeldStats()
    {
       // TODO Auto-generated method stub

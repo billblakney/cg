@@ -60,8 +60,12 @@ public class LotsHeldPanel extends AccountReportPanel implements ActionListener 
 		// create title
 		final JLabel tradeTitle = new JLabel("LotsHeld Table");
 
+		// Build the center panel.
+		table = new LotsHeldTable();
+		JScrollPane tradeTablePane = new JScrollPane(table);
+
 		// create the ticker filter combo box
-		tickerFilterBox = new TickerFilterBox();
+		tickerFilterBox = new TickerFilterBox(table,LotsHeldTableModel.COL_TICKER);
 		tickerFilterBox.addActionListener(this);
 
 		// create term filter combo box
@@ -73,10 +77,6 @@ public class LotsHeldPanel extends AccountReportPanel implements ActionListener 
 		topPanel.add(tradeTitle);
 		topPanel.add(tickerFilterBox);
 		topPanel.add(termFilterBox);
-
-		// Build the center panel.
-		table = new LotsHeldTable();
-		JScrollPane tradeTablePane = new JScrollPane(table);
 
 		// create the widgets for the bottom panel
 		sharesLabel = new SharesLabel();
@@ -102,7 +102,7 @@ public class LotsHeldPanel extends AccountReportPanel implements ActionListener 
 	protected void updatePanel(AbstractAccountData acct) {
 		Vector<LotDataProvider> lots = acct.getHeldLots(null,null); //TODO null,null?
 		table.setRows(lots);
-		tickerFilterBox.update(table.getModel());
+		tickerFilterBox.update();
 	}
 
 	/**

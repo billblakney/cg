@@ -60,8 +60,12 @@ public class SharesHeldPanel extends AccountReportPanel implements ActionListene
 		// create title
 		final JLabel tradeTitle = new JLabel("SharesHeld Table");
 
+		// Build the center panel.
+		table = new SharesHeldTable();
+		JScrollPane tradeTablePane = new JScrollPane(table);
+
 		// create the ticker filter combo box
-		tickerFilterBox = new TickerFilterBox();
+		tickerFilterBox = new TickerFilterBox(table,SharesHeldTableModel.COL_TICKER);
 		tickerFilterBox.addActionListener(this);
 
 		// create term filter combo box
@@ -73,10 +77,6 @@ public class SharesHeldPanel extends AccountReportPanel implements ActionListene
 		topPanel.add(tradeTitle);
 		topPanel.add(tickerFilterBox);
 		topPanel.add(termFilterBox);
-
-		// Build the center panel.
-		table = new SharesHeldTable();
-		JScrollPane tradeTablePane = new JScrollPane(table);
 
 		// create the widgets for the bottom panel
 		sharesLabel = new SharesLabel();
@@ -102,7 +102,7 @@ public class SharesHeldPanel extends AccountReportPanel implements ActionListene
 	protected void updatePanel(AbstractAccountData acct) {
 		Vector<SharesHeldStat> statList = acct.getSharesHeldStats();
 		table.setRows(statList);
-		tickerFilterBox.update(table.getModel());
+		tickerFilterBox.update();
 	}
 
 	/**

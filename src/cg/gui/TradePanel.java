@@ -70,8 +70,12 @@ public class TradePanel extends AccountReportPanel implements ActionListener {
 		// create title
 		final JLabel tradeTitle = new JLabel("Trade Table");
 
+		// Build the center panel.
+		table = new TradeTable();
+		JScrollPane tradeTablePane = new JScrollPane(table);
+
 		// create the ticker filter combo box
-		tickerFilterBox = new TickerFilterBox();
+		tickerFilterBox = new TickerFilterBox(table,TradeTableModel.COL_TICKER);
 		tickerFilterBox.addActionListener(this);
 
 		// create the year filter combo box
@@ -88,10 +92,6 @@ public class TradePanel extends AccountReportPanel implements ActionListener {
 		topPanel.add(tickerFilterBox);
 		topPanel.add(yearFilterBox);
 		topPanel.add(positionsFilterBox);
-
-		// Build the center panel.
-		table = new TradeTable();
-		JScrollPane tradeTablePane = new JScrollPane(table);
 
 		// create the widgets for the bottom panel
 		sharesLabel = new SharesLabel();
@@ -121,7 +121,7 @@ public class TradePanel extends AccountReportPanel implements ActionListener {
 		TradeList tradeList = acct.getTradeList();
 		table.setRows(tradeList);
 		yearFilterBox.update(acct);
-		tickerFilterBox.update(table.getModel());
+		tickerFilterBox.update();
 	}
 
 	/**

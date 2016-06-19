@@ -9,16 +9,17 @@ import javax.swing.RowFilter;
 import javax.swing.RowFilter.*;
 
 import cg.Term;
-import cg.gui.GainTable.TotalGain;
 
 public class SharesHeldTable extends JTable {
 
 	private SharesHeldTableModel model;
 	private TableRowSorter<SharesHeldTableModel> sorter = null;
 
-	private Term filterTerm;
+	/** Default filter for Term. */
+	private Term filterTerm = Term.BOTH;
 
 	final private String ANY_TICKER = ".*";
+	/** Default filter for Ticker. */
 	private String tickerRegEx = ANY_TICKER;
 
 	RowFilter<AbstractTableModel, Integer> rowFilter;

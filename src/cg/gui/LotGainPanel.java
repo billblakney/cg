@@ -60,8 +60,12 @@ public class LotGainPanel extends AccountReportPanel implements ActionListener {
 		// create title
 		JLabel gainTitle = new JLabel("Cap Gain Lots Table");
 
+		// create the center panel
+		table = new LotGainTable();
+		JScrollPane gainTablePane = new JScrollPane(table);
+
 		// create the ticker filter combo box
-		tickerFilterBox = new TickerFilterBox();
+		tickerFilterBox = new TickerFilterBox(table,LotGainTableModel.COL_TICKER);
 		tickerFilterBox.addActionListener(this);
 
 		// create the year filter combo box
@@ -73,10 +77,6 @@ public class LotGainPanel extends AccountReportPanel implements ActionListener {
 		topPanel.add(gainTitle);
 		topPanel.add(tickerFilterBox);
 		topPanel.add(yearFilterBox);
-
-		// create the center panel
-		table = new LotGainTable();
-		JScrollPane gainTablePane = new JScrollPane(table);
 
 		// create the widgets for the bottom panel
 		gainLabel = new GainLabel();
@@ -102,7 +102,7 @@ public class LotGainPanel extends AccountReportPanel implements ActionListener {
 	protected void updatePanel(AbstractAccountData acct) {
 		Vector gains = acct.getTaxGainLots(null,null); //zzz
 		table.setRows(gains);
-		tickerFilterBox.update(table.getModel());
+		tickerFilterBox.update();
 		yearFilterBox.update(acct);
 	}
 
