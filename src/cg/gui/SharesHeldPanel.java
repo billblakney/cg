@@ -65,7 +65,8 @@ public class SharesHeldPanel extends AccountReportPanel implements ActionListene
 		JScrollPane tradeTablePane = new JScrollPane(table);
 
 		// create the ticker filter combo box
-		tickerFilterBox = new ColumnValuesComboBox(table,SharesHeldTableModel.COL_TICKER);
+		tickerFilterBox = new ColumnValuesComboBox(
+		      table,SharesHeldTableModel.COL_TICKER,"-All Symbols-");
 		tickerFilterBox.addActionListener(this);
 
 		// create term filter combo box

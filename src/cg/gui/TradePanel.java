@@ -75,7 +75,8 @@ public class TradePanel extends AccountReportPanel implements ActionListener {
 		JScrollPane tradeTablePane = new JScrollPane(table);
 
 		// create the ticker filter combo box
-		tickerFilterBox = new ColumnValuesComboBox(table,TradeTableModel.COL_TICKER);
+		tickerFilterBox = new ColumnValuesComboBox(
+		      table,TradeTableModel.COL_TICKER,"All Symbols");
 		tickerFilterBox.addActionListener(this);
 
 		// create the year filter combo box

@@ -70,7 +70,8 @@ public class GainPanel extends AccountReportPanel implements ActionListener {
 		totalGain.addObserver(this);
 
 		// create the ticker filter combo box
-		tickerFilterBox = new ColumnValuesComboBox(table,GainTableModel.COL_TICKER);
+		tickerFilterBox = new ColumnValuesComboBox(
+		      table,GainTableModel.COL_TICKER,"-All Symbols-");
 		tickerFilterBox.addActionListener(this);
 
 		// create the year filter combo box

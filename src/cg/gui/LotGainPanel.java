@@ -65,7 +65,8 @@ public class LotGainPanel extends AccountReportPanel implements ActionListener {
 		JScrollPane gainTablePane = new JScrollPane(table);
 
 		// create the ticker filter combo box
-		tickerFilterBox = new ColumnValuesComboBox(table,LotGainTableModel.COL_TICKER);
+		tickerFilterBox = new ColumnValuesComboBox(
+		      table,LotGainTableModel.COL_TICKER,"-All Symbols-");
 		tickerFilterBox.addActionListener(this);
 
 		// create the year filter combo box
