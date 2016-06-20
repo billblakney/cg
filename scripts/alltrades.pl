@@ -12,6 +12,7 @@ BEGIN { push @INC, $ENV{"PERLSCRIPTS"} }
 
 #use MyPerl::Utils qw(msg readFile createBakFiles printlist);
 use MyPerl::Utils qw(msg readFile createBakFiles printlist);
+use File::Copy qw(copy);
 
 my $USAGE = "\nUsage: alltrades.pl [-h] [-p] [-s]
       -h      # print this message
@@ -80,6 +81,7 @@ if( -e $allTradesFile ){
    createBakFiles($allTradesFile);
 }
 
+# Open the file and write all lines to it.
 open(my $fh, ">", $allTradesFile)
    or die "Could not open $allTradesFile\n";
 
@@ -88,6 +90,15 @@ foreach my $line (@lines){
 }
 
 close $fh;
+
+#-------------------------
+# Copy the all trades file to the ../all directory, with a new name that
+# takes the tail of the current directory as the root of the copied file
+# name. The copied file is given the "txt" extension.
+#-------------------------
+my $acctFile = getAccountFile();
+print "acctFile: $acctFile\n";
+copy($allTradesFile,$acctFile);
 
 #-------------------------
 # get list of trade file names
@@ -105,4 +116,18 @@ sub getTradeFiles
    }
    closedir(DIR);
    @files;
+}
+
+#-------------------------
+# get list of trade file names
+#-------------------------
+sub getAccountFile
+{
+   my $currentDir =  $ENV{'PWD'};
+   my @pathComponents = split /\//, $currentDir;
+   my $lastComponent = pop @pathComponents;
+   my $parentDir = join '/', @pathComponents;
+   my $destinationDir = join '/', $parentDir, "all";
+   my $fileName = $lastComponent . ".txt";
+   my $destinationFile = $destinationDir . "/" . $fileName;
 }

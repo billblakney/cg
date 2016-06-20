@@ -11,3 +11,4 @@ db/*/data
 all.sql
 /bin/
 data/TdRoll1
+data/all
