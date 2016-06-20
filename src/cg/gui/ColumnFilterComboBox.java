@@ -41,18 +41,6 @@ public class ColumnFilterComboBox extends JComboBox {
 	}
 	
 	/**
-	 * @return Returns selected year, or null if "All Tickers" is selected. 
-	 * TODO get rid of this
-	 */
-	public String getSelectedTicker(){
-		String item = (String)getSelectedItem();
-		if (item.equals(_allItem))
-			return null;
-		else
-			return item;
-	}
-	
-	/**
 	 * Update the selection list based on current values in the table model.
 	 * This method should be called when the table contents changes.
 	 */

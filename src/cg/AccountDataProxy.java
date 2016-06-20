@@ -38,13 +38,6 @@ public class AccountDataProxy extends AbstractAccountData
    }
 
    @Override
-   public TreeSet<Integer> getYears(Boolean includeIdleYears)
-   {
-      // TODO Auto-generated method stub
-      return null;
-   }
-
-   @Override
    public Vector getSharesHeldStats()
    {
       // TODO Auto-generated method stub

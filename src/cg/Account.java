@@ -84,14 +84,6 @@ public class Account extends AbstractAccountData implements AccountDataProvider 
 	}
 
 	/**
-	 * Get the list of years for all stocks in this account.
-	 */
-	@Override
-	public TreeSet<Integer> getYears(Boolean includeIdleYears) {
-		return allTrades.getYears(includeIdleYears);
-	}
-
-	/**
 	 * Get a list of all trades.
 	 */
 	@Override
