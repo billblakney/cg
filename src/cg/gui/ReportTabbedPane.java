@@ -19,28 +19,14 @@ public class ReportTabbedPane extends JTabbedPane {
 	 * @param type Type of report.
 	 * @param acct Account being reported.
 	 */
-	public void addReport(String accountName,ReportType type, AbstractAccountData acct) {
+	public void addReport(
+	      String accountName,ReportType type, AbstractAccountData acct) {
 		JPanel newPanel = getReportPanel(type, acct);
 		String title = accountName + " - " + type.toString();
 		addTab(title, newPanel);
 		int index = indexOfComponent(newPanel);
 		setTabComponentAt(index, new ButtonTabComponent(this));
 	}
-
-//	/**TODO rm
-//	 * TODO this is just POC, need to adapt all
-//	 * Adds a report tab for the specified report type for the specified account.
-//	 * 
-//	 * @param type Type of report.
-//	 * @param acct Account being reported.
-//	 */
-//	public void addReport(String accountName,ReportType type, AbstractAccountData acct) {
-//		JPanel newPanel = getReportPanel(type, acct);
-//		String title = accountName + " - " + type.toString();
-//		addTab(title, newPanel);
-//		int index = indexOfComponent(newPanel);
-//		setTabComponentAt(index, new ButtonTabComponent(this));
-//	}
 	
 	/**
 	 * Change the account displayed by all the report tabs.
@@ -53,11 +39,6 @@ public class ReportTabbedPane extends JTabbedPane {
 			panel.setAccount(acct);
 		}
 	}
-
-//	/** TODO POC */
-//	private JPanel getReportPanel(ReportType type,AbstractAccountData acct){
-//			return new LotsHeldPanel(acct);
-//	}
 
 	private JPanel getReportPanel(ReportType type,AbstractAccountData acct){
 		if( type == ReportType.ALL_TRADES )
