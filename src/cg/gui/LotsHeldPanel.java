@@ -21,13 +21,13 @@ public class LotsHeldPanel extends AccountReportPanel implements ActionListener 
 	 * Selection box for filtering by ticker. The list of selectable tickers is
 	 * provided by the displayed account.
 	 */
-	ColumnValuesComboBox tickerFilterBox;
+	ColumnFilterComboBox tickerFilterBox;
 
 	/*
 	 * Selection box for filtering by year. The list of selectable years is
 	 * provided by the displayed account.
 	 */
-	ColumnValuesComboBox termFilterBox;
+	ColumnFilterComboBox termFilterBox;
 
 	/*
 	 * Label to display the total number of shares held.
@@ -65,12 +65,12 @@ public class LotsHeldPanel extends AccountReportPanel implements ActionListener 
 		JScrollPane tradeTablePane = new JScrollPane(table);
 
 		// create the ticker filter combo box
-		tickerFilterBox = new ColumnValuesComboBox(
+		tickerFilterBox = new ColumnFilterComboBox(
 		      table,LotsHeldTableModel.COL_TICKER,"-All Symbols-");
 		tickerFilterBox.addActionListener(this);
 
 		// create term filter combo box
-		termFilterBox = new ColumnValuesComboBox(
+		termFilterBox = new ColumnFilterComboBox(
 		      table,LotsHeldTableModel.COL_TERM,"-All Terms-");
 		termFilterBox.addActionListener(this);
 		
@@ -126,17 +126,17 @@ public class LotsHeldPanel extends AccountReportPanel implements ActionListener 
 	 * trades table.
 	 */
 	public void actionPerformed(ActionEvent e) {
-		JComboBox box = (JComboBox) e.getSource();
+		JComboBox tComboBox = (JComboBox) e.getSource();
 
 		// handle filter by ticker requests
-		if (box == tickerFilterBox) {
-			ColumnValuesComboBox tbox = (ColumnValuesComboBox)box;
-			table.filterOnTicker(tbox.getSelectedTicker());
+		if (tComboBox == tickerFilterBox) {
+			ColumnFilterComboBox tBox = (ColumnFilterComboBox)tComboBox;
+			table.filterOnTicker(tBox.getFilter());
 		}
 		// handle filter by year requests
-		else if (box == termFilterBox) {
-			ColumnValuesComboBox termbox = (ColumnValuesComboBox)box;
-			table.filterOnTerm(termbox.getSelectedTicker());
+		else if (tComboBox == termFilterBox) {
+			ColumnFilterComboBox tBox = (ColumnFilterComboBox)tComboBox;
+			table.filterOnTerm(tBox.getFilter());
 		}
 	}
 }

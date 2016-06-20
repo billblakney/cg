@@ -23,13 +23,13 @@ public class GainPanel extends AccountReportPanel implements ActionListener {
 	 * Selection box for filtering by ticker. The list of selectable tickers is
 	 * provided by the displayed account.
 	 */
-	ColumnValuesComboBox tickerFilterBox;
+	ColumnFilterComboBox tickerFilterBox;
 
 	/*
 	 * Selection box for filtering by year. The list of selectable years is
 	 * provided by the displayed account.
 	 */
-	YearFilterBox yearFilterBox;
+	ColumnFilterComboBox  yearFilterBox;
 
 	/*
 	 * Label to display total gain of displayed gain components.
@@ -70,12 +70,13 @@ public class GainPanel extends AccountReportPanel implements ActionListener {
 		totalGain.addObserver(this);
 
 		// create the ticker filter combo box
-		tickerFilterBox = new ColumnValuesComboBox(
+		tickerFilterBox = new ColumnFilterComboBox(
 		      table,GainTableModel.COL_TICKER,"-All Symbols-");
 		tickerFilterBox.addActionListener(this);
 
 		// create the year filter combo box
-		yearFilterBox = new YearFilterBox();
+		yearFilterBox = new ColumnFilterComboBox(
+		      table,GainTableModel.COL_CTAXYEAR,"-All Years-");
 		yearFilterBox.addActionListener(this);
 
 		// create the top panel, add items
@@ -104,7 +105,7 @@ public class GainPanel extends AccountReportPanel implements ActionListener {
 		Vector gains = acct.getTaxGains(null,null); //zzz
 		table.setRows(gains);
 		tickerFilterBox.update();
-		yearFilterBox.update(acct);
+		yearFilterBox.update();
 	}
 
 	/**
@@ -124,17 +125,17 @@ public class GainPanel extends AccountReportPanel implements ActionListener {
 	 * ActionEvent handler.
 	 */
 	public void actionPerformed(ActionEvent e) {
-		JComboBox box = (JComboBox) e.getSource();
+		JComboBox tComboBox = (JComboBox) e.getSource();
 
 		// handle filter by ticker requests
-		if (box == tickerFilterBox) {
-			ColumnValuesComboBox tickerbox = (ColumnValuesComboBox)box;
-			table.filterOnTicker(tickerbox.getSelectedTicker());
+		if (tComboBox == tickerFilterBox) {
+			ColumnFilterComboBox tBox = (ColumnFilterComboBox)tComboBox;
+			table.filterOnTicker(tBox.getFilter());
 		}
 		// handle filter by year requests
-		else if (box == yearFilterBox) {
-			YearFilterBox yearbox = (YearFilterBox)box;
-			table.filterOnYear(yearbox.getSelectedYear());
+		else if (tComboBox == yearFilterBox) {
+			ColumnFilterComboBox tBox = (ColumnFilterComboBox)tComboBox;
+			table.filterOnYear(tBox.getFilter());
 		}
 	}
 }

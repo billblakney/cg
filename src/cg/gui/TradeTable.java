@@ -22,10 +22,8 @@ public class TradeTable extends JTable {
 	 */
 	private TableRowSorter<TradeTableModel> sorter = null;
 
-	private String filterYear;
-
-	final private String ANY_TICKER = ".*";
-	private String tickerRegEx = ANY_TICKER;
+	private RowFilter<AbstractTableModel,Integer> _tickerFilter = null;
+	private RowFilter<AbstractTableModel,Integer> _yearFilter = null;
 	
 	private boolean openPositionsOnly;
 
@@ -62,32 +60,31 @@ public class TradeTable extends JTable {
 		setRowFilter();
 	}
 
-	public void filterOnTicker(String ticker) {
-		if (null == ticker)
-			tickerRegEx = ANY_TICKER;
-		else
-			tickerRegEx = new String(ticker);
+	public void filterOnTicker(RowFilter<AbstractTableModel,Integer> aFilter)
+	{
+	   _tickerFilter = aFilter;
 		setRowFilter();
 	}
 
-	public void filterOnYear(String year) {
-		if (null == year)
-			filterYear = null;
-		else
-			filterYear = new String(year);
+	public void filterOnYear(RowFilter<AbstractTableModel,Integer> aFilter)
+	{
+	   _yearFilter = aFilter;
 		setRowFilter();
 	}
 
 	private void setRowFilter() {
-		List<RowFilter<AbstractTableModel, Integer>> filters = new ArrayList<RowFilter<AbstractTableModel, Integer>>(
-				3);
-		// ticker filter
-		RowFilter<AbstractTableModel, Integer> tf = RowFilter.regexFilter(
-				tickerRegEx, TradeTableModel.COL_TICKER);
-		filters.add(tf);
+		List<RowFilter<AbstractTableModel, Integer>> filters =
+		      new Vector<RowFilter<AbstractTableModel, Integer>>();
 
-		// year filter
-		filters.add(new CGDateFilter(filterYear,TradeTableModel.COL_DATE));
+		if (_tickerFilter != null)
+		{
+		   filters.add(_tickerFilter);
+		}
+
+		if (_yearFilter != null)
+		{
+		   filters.add(_yearFilter);
+		}
 
 		//open positions filter
 		filters.add(new TradeIsOpenPositionFilter(openPositionsOnly));

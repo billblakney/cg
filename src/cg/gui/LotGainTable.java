@@ -12,10 +12,8 @@ public class LotGainTable extends JTable {
 	private LotGainTableModel model;
 	private TableRowSorter<LotGainTableModel> sorter = null;
 
-	private String filterYear;
-
-	final private String ANY_TICKER = ".*";
-	private String tickerRegEx = ANY_TICKER;
+	private RowFilter<AbstractTableModel,Integer> _tickerFilter = null;
+	private RowFilter<AbstractTableModel,Integer> _yearFilter = null;
 
 	private RowFilter<AbstractTableModel, Integer> rowFilter;
 
@@ -43,31 +41,32 @@ public class LotGainTable extends JTable {
 		updateTotalGain();
 	}
 
-	public void filterOnTicker(String ticker) {
-		if (null == ticker)
-			tickerRegEx = ANY_TICKER;
-		else
-			tickerRegEx = new String(ticker);
+	public void filterOnTicker(RowFilter<AbstractTableModel,Integer> aFilter)
+	{
+	   _tickerFilter = aFilter;
 		setRowFilter();
 	}
 
-	public void filterOnYear(String year) {
-		if (null == year)
-			filterYear = null;
-		else
-			filterYear = new String(year);
+	public void filterOnYear(RowFilter<AbstractTableModel,Integer> aFilter)
+	{
+	   _yearFilter = aFilter;
 		setRowFilter();
 	}
 
-	private void setRowFilter() {
-		List<RowFilter<AbstractTableModel, Integer>> filters = new ArrayList<RowFilter<AbstractTableModel, Integer>>(
-				2);
-		// ticker filter
-		RowFilter<AbstractTableModel, Integer> tf = RowFilter.regexFilter(
-				tickerRegEx, LotGainTableModel.COL_TICKER);
-		filters.add(tf);
-		// year filter
-		filters.add(new CGDateFilter(filterYear,LotGainTableModel.COL_SELLDATE));
+	private void setRowFilter()
+	{
+		List<RowFilter<AbstractTableModel, Integer>> filters =
+		      new Vector<RowFilter<AbstractTableModel, Integer>>();
+
+		if (_tickerFilter != null)
+		{
+		   filters.add(_tickerFilter);
+		}
+
+		if (_yearFilter != null)
+		{
+		   filters.add(_yearFilter);
+		}
 
 		rowFilter = RowFilter.andFilter(filters);
 		sorter.setRowFilter(rowFilter);

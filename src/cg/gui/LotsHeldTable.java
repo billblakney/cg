@@ -16,10 +16,8 @@ public class LotsHeldTable extends JTable {
 	private LotsHeldTableModel model;
 	private TableRowSorter<LotsHeldTableModel> sorter = null;
 
-	private String filterTerm = ".*";
-
-	final private String ANY_TICKER = ".*";
-	private String tickerRegEx = ANY_TICKER;
+	private RowFilter<AbstractTableModel,Integer> _tickerFilter = null;
+	private RowFilter<AbstractTableModel,Integer> _termFilter = null;
 
 	RowFilter<AbstractTableModel, Integer> rowFilter;
 
@@ -47,31 +45,32 @@ public class LotsHeldTable extends JTable {
 		updateSharesHeld();
 	}
 
-	public void filterOnTicker(String ticker) {
-		if (null == ticker)
-			tickerRegEx = ANY_TICKER;
-		else
-			tickerRegEx = new String(ticker);
+	public void filterOnTicker(RowFilter<AbstractTableModel,Integer> aFilter)
+	{
+	   _tickerFilter = aFilter;
 		setRowFilter();
 	}
 
-	public void filterOnTerm(String term) {
-		filterTerm = term;
+	public void filterOnTerm(RowFilter<AbstractTableModel,Integer> aFilter)
+	{
+	   _termFilter = aFilter;
 		setRowFilter();
 	}
 
-	private void setRowFilter() {
-		List<RowFilter<AbstractTableModel, Integer>> filters = new ArrayList<RowFilter<AbstractTableModel, Integer>>(
-				2);
-		// ticker filter
-		RowFilter<AbstractTableModel, Integer> tf = RowFilter.regexFilter(
-				tickerRegEx, LotsHeldTableModel.COL_TICKER);
-		filters.add(tf);
+	private void setRowFilter()
+	{
+		List<RowFilter<AbstractTableModel, Integer>> filters =
+		      new Vector<RowFilter<AbstractTableModel, Integer>>();
 
-		// term filter
-		RowFilter<AbstractTableModel, Integer> tf2 = RowFilter.regexFilter(
-				tickerRegEx, LotsHeldTableModel.COL_TERM);
-		filters.add(tf2);//TODO tf2
+		if (_tickerFilter != null)
+		{
+		   filters.add(_tickerFilter);
+		}
+
+		if (_termFilter != null)
+		{
+		   filters.add(_termFilter);
+		}
 
 		sorter.setRowFilter(null);
 		

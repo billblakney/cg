@@ -5,6 +5,7 @@ import javax.swing.table.AbstractTableModel;
 
 import cg.SimpleDate;
 
+//TODO rename to DateRowFilter
 public class CGDateFilter extends RowFilter<AbstractTableModel, Integer> {
 
 	private String year;

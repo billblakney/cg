@@ -3,6 +3,7 @@ package cg.gui;
 import java.util.TreeSet;
 import javax.swing.table.TableModel;
 
+//TODO deprecate this class
 public class TableModelUtil
 {
    static TreeSet<String> getColumnValues(TableModel aModel,int aCol)
