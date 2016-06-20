@@ -134,7 +134,7 @@ public class TradePanel extends AccountReportPanel implements ActionListener {
 		if( ov instanceof AbstractAccountData ){
 			updatePanel((AbstractAccountData)ov);
 		}
-		else if( ov.getClass() == SharesHeld.class ){
+		else if( ov instanceof SharesHeld){
 			sharesLabel.update((Integer)obj);
 		}
 	}
@@ -157,8 +157,8 @@ public class TradePanel extends AccountReportPanel implements ActionListener {
 			table.filterOnYear(tBox.getFilter());
 		}
 		else if (tComboBox == positionsFilterBox) {
-			PositionsFilterBox pbox = (PositionsFilterBox)tComboBox;
-			table.filterShowOpenPositions(pbox.onlyShowOpenPositions());
+			PositionsFilterBox tBox = (PositionsFilterBox)tComboBox;
+			table.filterShowOpenPositions(tBox.onlyShowOpenPositions());
 		}
 	}
 }

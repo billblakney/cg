@@ -116,7 +116,7 @@ public class SharesHeldPanel extends AccountReportPanel implements ActionListene
 		if( ov instanceof AbstractAccountData){
 			updatePanel((AbstractAccountData)ov);
 		}
-		else if( ov.getClass() == SharesHeld.class ){
+		else if( ov instanceof SharesHeld){
 			sharesLabel.update((Integer)obj);
 		}
 	}

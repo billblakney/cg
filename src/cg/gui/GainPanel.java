@@ -116,7 +116,7 @@ public class GainPanel extends AccountReportPanel implements ActionListener {
 		if( ov instanceof AbstractAccountData){
 			updatePanel((AbstractAccountData)ov);
 		}
-		else if( ov.getClass() == GainTable.TotalGain.class ){
+		else if( ov instanceof GainTable.TotalGain){
 			gainLabel.update((Integer)obj);
 		}
 	}

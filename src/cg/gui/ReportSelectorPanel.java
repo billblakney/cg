@@ -71,17 +71,6 @@ public class ReportSelectorPanel extends JPanel implements
       tPanel.add(treePane, c);
 
       add(tPanel);
-		/*
-		 * Add the components to the layout.
-		 */
-//		setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
-//		add(treeTitle);
-//		add(tComboBox);
-//		add(treePane);
-
-//		add(Box.createVerticalGlue());
-////		add(treeTitle, "North");
-////		add(treePane, "Center");
 	}
 
 	/**
@@ -95,11 +84,6 @@ public class ReportSelectorPanel extends JPanel implements
 	}
 
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.swing.event.TreeSelectionListener#valueChanged(javax.swing.event
-	 * .TreeSelectionEvent)
 	 */
 	public void valueChanged(TreeSelectionEvent event) {
 		// Get the string value of the selected node.

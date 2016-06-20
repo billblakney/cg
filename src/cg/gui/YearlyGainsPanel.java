@@ -89,7 +89,7 @@ public class YearlyGainsPanel extends AccountReportPanel implements ActionListen
 		if( ov instanceof AbstractAccountData){
 			updatePanel((AbstractAccountData)ov);
 		}
-		else if( ov.getClass() == YearlyGainsTable.TotalGain.class ){
+		else if( ov instanceof YearlyGainsTable.TotalGain){
 			gainLabel.update((Integer)obj);
 		}
 	}
