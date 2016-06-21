@@ -63,7 +63,7 @@ public class CapGainsFrame extends JFrame {
 	/**
 	 * The account that is currently displayed.
 	 */
-	private Account displayAccount = null;
+	private Account legacyAccount = null;
 
 	/**
 	 * The tabbed pane that displays reports.
@@ -199,13 +199,16 @@ System.out.println("dbUrl: " + dbUrl);
 	/**
 	 * Method to update the display with data for a specified account.
 	 * 
-	 * @param acct Account to be displayed.
+	 * @param aAccount Account to be displayed.
 	 */
-	public void showAccount(Account acct){
+	@Deprecated
+	public void showAccount(Account aAccount)
+	{
+	   legacyAccount = aAccount;
 //		reportTabbedPane.removeAll();
-		reportTabbedPane.addReport(acct.getName(),ReportType.SHARES_HELD,displayAccount);
-		reportTabbedPane.addReport(acct.getName(),ReportType.ALL_TRADES,displayAccount);
-		reportTabbedPane.addReport(acct.getName(),ReportType.TAX_GAINS,displayAccount);
+		reportTabbedPane.addReport(aAccount.getName(),ReportType.SHARES_HELD,aAccount);
+		reportTabbedPane.addReport(aAccount.getName(),ReportType.ALL_TRADES,aAccount);
+		reportTabbedPane.addReport(aAccount.getName(),ReportType.TAX_GAINS,aAccount);
 	}
 
 	/**
@@ -271,6 +274,7 @@ System.out.println("dbUrl: " + dbUrl);
 	/**
 	 * Prompts the user to select an account
 	 */
+	@Deprecated
 	private void actionSelectAccount() {
 
 		Vector<AccountInfo> accts = _dataStore.getAccountInfoVector();
@@ -345,7 +349,7 @@ System.out.println("dbUrl: " + dbUrl);
 	 */
 	private void actionLoadTrades(String tradeFile) {
 		TradeList trades = TradeFileReader.loadTradeFile(tradeFile);
-		displayAccount.addTrades(trades);
+		legacyAccount.addTrades(trades);
 	}
 
 	/**
@@ -353,14 +357,14 @@ System.out.println("dbUrl: " + dbUrl);
 	 * a new empty one.
 	 */
 	private void actionClearTrades() {
-		displayAccount.removeAllTrades();
+		legacyAccount.removeAllTrades();
 	}
 
 	/**
 	 * Creates a report of the specified type for the specified account.
 	 */
 	private void actionCreateReport(ReportType type) {
-		reportTabbedPane.addReport(displayAccount.getName(),type,displayAccount);
+		reportTabbedPane.addReport(legacyAccount.getName(),type,legacyAccount);
 	}
 
 	/**
@@ -523,7 +527,7 @@ System.out.println("dbUrl: " + dbUrl);
 			// Handle "Select DB Account"
 			else if (e.getActionCommand().equals(SELECT_DB_ACCOUNT)) {
 				System.out.println("User selected \"Select DB Account\"");
-				actionSelectAccount();
+//				actionSelectAccount();
 			}
 			// Handle "LEGACY Select File Account"
 			else if (e.getActionCommand().equals(LEGACY_LOAD_TRADE_FILE)) {
