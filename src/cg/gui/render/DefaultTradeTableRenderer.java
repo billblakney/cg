@@ -1,16 +1,15 @@
-package cg.gui;
+package cg.gui.render;
 
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
-
 import cg.Trade;
+import cg.gui.TradeTableModel;
 
 /**
  * This class provides rendering for the cells in the trade table.

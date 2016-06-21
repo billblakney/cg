@@ -8,6 +8,8 @@ import javax.swing.RowFilter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 import cg.TradeDataProvider;
+import cg.gui.render.DefaultTradeTableRenderer;
+import cg.gui.render.IntegerTradeTableRenderer;
 
 public class TradeTable extends JTable {
 

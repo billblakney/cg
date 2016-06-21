@@ -6,6 +6,8 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.RowFilter;
 import javax.swing.RowFilter.*;
+import cg.gui.render.DefaultGainTableRenderer;
+import cg.gui.render.IntegerGainTableRenderer;
 
 public class GainTable extends JTable {
 

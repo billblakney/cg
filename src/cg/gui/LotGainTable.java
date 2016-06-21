@@ -6,6 +6,8 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.RowFilter;
 import javax.swing.RowFilter.*;
+import cg.gui.render.DefaultLotTableRenderer;
+import cg.gui.render.IntegerLotTableRenderer;
 
 public class LotGainTable extends JTable {
 

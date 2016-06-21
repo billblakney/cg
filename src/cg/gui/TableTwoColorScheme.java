@@ -12,12 +12,12 @@ import java.awt.Color;
  */
 public class TableTwoColorScheme {
 
-	Color[] bg_Normal = { Color.cyan, Color.magenta };
-	Color[] bg_IsSelected = { Color.lightGray, Color.lightGray };
-	Color[] bg_HasFocus = { Color.white, Color.white };
-	Color[] fg_Normal = { Color.black, Color.black };
-	Color[] fg_IsSelected = { Color.black, Color.black };
-	Color[] fg_HasFocus = { Color.black, Color.black };
+	public Color[] bg_Normal = { Color.cyan, Color.magenta };
+	public Color[] bg_IsSelected = { Color.lightGray, Color.lightGray };
+	public Color[] bg_HasFocus = { Color.white, Color.white };
+	public Color[] fg_Normal = { Color.black, Color.black };
+	public Color[] fg_IsSelected = { Color.black, Color.black };
+	public Color[] fg_HasFocus = { Color.black, Color.black };
 
 	public TableTwoColorScheme() {
 	}

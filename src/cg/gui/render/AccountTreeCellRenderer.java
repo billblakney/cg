@@ -1,4 +1,4 @@
-package cg.gui;
+package cg.gui.render;
 
 import java.io.*;
 import java.util.*;

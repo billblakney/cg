@@ -1,23 +1,24 @@
-package cg.gui;
+package cg.gui.render;
 
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
+import cg.gui.GainColumnFinder;
+import cg.gui.GainTableModel;
 
 /**
  * This class provides rendering for the cells in the gain table.
  */
-public class DefaultLotTableRenderer extends TwoColorTableRenderer {
+public class DefaultGainTableRenderer extends TwoColorTableRenderer {
 
-	TableRowSorter<LotGainTableModel> sorter;
+	TableRowSorter<GainTableModel> sorter;
 
-	public DefaultLotTableRenderer(TableRowSorter<LotGainTableModel> s) {
+	public DefaultGainTableRenderer(TableRowSorter<GainTableModel> s) {
 		super();
 		sorter = s;
 		setColorScheme();
@@ -31,7 +32,7 @@ public class DefaultLotTableRenderer extends TwoColorTableRenderer {
 	}
 
 	public int getColorIndex(JTable table, int row){
-		LotGainTableModel model = (LotGainTableModel) table.getModel();
+		GainTableModel model = (GainTableModel) table.getModel();
 		GainColumnFinder gcf = (GainColumnFinder) model;
 		int actual_row = sorter.convertRowIndexToModel(row);
 		Integer gain = (Integer) (model.getValueAt(actual_row, gcf.getGainColumn()/*2*/));
