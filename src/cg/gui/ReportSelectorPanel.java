@@ -121,7 +121,9 @@ System.out.println("getting data for acct: " + _accountId + ", " + tAccount.getN
       /*
        * Add the report to the report tabbed pane.
        */
-      if (type != ReportType.NO_REPORT) reportTabbedPane.addReport(
-            tAccount.getName(),type, tAccount); //TODO tAccount already has name
+      if (type != ReportType.NO_REPORT)
+      {
+         reportTabbedPane.addReport(type, tAccount);
+      }
    }
 }

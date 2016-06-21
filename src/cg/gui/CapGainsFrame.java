@@ -199,16 +199,16 @@ System.out.println("dbUrl: " + dbUrl);
 	/**
 	 * Method to update the display with data for a specified account.
 	 * 
-	 * @param aAccount Account to be displayed.
+	 * @param acct Account to be displayed.
 	 */
 	@Deprecated
-	public void showAccount(Account aAccount)
+	public void showAccount(Account acct)
 	{
-	   legacyAccount = aAccount;
+	   legacyAccount = acct;
 //		reportTabbedPane.removeAll();
-		reportTabbedPane.addReport(aAccount.getName(),ReportType.SHARES_HELD,aAccount);
-		reportTabbedPane.addReport(aAccount.getName(),ReportType.ALL_TRADES,aAccount);
-		reportTabbedPane.addReport(aAccount.getName(),ReportType.TAX_GAINS,aAccount);
+		reportTabbedPane.addReport(ReportType.SHARES_HELD,acct);
+		reportTabbedPane.addReport(ReportType.ALL_TRADES,acct);
+		reportTabbedPane.addReport(ReportType.TAX_GAINS,acct);
 	}
 
 	/**
@@ -364,7 +364,7 @@ System.out.println("dbUrl: " + dbUrl);
 	 * Creates a report of the specified type for the specified account.
 	 */
 	private void actionCreateReport(ReportType type) {
-		reportTabbedPane.addReport(legacyAccount.getName(),type,legacyAccount);
+		reportTabbedPane.addReport(type,legacyAccount);
 	}
 
 	/**
