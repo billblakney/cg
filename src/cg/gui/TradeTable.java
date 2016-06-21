@@ -3,11 +3,11 @@ package cg.gui;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
+import cg.TradeDataProvider;
 
 public class TradeTable extends JTable {
 
@@ -49,7 +49,7 @@ public class TradeTable extends JTable {
 		setDefaultRenderer(cg.Trade.SpecialInstruction.class,r);
 	}
 
-	public void setRows(Vector trades) {
+	public void setRows(Vector<TradeDataProvider> trades) {
 
 		model.setData(trades);
 		updateSharesHeld();

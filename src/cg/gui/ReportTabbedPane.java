@@ -16,6 +16,7 @@ public class ReportTabbedPane extends JTabbedPane {
 	/**
 	 * Adds a report tab for the specified report type for the specified account.
 	 * 
+	 * @param accountName type Type of report.
 	 * @param type Type of report.
 	 * @param acct Account being reported.
 	 */
@@ -32,6 +33,7 @@ public class ReportTabbedPane extends JTabbedPane {
 	 * Change the account displayed by all the report tabs.
 	 * @param acct
 	 */
+	@Deprecated //not sure if will have any use
 	public void changeAccount(AbstractAccountData acct){
 		int count = getTabCount();
 		for( int i = 0; i < count; i++ ){

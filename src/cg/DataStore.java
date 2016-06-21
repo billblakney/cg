@@ -62,8 +62,29 @@ public class DataStore
    {
       return new AccountDataProxy(this,aAccountId);
    }
+   
+   public String getAccountName(int aAccountId)
+   {
+      String tName = null;
 
-   public TradeList getTrades(int aAccountId)
+      if (_cm != null)
+      {
+         Connection tConn = _cm.getConnection();
+         if (tConn != null)
+         {
+            tName = _dbi.getAccountName(tConn,aAccountId);
+            _cm.closeConnection(tConn);
+         }
+      }
+      else
+      {
+         //TODO
+      }
+
+      return tName;
+   }
+
+   public TradeList getTradeList(int aAccountId)
    {
       TradeList tTradeList = null;
 
@@ -72,7 +93,7 @@ public class DataStore
          Connection tConn = _cm.getConnection();
          if (tConn != null)
          {
-            tTradeList = _dbi.getTrades(tConn,aAccountId);
+            tTradeList = _dbi.getTradeList(tConn,aAccountId);
             _cm.closeConnection(tConn);
          }
       }
@@ -82,6 +103,27 @@ public class DataStore
       }
 
       return tTradeList;
+   }
+
+   public Vector<TradeDataProvider> getTrades(int aAccountId)
+   {
+      Vector<TradeDataProvider> tTrades = null;
+
+      if (_cm != null)
+      {
+         Connection tConn = _cm.getConnection();
+         if (tConn != null)
+         {
+            tTrades = _dbi.getTrades(tConn,aAccountId);
+            _cm.closeConnection(tConn);
+         }
+      }
+      else
+      {
+         //TODO
+      }
+
+      return tTrades;
    }
    
 //   @Override

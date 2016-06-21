@@ -6,9 +6,13 @@ import cg.db.ConnectionManager;
 
 public class AccountDataProxy extends AbstractAccountData
 {
+   private DataStore _ds = null;
+   
    private int _accountId;
    
-   private DataStore _ds = null;
+   private String _accountName = null;
+
+	private Vector<LotDataProvider> _lotData = null;
    
    AccountDataProxy(DataStore aDataStore, int aAccountId)
    {
@@ -24,17 +28,36 @@ public class AccountDataProxy extends AbstractAccountData
 //   }
 
 	@Override
+	public String getName()
+	{
+	   if (_accountName == null)
+	   {
+	      _accountName = _ds.getAccountName(_accountId);
+	   }
+	   return _accountName;
+	}
+
+	/**
+	 * TODO may want to save ticker and year along with _lotData, and only
+	 * fetch when the ticker/year is in the request is different from the
+	 * last one. or may want to do the filtering here?
+	 */
+	@Override
 	public Vector<LotDataProvider>
 	getHeldLots(String ticker, String year)
 	{
 	   return _ds.getHeldLots(_accountId,ticker,year);
 	}
 
+	public Vector<TradeDataProvider> getTrades()
+	{
+      return _ds.getTrades(_accountId);
+	}
+
    @Override
    public TradeList getTradeList()
    {
-      // TODO Auto-generated method stub
-      return null;
+      return _ds.getTradeList(_accountId);
    }
 
    @Override

@@ -7,7 +7,7 @@ import java.math.BigDecimal;
  * This base class encapsulates data common to buy and sell trades. BuyTrade and
  * SellTrade are derived from this class.
  */
-public class Trade implements Comparable {
+public class Trade implements TradeDataProvider, Comparable {
 
 	public enum Type
 	{
@@ -152,6 +152,88 @@ public class Trade implements Comparable {
 		// Second tiebreaker is trade ticker.
 		return ticker.compareTo(otherTrade.ticker);
 	}
+
+	@Override
+   public Integer getTradeId()
+   {
+      return tradeId;
+   }
+
+	@Override
+   public SimpleDate getDate()
+   {
+      return date;
+   }
+
+	@Override
+   public Trade.Type getTradeType()
+   {
+      return tradeType;
+   }
+
+	@Override
+   public String getSymbol()
+   {
+      return ticker;
+   }
+
+	@Override
+   public Integer getNumShares()
+   {
+      return numShares;
+   }
+
+	@Override
+   public Integer getNumSharesHeld()
+   {
+      return numSharesHeld;
+   }
+
+	@Override
+   public Integer getNumSharesSold()
+   {
+      return numSharesSold;
+   }
+
+	@Override
+   public Float getSharePrice()
+   {
+      return sharePrice;
+   }
+
+	@Override
+   public BigDecimal getCommission()
+   {
+      return comm;
+   }
+
+	@Override
+   public Integer getClaimedTaxYear()
+   {
+	   if (isBuyTrade())
+	   {
+	      return 0;
+	   }
+	   else
+	   {
+	      SellTrade tThisSellTrade = (SellTrade)this;
+	      return tThisSellTrade.getTaxGain().claimedTaxYear;
+	   }
+   }
+
+	@Override
+   public String getNote()
+   {
+	   if (note == null)
+	   {
+	      return "";
+	   }
+	   else
+	   {
+	      return note;
+	   }
+   }
+
 
 	public void appendToHistory(String txt) {
 		history += txt;

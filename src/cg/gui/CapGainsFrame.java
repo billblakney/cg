@@ -202,12 +202,10 @@ System.out.println("dbUrl: " + dbUrl);
 	 * @param acct Account to be displayed.
 	 */
 	public void showAccount(Account acct){
-		displayAccount = acct;
 //		reportTabbedPane.removeAll();
 		reportTabbedPane.addReport(acct.getName(),ReportType.SHARES_HELD,displayAccount);
 		reportTabbedPane.addReport(acct.getName(),ReportType.ALL_TRADES,displayAccount);
 		reportTabbedPane.addReport(acct.getName(),ReportType.TAX_GAINS,displayAccount);
-		reportSelectorPanel.setAccount(displayAccount);
 	}
 
 	/**
@@ -225,16 +223,20 @@ System.out.println("dbUrl: " + dbUrl);
 		reportTabbedPane = new ReportTabbedPane();
 
 		// create the report tree panel
-		Vector<String> tAccountNames = new Vector<String>();
+		Map<Integer,String> tAccountNames = new LinkedHashMap<Integer,String>();
 		if (_dataStore != null)
 		{
 		   // TODO kind of ugly; add method to get names directly
 		   Vector<AccountInfo> tAccounts = _dataStore.getAccountInfoVector();
-		   tAccountNames = AccountInfo.getNames(tAccounts);
+//		   tAccountNames = AccountInfo.getNames(tAccounts); //TODO maybe deprecate getNames
+		   for (AccountInfo tInfo: tAccounts)
+		   {
+		      tAccountNames.put(tInfo.acct_id, tInfo.name);
+		   }
 		}
 		else
 		{
-		   tAccountNames.add("No Account");
+		   tAccountNames.put(0,"Legacy");
 		}
 		reportSelectorPanel = new ReportSelectorPanel(reportTabbedPane,tAccountNames);
 
@@ -280,7 +282,7 @@ System.out.println("dbUrl: " + dbUrl);
 
 		System.out.println("Selected account: " + selected_acct.name);
 
-		TradeList trades = _dataStore.getTrades(selected_acct.acct_id);
+		TradeList trades = _dataStore.getTradeList(selected_acct.acct_id);
 		Account acct = new Account(selected_acct.name,trades);
 		showAccount(acct);
 	}
@@ -324,14 +326,14 @@ System.out.println("dbUrl: " + dbUrl);
 			TradeList trades = TradeFileReader.loadTradeFile(tTradeFileName);
 			_dataStore.addTrades(tAccountId,trades,true);
 
-			// For now, show reports for the loaded trade file.
-			// TODO later, the reports will take data from the DB, but not yet.
-			Account acct = new Account(tAccountName,trades);
-			showAccount(acct);
-
-//			actionCreateReport(ReportType.LOTS_HELD);
-			reportTabbedPane.addReport("FROMDB",ReportType.LOTS_HELD,
-			      _dataStore.getAccountDataProvider(tAccountId)); //TODO individual accounts
+//			// For now, show reports for the loaded trade file.
+//			// TODO later, the reports will take data from the DB, but not yet.
+//			Account acct = new Account(tAccountName,trades);
+//			showAccount(acct);
+//
+////			actionCreateReport(ReportType.LOTS_HELD);
+//			reportTabbedPane.addReport("FROMDB",ReportType.LOTS_HELD,
+//			      _dataStore.getAccountDataProvider(tAccountId)); //TODO individual accounts
 		}
 	}
 

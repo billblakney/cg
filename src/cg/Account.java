@@ -47,15 +47,6 @@ public class Account extends AbstractAccountData implements AccountDataProvider 
 		name = aName;
 		addTrades(trades);
 	}
-	
-	/**
-	 * Get the account name.
-	 * @return
-	 */
-	public String getName()
-	{
-	   return name;
-	}
 
 	/**
 	 * Add trades to this account, and recomputes the capital
@@ -81,6 +72,29 @@ public class Account extends AbstractAccountData implements AccountDataProvider 
 		mgrs.clear();
 		allTrades.clear();
 		updateObservers(); // notify observers
+	}
+	
+	/**
+	 * Get the account name.
+	 * @return
+	 */
+	@Override
+	public String getName()
+	{
+	   return name;
+	}
+
+	/**
+	 * Get a list of all trades.
+	 */
+	@Override
+	public Vector<TradeDataProvider> getTrades() {
+	   Vector<TradeDataProvider> tTrades = new Vector<TradeDataProvider>();
+	   for (Trade tTrade: allTrades)
+	   {
+	      tTrades.add(tTrade);
+	   }
+		return tTrades;
 	}
 
 	/**

@@ -20,6 +20,8 @@ import cg.SellTrade;
 import cg.SimpleDate;
 import cg.Term;
 import cg.Trade;
+import cg.TradeData;
+import cg.TradeDataProvider;
 import cg.TradeList;
 
 public class DatabaseInterface
@@ -104,6 +106,36 @@ public class DatabaseInterface
       return accounts;
    }
 
+   public String getAccountName(Connection aConn,int aAccountId)
+   {
+      String tName = null;
+
+      try
+      {
+         Statement tSql = aConn.createStatement();
+
+         String tQuery = "select * from acct where acct_id = " + aAccountId;
+
+         ResultSet tResults = tSql.executeQuery(tQuery);
+
+         if (tResults != null)
+         {
+            if (tResults.next())
+            {
+               tName = tResults.getString("name");
+            }
+         }
+         tResults.close();
+         tSql.close();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("ERROR:\n" + ex);
+      }
+System.out.println("queried account name for id " + aAccountId + ": " + tName);
+      return tName;
+   }
+
    /**
     * Get lot report rows.
     */
@@ -147,7 +179,7 @@ public class DatabaseInterface
    /**
     * Get trades.
     */
-   public TradeList getTrades(Connection aConn,int aAccountId)
+   public TradeList getTradeList(Connection aConn,int aAccountId)
    {
       TradeList tlist = new TradeList();
 
@@ -213,6 +245,79 @@ public class DatabaseInterface
       }
 
       return tlist;
+   }
+
+   /**
+    * Get trades.
+    */
+   public Vector<TradeDataProvider> getTrades(Connection aConn,int aAccountId)
+   {
+      Vector<TradeDataProvider> tTrades = new Vector<TradeDataProvider>();
+
+      // run query
+      try
+      {
+         Statement tSql = aConn.createStatement();
+
+         ResultSet tResults = tSql.executeQuery(
+               "SELECT DISTINCT * FROM trade WHERE trade.acct_id='"
+                     + aAccountId + "' ORDER BY trade.trade_id");
+         if (tResults != null)
+         {
+
+            while (tResults.next())
+            {
+               // convert all fields from the db record
+               int trade_id = tResults.getInt("trade_id");
+               int acct_id = tResults.getInt("acct_id");
+               int seqnum = tResults.getInt("seqnum");
+               /*
+                * GregorianCalendar refdate = new GregorianCalendar(); Date date
+                * = results.getDate("date",refdate);
+                */
+               Date date = tResults.getDate("date");
+               String buysell = tResults.getString("buysell");
+               String ticker = tResults.getString("ticker");
+               int shares = tResults.getInt("shares");
+               float price = tResults.getFloat("price");
+               BigDecimal commission = tResults.getBigDecimal("commission");
+               String special_rule = tResults.getString("special_rule");
+
+               // Convert date to format needed by the Trade constructor
+               SimpleDate tdate = new SimpleDate(date);
+
+               // Convert buysell to format needed by the Trade constructor
+               Trade.Type tradeType = Trade.Type.getEnumValue(buysell);
+
+               // Convert special_rule to format needed by the Trade constructor
+               Trade.SpecialInstruction instr = Trade.SpecialInstruction
+                     .getEnumValue(special_rule);
+
+               TradeData tTrade = new TradeData();
+               tTrade.set_tradeId(trade_id);
+               tTrade.set_date(new SimpleDate(date));
+               tTrade.set_tradeType(tradeType);
+               tTrade.set_symbol(ticker);
+               tTrade.set_numShares(shares);
+               tTrade.set_numSharesHeld(0);
+               tTrade.set_numSharesSold(0);
+               tTrade.set_sharePrice(price);
+               tTrade.set_commission(commission);
+               tTrade.set_claimedTaxYear(0);
+               tTrade.set_note("");
+               
+               tTrades.add(tTrade);
+            }
+         }
+         tResults.close();
+         tSql.close();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("***Exception:\n" + ex);
+      }
+
+      return tTrades;
    }
 
    /**

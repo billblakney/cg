@@ -9,7 +9,7 @@ import javax.swing.event.TableModelEvent;
 
 import cg.SellTrade;
 import cg.TaxGain;
-import cg.Trade;
+import cg.TradeDataProvider;
 
 /*
  * Note: These three methods must be implemented to extend AbstractTableModel
@@ -37,7 +37,7 @@ public class TradeTableModel extends AbstractTableModel {
 
 	private Vector data;
 	
-	private Vector<Trade> trades;
+	private Vector<TradeDataProvider> trades;
 	
 	TradeTableModel() {
 		data = new Vector(0);
@@ -71,7 +71,7 @@ public class TradeTableModel extends AbstractTableModel {
 			return ((Vector)(data.elementAt(arg0))).elementAt(arg1);
 	}
 
-	public void setData(Vector<Trade> trades){
+	public void setData(Vector<TradeDataProvider> trades){
 		this.trades = trades;
 		data = new Vector();
 		for (int i = 0; i < trades.size(); i++)
@@ -83,28 +83,20 @@ public class TradeTableModel extends AbstractTableModel {
 	 * Get vector data for a gain.
 	 */
 	private Vector getDataRow(Object row) {
-		Trade trade = (Trade) row;
+		TradeDataProvider trade = (TradeDataProvider) row;
 
 		Vector v = new Vector();
-		v.addElement(trade.tradeId); //0
-		v.addElement(trade.date); //1
-		v.addElement(trade.tradeType); //2
-		v.addElement(trade.ticker); //3
-		v.addElement(trade.numShares); //4
-		v.addElement(trade.numSharesHeld); //5
-		v.addElement(trade.numSharesSold); //6
-		v.addElement(trade.sharePrice); //7
-		v.addElement(new Float(trade.comm.floatValue())); //8
-		if (trade.isSellTrade()) {
-			SellTrade sellTrade = (SellTrade) trade;
-			v.addElement(sellTrade.getTaxGain().claimedTaxYear); //9
-		} else {
-			v.addElement(new Integer(0)); //9
-		}
-		if( trade.note == null )
-			v.addElement(""); //10
-		else
-			v.addElement(trade.note); //10
+		v.addElement(trade.getTradeId()); //0
+		v.addElement(trade.getDate()); //1
+		v.addElement(trade.getTradeType()); //2
+		v.addElement(trade.getSymbol()); //3
+		v.addElement(trade.getNumShares()); //4
+		v.addElement(trade.getNumSharesHeld()); //5
+		v.addElement(trade.getNumSharesSold()); //6
+		v.addElement(trade.getSharePrice()); //7
+		v.addElement(trade.getCommission()); //8
+		v.addElement(trade.getClaimedTaxYear()); //9
+		v.addElement(trade.getNote()); //10
 		return v;
 	}
 	

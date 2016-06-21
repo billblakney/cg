@@ -10,7 +10,9 @@ public interface AccountDataProvider
 	 * 'null' for 'ticker' gets held lots for all tickers. A value of 'null' for
 	 * 'year' gets held lots for all years.
 	 */
+   public String getName();
 	public Vector<LotDataProvider> getHeldLots(String ticker, String year);
+	public Vector<TradeDataProvider> getTrades();
 
 	public TradeList getTradeList();
 	public Vector getSharesHeldStats(); //TODO change raw vector?
