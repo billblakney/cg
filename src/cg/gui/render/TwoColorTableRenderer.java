@@ -12,6 +12,7 @@ import cg.gui.TableTwoColorScheme;
 
 /**
  * This class provides rendering for the cells in a table using a two color scheme. 
+ * TODO add constructor with TwoColorScheme
  */
 abstract public class TwoColorTableRenderer extends JLabel implements TableCellRenderer {
 
@@ -19,7 +20,7 @@ abstract public class TwoColorTableRenderer extends JLabel implements TableCellR
 	
 	TableTwoColorScheme scheme;
 	
-	public TwoColorTableRenderer(/*TableRowSorter<GainTableModel> s*/) {
+	public TwoColorTableRenderer(/*TableRowSorter<GainTableModel> s*/) {//TODO rm commented
 		super();
 		init();
 		scheme = new TableTwoColorScheme();
@@ -43,8 +44,8 @@ abstract public class TwoColorTableRenderer extends JLabel implements TableCellR
 	
 	public Component getTableCellRendererComponent(JTable table,
 			Object value, boolean isSelected, boolean hasFocus, int row,
-			int column) {
-		
+			int column)
+	{
 		setColors(table,isSelected,hasFocus,row);
 
 		if (value == null)
