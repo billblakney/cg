@@ -6,9 +6,12 @@ import java.util.Vector;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import javax.swing.table.TableCellRenderer;
 
+/**
+ * TODO update xjava version to match this
+ */
+@SuppressWarnings("serial")
 public class CustomTableCellRenderer extends JLabel
                                      implements TableCellRenderer {
 
@@ -98,7 +101,14 @@ public class CustomTableCellRenderer extends JLabel
 	   }
 	   else
 	   {
-	      setBackground(null);
+	      if (isSelected)
+	      {
+	         setBackground(table.getSelectionBackground());
+	      }
+	      else
+	      {
+	         setBackground(table.getBackground());
+	      }
 	   }
 	   
 	   if (tForeground != null)
@@ -107,7 +117,14 @@ public class CustomTableCellRenderer extends JLabel
 	   }
 	   else
 	   {
-	      setForeground(null);
+	      if (isSelected)
+	      {
+	         setForeground(table.getSelectionForeground());
+	      }
+	      else
+	      {
+	         setForeground(table.getForeground());
+	      }
 	   }
 
 		return this;
