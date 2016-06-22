@@ -30,6 +30,11 @@ public class SharesHeldTable extends JTable {
 		setRowSorter(sorter);
 		
 		sharesHeld = new SharesHeld();
+		
+//		RenderIntWithComma tIntRender = new RenderIntWithComma(SharesHeldTableModel.COL_SHARES);
+//		CustomTableCellRenderer tRenderer = new CustomTableCellRenderer(tIntRender);
+//		
+//		setDefaultRenderer(Integer.class,tRenderer);
 
 		/*
 		 * SharesHeldTableRenderer r = new SharesHeldTableRenderer();
