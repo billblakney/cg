@@ -9,6 +9,7 @@ import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableRowSorter;
+import cg.Trade;
 import cg.TradeDataProvider;
 import cg.gui.render.DefaultTradeTableRenderer;
 import cg.gui.render.IntegerTradeTableRenderer;
@@ -66,29 +67,22 @@ public class TradeTable extends JTable {
 		TableTwoColorScheme tColorScheme = new TableTwoColorScheme();
 		tColorScheme.bg_Normal[0]     = new Color(235, 237, 255);
 		tColorScheme.bg_Normal[1]     = new Color(217, 251, 209);
-		RenderTableCellTest tTest =
+
+		RenderTableCellTest tRowTest =
 		      (JLabel label,JTable table,Object value,boolean isSelected,
 		            boolean hasFocus, int row,int column) -> 
 		{
-		   /*
-		    * Get the actual row.
-		    */
-		   TradeTableModel model = (TradeTableModel) table.getModel();
-		   int actual_row = sorter.convertRowIndexToModel(row);
+		   TradeTableModel tModel = (TradeTableModel) table.getModel();
+		   int tModelRow = sorter.convertRowIndexToModel(row);
 
-		   /*
-		    * Look at the trade type column to determine the color index to be used,
-		    * so that buy and sell trades are colored differently.
-		    */
-		   cg.Trade.Type tradeType = (cg.Trade.Type) model.getValueAt(actual_row, 2);
+		   Trade.Type tTradeType = (Trade.Type)tModel.getValueAt(
+		         tModelRow,TradeTableModel.COL_BUYSELL);
 
-		   if (tradeType == cg.Trade.Type.BUY)
-		      return false;
-		   else
-		      return true;
+		   return ((tTradeType==Trade.Type.BUY)?true:false);
 		};
 
-		RenderColoredRows tRowRender = new RenderColoredRows(tColorScheme,tTest);
+		RenderColoredRows tRowRender =
+		      new RenderColoredRows(tColorScheme,tRowTest);
 
 		CustomTableCellRenderer tRenderer = new CustomTableCellRenderer(tInfos);
 		tInfos.add(tRowRender);
