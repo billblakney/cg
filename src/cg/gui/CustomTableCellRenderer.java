@@ -22,15 +22,15 @@ public class CustomTableCellRenderer extends JLabel
 //		_defaultForegroundColor = UIManager.getColor ( "Panel.foreground" );
    
    
-   Vector<TableCellInfoGetter> _fontSetters = new Vector<TableCellInfoGetter>();
+   Vector<RenderTableCellInfo> _fontSetters = new Vector<RenderTableCellInfo>();
 	
-	public CustomTableCellRenderer(TableCellInfoGetter aCellInfoGetter) {
+	public CustomTableCellRenderer(RenderTableCellInfo aCellInfoGetter) {
 		super();
 		init();
 		_fontSetters.add(aCellInfoGetter);
 	}
 	
-	public CustomTableCellRenderer(Vector<TableCellInfoGetter> aCellInfoGetters) {
+	public CustomTableCellRenderer(Vector<RenderTableCellInfo> aCellInfoGetters) {
 		super();
 		init();
 		_fontSetters = aCellInfoGetters;
@@ -53,7 +53,7 @@ public class CustomTableCellRenderer extends JLabel
 	   Color tBackground = null;
 	   Color tForeground = null;
 
-	   for (TableCellInfoGetter tSetter: _fontSetters)
+	   for (RenderTableCellInfo tSetter: _fontSetters)
 	   {
 	      TableCellInfo tInfo = (TableCellInfo)tSetter.getInfo(this, table, value, isSelected, hasFocus, row, column);
 	      if (tInfo != null)

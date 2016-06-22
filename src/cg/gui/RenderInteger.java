@@ -3,7 +3,7 @@ import java.text.DecimalFormat;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
-public class RenderInteger implements TableCellInfoGetter
+public class RenderInteger implements RenderTableCellInfo
 {
    /** Comma separated format. */
 	static public final String COMMA_FORMAT = "###,###,###,##0";

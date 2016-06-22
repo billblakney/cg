@@ -1,8 +1,10 @@
 package cg.gui;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.table.AbstractTableModel;
@@ -41,14 +43,68 @@ public class TradeTable extends JTable {
 		setRowSorter(sorter);
 		
 		sharesHeld = new SharesHeld();
+		
+		/*
+		 * TODO cleanup/document this renderer stuff
+		 * TODO use new render classes for all tables, rm old classes
+		 */
+		
+		Vector<RenderTableCellInfo> tInfos = new Vector<RenderTableCellInfo>();
+		
+		RenderInteger tIntRenderShares = new RenderInteger(
+		      RenderInteger.COMMA_FORMAT,TradeTableModel.COL_SHARES);
+		tInfos.add(tIntRenderShares);
+		
+		RenderInteger tIntRenderSharesHeld = new RenderInteger(
+		      RenderInteger.COMMA_FORMAT,TradeTableModel.COL_SHARESHELD);
+		tInfos.add(tIntRenderSharesHeld);
+		
+		RenderInteger tIntRenderSharesSold = new RenderInteger(
+		      RenderInteger.COMMA_FORMAT,TradeTableModel.COL_SHARESSOLD);
+		tInfos.add(tIntRenderSharesSold);
 
-		DefaultTradeTableRenderer r = new DefaultTradeTableRenderer(sorter);
-		IntegerTradeTableRenderer lr = new IntegerTradeTableRenderer(sorter);
-		setDefaultRenderer(Object.class, r);
-		setDefaultRenderer(Float.class, r);
-		setDefaultRenderer(Integer.class, r);
-		setDefaultRenderer(cg.Trade.Type.class,r);
-		setDefaultRenderer(cg.Trade.SpecialInstruction.class,r);
+		TableTwoColorScheme tColorScheme = new TableTwoColorScheme();
+		tColorScheme.bg_Normal[0]     = new Color(235, 237, 255);
+		tColorScheme.bg_Normal[1]     = new Color(217, 251, 209);
+		RenderTableCellTest tTest =
+		      (JLabel label,JTable table,Object value,boolean isSelected,
+		            boolean hasFocus, int row,int column) -> 
+		{
+		   /*
+		    * Get the actual row.
+		    */
+		   TradeTableModel model = (TradeTableModel) table.getModel();
+		   int actual_row = sorter.convertRowIndexToModel(row);
+
+		   /*
+		    * Look at the trade type column to determine the color index to be used,
+		    * so that buy and sell trades are colored differently.
+		    */
+		   cg.Trade.Type tradeType = (cg.Trade.Type) model.getValueAt(actual_row, 2);
+
+		   if (tradeType == cg.Trade.Type.BUY)
+		      return false;
+		   else
+		      return true;
+		};
+
+		RenderColoredRows tRowRender = new RenderColoredRows(tColorScheme,tTest);
+
+		CustomTableCellRenderer tRenderer = new CustomTableCellRenderer(tInfos);
+		tInfos.add(tRowRender);
+
+		for (int i = 0; i < getColumnCount(); i++)
+		{
+		    getColumnModel().getColumn(i).setCellRenderer(tRenderer);
+		}
+
+//		DefaultTradeTableRenderer r = new DefaultTradeTableRenderer(sorter);
+//		IntegerTradeTableRenderer lr = new IntegerTradeTableRenderer(sorter);
+//		setDefaultRenderer(Object.class, r);
+//		setDefaultRenderer(Float.class, r);
+//		setDefaultRenderer(Integer.class, r);
+//		setDefaultRenderer(cg.Trade.Type.class,r);
+//		setDefaultRenderer(cg.Trade.SpecialInstruction.class,r);
 	}
 
 	public void setRows(Vector<TradeDataProvider> trades) {
