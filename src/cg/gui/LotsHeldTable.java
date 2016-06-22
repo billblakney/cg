@@ -32,12 +32,29 @@ public class LotsHeldTable extends JTable {
 		
 		sharesHeld = new SharesHeld();
 
+		setRenderers();
+	}
+
+	private void setRenderers()
+	{
+		Vector<RenderTableCellInfo> tInfos = new Vector<RenderTableCellInfo>();
+
 		/*
-		 * SharesHeldTableRenderer r = new SharesHeldTableRenderer();
-		 * setDefaultRenderer(Object.class, r); setDefaultRenderer(Float.class,
-		 * r); setDefaultRenderer(Integer.class, r);
-		 * setDefaultRenderer(Integer.class, r);
+		 * Set renders for comma separated integer columns.
 		 */
+		RenderInteger tIntRenderShares = new RenderInteger(
+		      RenderInteger.COMMA_FORMAT,LotsHeldTableModel.COL_SHARES);
+		tInfos.add(tIntRenderShares);
+	   
+		/*
+		 * Create the custom table cell renderer and apply it to all columns.
+		 */
+		CustomTableCellRenderer tRenderer = new CustomTableCellRenderer(tInfos);
+
+		for (int i = 0; i < getColumnCount(); i++)
+		{
+		    getColumnModel().getColumn(i).setCellRenderer(tRenderer);
+		}
 	}
 
 	public void setRows(Vector<LotDataProvider> lots) {

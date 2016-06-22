@@ -1,16 +1,12 @@
 package cg.gui;
 
-import java.awt.Color;
 import java.util.*;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableRowSorter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.RowFilter;
-import javax.swing.RowFilter.*;
-import cg.Term;
-import cg.gui.render.TwoColorTableRenderer;
 
+@SuppressWarnings("serial")
 public class SharesHeldTable extends JTable {
 
 	private SharesHeldTableModel model;
@@ -32,22 +28,24 @@ public class SharesHeldTable extends JTable {
 		
 		sharesHeld = new SharesHeld();
 		
+		setRenderers();
+	}
+	
+	private void setRenderers()
+	{
 		Vector<RenderTableCellInfo> tInfos = new Vector<RenderTableCellInfo>();
-		
-		RenderInteger tIntRender = new RenderInteger(
+
+		/*
+		 * Set renders for comma separated integer columns.
+		 */
+		RenderInteger tIntRenderShares = new RenderInteger(
 		      RenderInteger.COMMA_FORMAT,SharesHeldTableModel.COL_SHARES);
-		tInfos.add(tIntRender);
-
-		TableTwoColorScheme tColorScheme = new TableTwoColorScheme();
-		tColorScheme.bg_Normal[0]     = new Color(235, 237, 255);
-		tColorScheme.bg_Normal[1]     = new Color(217, 251, 209);
-		RenderTableCellTest tTest =
-		      (JLabel label,JTable table,Object value,boolean isSelected,
-		            boolean hasFocus, int row,int column) -> {return (0 == row%2);};
-		RenderColoredRows tRowRender = new RenderColoredRows(tColorScheme,tTest);
-
+		tInfos.add(tIntRenderShares);
+	   
+		/*
+		 * Create the custom table cell renderer and apply it to all columns.
+		 */
 		CustomTableCellRenderer tRenderer = new CustomTableCellRenderer(tInfos);
-		tInfos.add(tRowRender);
 
 		for (int i = 0; i < getColumnCount(); i++)
 		{

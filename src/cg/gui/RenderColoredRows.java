@@ -1,27 +1,26 @@
 package cg.gui;
-import java.awt.Color;
 import java.awt.Font;
-import java.text.DecimalFormat;
+import java.util.List;
 import java.util.Set;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
 public class RenderColoredRows implements RenderTableCellInfo
 {
-	TableTwoColorScheme _scheme;
-	RenderTableCellTest _test;
+	List<TableCellColorSet> _scheme;
+	TableRowColorChooser _colorIndexGetter;
 	Set<Integer> _columns;
 
-   RenderColoredRows(TableTwoColorScheme aColorScheme,RenderTableCellTest aTest)
+   RenderColoredRows(List<TableCellColorSet> aColorScheme,TableRowColorChooser aTest)
    {
       _scheme = aColorScheme;
-      _test = aTest;
+      _colorIndexGetter = aTest;
    }
 
-   RenderColoredRows(TableTwoColorScheme aColorScheme,RenderTableCellTest aTest,Set<Integer> aColumns)
+   RenderColoredRows(List<TableCellColorSet> aColorScheme,TableRowColorChooser aTest,Set<Integer> aColumns)
    {
       _scheme = aColorScheme;
-      _test = aTest;
+      _colorIndexGetter = aTest;
       _columns = aColumns;
    }
 
@@ -35,32 +34,35 @@ public class RenderColoredRows implements RenderTableCellInfo
          return null;
       }
 
+      int tIndex = _colorIndexGetter.getIndex(label, table, value, isSelected, hasFocus, row, column);
+      
+      if (tIndex < 0 || tIndex >= _scheme.size())
+      {
+         System.out.print("ERROR: invalid color set");
+         return null;
+      }
+
       TableCellInfo tInfo = new TableCellInfo();
 
-      int i = 0;
-      if (_test.test(label, table, value, isSelected, hasFocus, row, column))
-      {
-         i = 1;
-      }
+      TableCellColorSet tColorSet = _scheme.get(tIndex);
 
 		// cell in normal row (isSelected == false)
 		if (isSelected == false) {
 			tInfo._font = label.getFont().deriveFont(Font.PLAIN);
-			tInfo._bgColor =_scheme.bg_Normal[i];
-			tInfo._fgColor = _scheme.fg_Normal[i];
+			tInfo._bgColor = tColorSet._bgNormal;
+			tInfo._fgColor = tColorSet._fgNormal;
 		// cell in selected row without focus
 		} else if ( isSelected == true && hasFocus == false ){
 			tInfo._font = label.getFont().deriveFont(Font.ITALIC);
-			tInfo._bgColor = _scheme.bg_IsSelected[i];
-			tInfo._fgColor = _scheme.fg_IsSelected[i];
+			tInfo._bgColor = tColorSet._bgSelected;
+			tInfo._fgColor = tColorSet._fgSelected;
 		// cell in selected row with focus
 		} else {
 			tInfo._font = label.getFont().deriveFont(Font.PLAIN);
-			tInfo._bgColor = _scheme.bg_HasFocus[i];
-			tInfo._fgColor = _scheme.fg_HasFocus[i];
+			tInfo._bgColor = tColorSet._bgFocus;
+			tInfo._fgColor = tColorSet._fgFocus;
 		}
 	   
 	   return tInfo;
 	}
-
 }

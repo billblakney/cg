@@ -6,6 +6,7 @@ import javax.swing.table.TableRowSorter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.RowFilter;
 
+@SuppressWarnings("serial")
 public class YearlyGainsTable extends JTable {
 
 	private YearlyGainsTableModel model;
@@ -23,11 +24,30 @@ public class YearlyGainsTable extends JTable {
 		setRowSorter(sorter);
 
 		totalGain = new TotalGain();
+
+		setRenderers();
+	}
+
+	private void setRenderers()
+	{
+		Vector<RenderTableCellInfo> tInfos = new Vector<RenderTableCellInfo>();
+		
 		/*
-		 * YearlyGainsTableRenderer r = new YearlyGainsTableRenderer();
-		 * setDefaultRenderer(Object.class, r); setDefaultRenderer(Float.class,
-		 * r); setDefaultRenderer(Integer.class, r);
+		 * Set renders for comma separated integer columns.
 		 */
+		RenderInteger tIntRenderGains = new RenderInteger(
+		      RenderInteger.COMMA_FORMAT,YearlyGainsTableModel.COL_GAIN);
+		tInfos.add(tIntRenderGains);
+
+		/*
+		 * Create the custom table cell renderer and apply it to all columns.
+		 */
+		CustomTableCellRenderer tRenderer = new CustomTableCellRenderer(tInfos);
+
+		for (int i = 0; i < getColumnCount(); i++)
+		{
+		    getColumnModel().getColumn(i).setCellRenderer(tRenderer);
+		}
 	}
 
 	public void setRows(Vector gains) {

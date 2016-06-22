@@ -10,8 +10,8 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableCellRenderer;
 import java.awt.Component;
 import javax.swing.RowFilter;
-import javax.swing.RowFilter.*;
 
+@SuppressWarnings("serial")
 public class SecurityGainsTable extends JTable {
 
 	private SecurityGainsTableModel model;
@@ -31,11 +31,30 @@ public class SecurityGainsTable extends JTable {
 		setRowSorter(sorter);
 
 		totalGain = new TotalGain();
+
+		setRenderers();
+	}
+
+	private void setRenderers()
+	{
+		Vector<RenderTableCellInfo> tInfos = new Vector<RenderTableCellInfo>();
+		
 		/*
-		 * SecurityGainsTableRenderer r = new SecurityGainsTableRenderer();
-		 * setDefaultRenderer(Object.class, r); setDefaultRenderer(Float.class,
-		 * r); setDefaultRenderer(Integer.class, r);
+		 * Set renders for comma separated integer columns.
 		 */
+		RenderInteger tIntRenderGains = new RenderInteger(
+		      RenderInteger.COMMA_FORMAT,SecurityGainsTableModel.COL_GAIN);
+		tInfos.add(tIntRenderGains);
+
+		/*
+		 * Create the custom table cell renderer and apply it to all columns.
+		 */
+		CustomTableCellRenderer tRenderer = new CustomTableCellRenderer(tInfos);
+
+		for (int i = 0; i < getColumnCount(); i++)
+		{
+		    getColumnModel().getColumn(i).setCellRenderer(tRenderer);
+		}
 	}
 
 	public void setRows(Vector gains) {

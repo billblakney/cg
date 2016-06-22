@@ -1,24 +1,36 @@
 package cg.gui;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Vector;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import cg.Trade;
 import cg.TradeDataProvider;
-import cg.gui.render.DefaultTradeTableRenderer;
-import cg.gui.render.IntegerTradeTableRenderer;
 
+@SuppressWarnings("serial")
 public class TradeTable extends JTable {
-
 	
+   final static public TableCellColorSet kBuyColors = new TableCellColorSet(
+         new Color (235,237,255),
+         Color.lightGray,
+         Color.white,
+         Color.black,
+         Color.black,
+         Color.black);
+	
+   final static public TableCellColorSet kSellColors = new TableCellColorSet(
+         new Color (217,251,209),
+         Color.lightGray,
+         Color.white,
+         Color.black,
+         Color.black,
+         Color.black);
+
 	/**
 	 * The model for this table.
 	 */
@@ -53,13 +65,11 @@ public class TradeTable extends JTable {
 
 	private void setRenderers()
 	{
-		/*
-		 * TODO cleanup/document this renderer stuff
-		 * TODO use new render classes for all tables, rm old classes
-		 */
-		
 		Vector<RenderTableCellInfo> tInfos = new Vector<RenderTableCellInfo>();
 		
+		/*
+		 * Set renders for comma separated integer columns.
+		 */
 		RenderInteger tIntRenderShares = new RenderInteger(
 		      RenderInteger.COMMA_FORMAT,TradeTableModel.COL_SHARES);
 		tInfos.add(tIntRenderShares);
@@ -72,30 +82,34 @@ public class TradeTable extends JTable {
 		      RenderInteger.COMMA_FORMAT,TradeTableModel.COL_SHARESSOLD);
 		tInfos.add(tIntRenderSharesSold);
 
-		TableTwoColorScheme tColorScheme = new TableTwoColorScheme();
-		tColorScheme.bg_Normal[0]     = new Color(235, 237, 255);
-		tColorScheme.bg_Normal[1]     = new Color(217, 251, 209);
-
-		RenderTableCellTest tRowTest =
+		/*
+		 * Set the render for row coloring.
+		 */
+		Vector<TableCellColorSet> tColors = new Vector<TableCellColorSet>();
+		tColors.add(kBuyColors);
+		tColors.add(kSellColors);
+		
+		TableRowColorChooser tColorChooser =
 		      (JLabel label,JTable table,Object value,boolean isSelected,
 		            boolean hasFocus, int row,int column) -> 
 		{
-		   TradeTableModel tModel = (TradeTableModel) table.getModel();
+		   TableModel tModel = table.getModel();
 		   int tModelRow = sorter.convertRowIndexToModel(row);
 
 		   Trade.Type tTradeType = (Trade.Type)tModel.getValueAt(
 		         tModelRow,TradeTableModel.COL_BUYSELL);
 
-		   return ((tTradeType==Trade.Type.BUY)?true:false);
+		   return ((tTradeType==Trade.Type.BUY)?0:1);
 		};
 
-		Set<Integer> tColumns = new HashSet<Integer>();
-		tColumns.add(1);
-		RenderColoredRows tRowRender =
-		      new RenderColoredRows(tColorScheme,tRowTest,tColumns);
-
-		CustomTableCellRenderer tRenderer = new CustomTableCellRenderer(tInfos);
+		RenderColoredRows tRowRender = new RenderColoredRows(
+		     tColors,tColorChooser);
 		tInfos.add(tRowRender);
+
+		/*
+		 * Create the custom table cell renderer and apply it to all columns.
+		 */
+		CustomTableCellRenderer tRenderer = new CustomTableCellRenderer(tInfos);
 
 		for (int i = 0; i < getColumnCount(); i++)
 		{

@@ -1,15 +1,32 @@
 package cg.gui;
 
+import java.awt.Color;
 import java.util.*;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.RowFilter;
-import javax.swing.RowFilter.*;
-import cg.gui.render.DefaultGainTableRenderer;
-import cg.gui.render.IntegerGainTableRenderer;
 
+@SuppressWarnings("serial")
 public class GainTable extends JTable {
+	
+   final static public TableCellColorSet kGainColors = new TableCellColorSet(
+         new Color (175, 255, 175),
+         new Color (175, 225, 175),
+         Color.white,
+         Color.black,
+         Color.black,
+         Color.black);
+	
+   final static public TableCellColorSet kLossColors = new TableCellColorSet(
+         new Color (255, 204, 204),
+         new Color (225, 150, 150),
+         Color.white,
+         Color.black,
+         Color.black,
+         Color.black);
 
 	private GainTableModel model;
 	private TableRowSorter<GainTableModel> sorter = null;
@@ -28,13 +45,67 @@ public class GainTable extends JTable {
 		sorter = new TableRowSorter<GainTableModel>(model);
 		setRowSorter(sorter);
 
-		DefaultGainTableRenderer r = new DefaultGainTableRenderer(sorter);
-		IntegerGainTableRenderer lr = new IntegerGainTableRenderer(sorter);
-		setDefaultRenderer(Object.class, r);
-		setDefaultRenderer(Float.class, r);
-		setDefaultRenderer(Integer.class, lr);
-
 		totalGain = new TotalGain();
+
+		setRenderers();
+	}
+
+	private void setRenderers()
+	{
+		Vector<RenderTableCellInfo> tInfos = new Vector<RenderTableCellInfo>();
+		
+		/*
+		 * Set renders for comma separated integer columns.
+		 */
+		RenderInteger tIntRenderShares = new RenderInteger(
+		      RenderInteger.COMMA_FORMAT,GainTableModel.COL_SHARES);
+		tInfos.add(tIntRenderShares);
+		
+		RenderInteger tIntRenderGross = new RenderInteger(
+		      RenderInteger.COMMA_FORMAT,GainTableModel.COL_GROSS);
+		tInfos.add(tIntRenderGross);
+		
+		RenderInteger tIntRenderBasis = new RenderInteger(
+		      RenderInteger.COMMA_FORMAT,GainTableModel.COL_BASIS);
+		tInfos.add(tIntRenderBasis);
+		
+		RenderInteger tIntRenderGain = new RenderInteger(
+		      RenderInteger.COMMA_FORMAT,GainTableModel.COL_GAIN);
+		tInfos.add(tIntRenderGain);
+
+		/*
+		 * Set the render for row coloring.
+		 */
+		Vector<TableCellColorSet> tColors = new Vector<TableCellColorSet>();
+		tColors.add(kGainColors);
+		tColors.add(kLossColors);
+		
+		TableRowColorChooser tColorChooser =
+		      (JLabel label,JTable table,Object value,boolean isSelected,
+		            boolean hasFocus, int row,int column) -> 
+		{
+		   TableModel tModel = table.getModel();
+		   int tModelRow = sorter.convertRowIndexToModel(row);
+
+		   Integer gain = (Integer)tModel.getValueAt(
+		         tModelRow,GainTableModel.COL_GAIN);
+
+		   return ((gain > 0) ? 0:1);
+		};
+
+		RenderColoredRows tRowRender = new RenderColoredRows(
+		     tColors,tColorChooser);
+		tInfos.add(tRowRender);
+
+		/*
+		 * Create the custom table cell renderer and apply it to all columns.
+		 */
+		CustomTableCellRenderer tRenderer = new CustomTableCellRenderer(tInfos);
+
+		for (int i = 0; i < getColumnCount(); i++)
+		{
+		    getColumnModel().getColumn(i).setCellRenderer(tRenderer);
+		}
 	}
 
 	public void setRows(Vector gains) {
