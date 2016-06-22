@@ -38,7 +38,8 @@ public class TradeTable extends JTable {
 
 	SharesHeld sharesHeld;
 	
-	TradeTable(){
+	TradeTable()
+	{
 		model = new TradeTableModel();
 		setModel(model);
 		
@@ -47,6 +48,11 @@ public class TradeTable extends JTable {
 		
 		sharesHeld = new SharesHeld();
 		
+		setRenderers();
+	}
+
+	private void setRenderers()
+	{
 		/*
 		 * TODO cleanup/document this renderer stuff
 		 * TODO use new render classes for all tables, rm old classes
@@ -83,8 +89,10 @@ public class TradeTable extends JTable {
 		   return ((tTradeType==Trade.Type.BUY)?true:false);
 		};
 
+		Set<Integer> tColumns = new HashSet<Integer>();
+		tColumns.add(1);
 		RenderColoredRows tRowRender =
-		      new RenderColoredRows(tColorScheme,tRowTest);
+		      new RenderColoredRows(tColorScheme,tRowTest,tColumns);
 
 		CustomTableCellRenderer tRenderer = new CustomTableCellRenderer(tInfos);
 		tInfos.add(tRowRender);
@@ -93,14 +101,6 @@ public class TradeTable extends JTable {
 		{
 		    getColumnModel().getColumn(i).setCellRenderer(tRenderer);
 		}
-
-//		DefaultTradeTableRenderer r = new DefaultTradeTableRenderer(sorter);
-//		IntegerTradeTableRenderer lr = new IntegerTradeTableRenderer(sorter);
-//		setDefaultRenderer(Object.class, r);
-//		setDefaultRenderer(Float.class, r);
-//		setDefaultRenderer(Integer.class, r);
-//		setDefaultRenderer(cg.Trade.Type.class,r);
-//		setDefaultRenderer(cg.Trade.SpecialInstruction.class,r);
 	}
 
 	public void setRows(Vector<TradeDataProvider> trades) {
