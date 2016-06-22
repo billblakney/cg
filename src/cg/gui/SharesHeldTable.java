@@ -31,17 +31,14 @@ public class SharesHeldTable extends JTable {
 		
 		sharesHeld = new SharesHeld();
 		
-//		RenderIntWithComma tIntRender = new RenderIntWithComma(SharesHeldTableModel.COL_SHARES);
-//		CustomTableCellRenderer tRenderer = new CustomTableCellRenderer(tIntRender);
-//		
-//		setDefaultRenderer(Integer.class,tRenderer);
+		RenderInteger tIntRender = new RenderInteger(
+		      RenderInteger.COMMA_FORMAT,SharesHeldTableModel.COL_SHARES);
+		CustomTableCellRenderer tRenderer = new CustomTableCellRenderer(tIntRender);
 
-		/*
-		 * SharesHeldTableRenderer r = new SharesHeldTableRenderer();
-		 * setDefaultRenderer(Object.class, r); setDefaultRenderer(Float.class,
-		 * r); setDefaultRenderer(Integer.class, r);
-		 * setDefaultRenderer(Integer.class, r);
-		 */
+		for (int i = 0; i < getColumnCount(); i++)
+		{
+		    getColumnModel().getColumn(i).setCellRenderer(tRenderer);
+		}
 	}
 
 	public void setRows(Vector gains) {

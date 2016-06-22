@@ -3,19 +3,36 @@ import java.text.DecimalFormat;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
-public class RenderIntWithComma implements TableCellInfoGetter
+public class RenderInteger implements TableCellInfoGetter
 {
-	protected DecimalFormat _format = new DecimalFormat(
-	"###,###,###,##0");
+   /** Comma separated format. */
+	static public final String COMMA_FORMAT = "###,###,###,##0";
+   
+	/** Format to be used. */
+	protected DecimalFormat _format;
 	
-	Integer _column = null;
+	/** Column to be formatted. */
+	protected Integer _column = null;
 
-   RenderIntWithComma()
+	/**
+	 * Constructor to format all columns.
+	 * 
+	 * @param aBigDecimalFormat
+	 */
+   RenderInteger(String aBigDecimalFormat)
    {
+      _format = new DecimalFormat(aBigDecimalFormat);
    }
 
-   RenderIntWithComma(Integer aColumn)
+   /**
+    * Constructor to format a specified column.
+    * 
+    * @param aBigDecimalFormat
+    * @param aColumn
+    */
+   RenderInteger(String aBigDecimalFormat,Integer aColumn)
    {
+      _format = new DecimalFormat(aBigDecimalFormat);
 	   _column = aColumn;
    }
 
