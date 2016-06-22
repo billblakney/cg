@@ -2,6 +2,7 @@ package cg.gui;
 import java.awt.Color;
 import java.awt.Font;
 import java.text.DecimalFormat;
+import java.util.Set;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
@@ -9,6 +10,7 @@ public class RenderColoredRows implements RenderTableCellInfo
 {
 	TableTwoColorScheme _scheme;
 	RenderTableCellTest _test;
+	Set<Integer> _columns;
 
    RenderColoredRows(TableTwoColorScheme aColorScheme,RenderTableCellTest aTest)
    {
@@ -16,11 +18,23 @@ public class RenderColoredRows implements RenderTableCellInfo
       _test = aTest;
    }
 
+   RenderColoredRows(TableTwoColorScheme aColorScheme,RenderTableCellTest aTest,Set<Integer> aColumns)
+   {
+      _scheme = aColorScheme;
+      _test = aTest;
+      _columns = aColumns;
+   }
+
    @Override
 	public TableCellInfo getInfo(JLabel label,JTable table,
 			Object value, boolean isSelected, boolean hasFocus, int row,
 			int column)
 	{
+      if (_columns != null && !_columns.contains(column))
+      {
+         return null;
+      }
+
       TableCellInfo tInfo = new TableCellInfo();
 
       int i = 0;
