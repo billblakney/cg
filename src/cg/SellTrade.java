@@ -65,7 +65,7 @@ public class SellTrade extends Trade {
 	public boolean isOpenPosition() {
 		return false;
 /*		
-		if (numSharesHeld != numShares ) {
+		if (numSharesHeld != _numShares ) {
 			return true;
 		} else {
 			return false;

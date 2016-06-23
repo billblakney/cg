@@ -261,18 +261,18 @@ public class DataStore
        * Create a new buy lot.
        */
       Lot tLot = new Lot();
-      tLot.lotId = null;
-      tLot.parentId = null;
-      tLot.hasChildren = false;
-      tLot.triggerTradeId = aTrade.tradeId;
-      tLot.buyTradeId = aTrade.tradeId;
-      tLot.sellTradeId = null;
-      tLot.numShares = aTrade.numShares;
+      tLot._lotId = null;
+      tLot._parentId = null;
+      tLot._hasChildren = false;
+      tLot._triggerTradeId = aTrade.tradeId;
+      tLot._buyTradeId = aTrade.tradeId;
+      tLot._sellTradeId = null;
+      tLot._numShares = aTrade.numShares;
 		float tBasis = ((float)aTrade.numShares) * aTrade.sharePrice + aTrade.comm.floatValue(); //TODO use method?
-      tLot.basis = new BigDecimal(tBasis); //TODO
-      tLot.proceeds = new BigDecimal(0.0);
-      tLot.state = Lot.State.eOpen;
-      tLot.hasChildren = false;
+      tLot._basis = new BigDecimal(tBasis); //TODO
+      tLot._proceeds = new BigDecimal(0.0);
+      tLot._state = Lot.State.eOpen;
+      tLot._hasChildren = false;
 
       /*
        * Save the lot to the db.
@@ -309,41 +309,41 @@ public class DataStore
           * an open one that has the remaining shares available to sell,
           * and a closed one representing the shares sold.
           */
-         if (tNumToDistribute < tLot.numShares)
+         if (tNumToDistribute < tLot._numShares)
          {
             // two new lots and update old.hasChildren
             
             Lot tNewClosedLot = new Lot();
             {
-            tNewClosedLot.parentId = tLot.lotId;
-            tNewClosedLot.hasChildren = false;
-            tNewClosedLot.triggerTradeId = aTrade.tradeId;
-            tNewClosedLot.buyTradeId = tLot.buyTradeId;
-            tNewClosedLot.sellTradeId = aTrade.tradeId;
-            tNewClosedLot.numShares = tNumToDistribute;
-            float tFactor = (float)tNewClosedLot.numShares/(float)tLot.numShares;
-            tNewClosedLot.basis = new BigDecimal(tFactor*tLot.basis.floatValue());
+            tNewClosedLot._parentId = tLot._lotId;
+            tNewClosedLot._hasChildren = false;
+            tNewClosedLot._triggerTradeId = aTrade.tradeId;
+            tNewClosedLot._buyTradeId = tLot._buyTradeId;
+            tNewClosedLot._sellTradeId = aTrade.tradeId;
+            tNewClosedLot._numShares = tNumToDistribute;
+            float tFactor = (float)tNewClosedLot._numShares/(float)tLot._numShares;
+            tNewClosedLot._basis = new BigDecimal(tFactor*tLot._basis.floatValue());
             float tProceeds = //TODO !!! factor?
                   ((float)tNumToDistribute) * aTrade.sharePrice.floatValue()
                      - aTrade.comm.floatValue();
-            tNewClosedLot.proceeds = new BigDecimal(tProceeds);
-            tNewClosedLot.state = Lot.State.eClosed;
+            tNewClosedLot._proceeds = new BigDecimal(tProceeds);
+            tNewClosedLot._state = Lot.State.eClosed;
             }
 
             tNewLots.add(tNewClosedLot);
 
             Lot tNewOpenLot = new Lot();
             {
-            tNewOpenLot.parentId = tLot.lotId;
-            tNewOpenLot.hasChildren = false;
-            tNewOpenLot.triggerTradeId = aTrade.tradeId;
-            tNewOpenLot.buyTradeId = tLot.buyTradeId;
-            tNewOpenLot.sellTradeId = null;
-            tNewOpenLot.numShares = tLot.numShares - tNumToDistribute;
-            float tFactor = (float)tNewOpenLot.numShares/(float)tLot.numShares;
-            tNewOpenLot.basis = new BigDecimal(tFactor*tLot.basis.floatValue());
-            tNewOpenLot.proceeds = new BigDecimal(0.0);
-            tNewOpenLot.state = Lot.State.eOpen;
+            tNewOpenLot._parentId = tLot._lotId;
+            tNewOpenLot._hasChildren = false;
+            tNewOpenLot._triggerTradeId = aTrade.tradeId;
+            tNewOpenLot._buyTradeId = tLot._buyTradeId;
+            tNewOpenLot._sellTradeId = null;
+            tNewOpenLot._numShares = tLot._numShares - tNumToDistribute;
+            float tFactor = (float)tNewOpenLot._numShares/(float)tLot._numShares;
+            tNewOpenLot._basis = new BigDecimal(tFactor*tLot._basis.floatValue());
+            tNewOpenLot._proceeds = new BigDecimal(0.0);
+            tNewOpenLot._state = Lot.State.eOpen;
             }
 
             tNewLots.add(tNewOpenLot);
@@ -361,26 +361,26 @@ public class DataStore
 
             Lot tNewClosedLot = new Lot();
             {
-            tNewClosedLot.parentId = tLot.lotId;
-            tNewClosedLot.hasChildren = false;
-            tNewClosedLot.triggerTradeId = aTrade.tradeId;
-            tNewClosedLot.buyTradeId = tLot.buyTradeId;
-            tNewClosedLot.sellTradeId = aTrade.tradeId;
-            tNewClosedLot.numShares = tLot.numShares;
-            tNewClosedLot.basis = new BigDecimal(tLot.basis.floatValue());//TOOD check
+            tNewClosedLot._parentId = tLot._lotId;
+            tNewClosedLot._hasChildren = false;
+            tNewClosedLot._triggerTradeId = aTrade.tradeId;
+            tNewClosedLot._buyTradeId = tLot._buyTradeId;
+            tNewClosedLot._sellTradeId = aTrade.tradeId;
+            tNewClosedLot._numShares = tLot._numShares;
+            tNewClosedLot._basis = new BigDecimal(tLot._basis.floatValue());//TOOD check
             float tProceeds = //TODO !!! factor?
                   ((float)tNumToDistribute) * aTrade.sharePrice.floatValue()
                      - aTrade.comm.floatValue();
-            tNewClosedLot.proceeds = new BigDecimal(tProceeds);
-            tNewClosedLot.state = Lot.State.eClosed;
+            tNewClosedLot._proceeds = new BigDecimal(tProceeds);
+            tNewClosedLot._state = Lot.State.eClosed;
             }
 
             tNewLots.add(tNewClosedLot);
 
-            tNumToDistribute -= tLot.numShares;
+            tNumToDistribute -= tLot._numShares;
          }
 
-         tLot.hasChildren = true;
+         tLot._hasChildren = true;
 
          if (aConn != null)
          {
@@ -407,11 +407,11 @@ public class DataStore
       
       for (Lot tLot: _lots)
       {
-         if (tLot.hasChildren || tLot.state != Lot.State.eOpen){
+         if (tLot._hasChildren || tLot._state != Lot.State.eOpen){
             continue;
          }
 
-         Trade tTrade = getTradeById(tLot.buyTradeId);
+         Trade tTrade = getTradeById(tLot._buyTradeId);
          if (tTrade == null){
             System.out.println("ERROR: Need more open lots to sell!");
             System.exit(0);
@@ -423,7 +423,7 @@ public class DataStore
          
          tLots.add(tLot);
 
-         tQuantityFound += tLot.numShares;
+         tQuantityFound += tLot._numShares;
          if (tQuantityFound >= aQuantity) {
             break;
          }

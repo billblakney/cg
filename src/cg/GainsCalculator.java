@@ -98,11 +98,11 @@ class GainsCalculator {
          OldLot bLot = bLotSet.getFirstLot();
 
 
-         // Figure out how many shares and how much basis will be transferred
+         // Figure out how many shares and how much _basis will be transferred
          // from the buy lot to the new sell lot.
          int n;  // num shares to be transferred
-         float b; // basis to be transferred
-         float p; // proceeds to be transferred
+         float b; // _basis to be transferred
+         float p; // _proceeds to be transferred
 
          if ( sharesToProcess >= bLot.numShares){ // can transfer the entire buy lot
              n = bLot.numShares;
@@ -123,18 +123,18 @@ class GainsCalculator {
          OldLot sLot = new OldLot(
             st.ticker,             // ticker
             sLotID,                // id
-            n           ,          // numShares
+            n           ,          // _numShares
             bLot.buyDate,          // buyDate
             st.date,               // sellDate
             bt.sharePrice,         // buyPrice
             st.sharePrice,         // sellPrice
-            b,                     // basis
-            st.getProceeds(n) + p  // proceeds
+            b,                     // _basis
+            st.getProceeds(n) + p  // _proceeds
             );
 sLot.message = "new sell lot while processing sell trade";
          sLotSet.addLot(sLot);
 
-         // Remove the shares and corresponding basis from the buy lot.
+         // Remove the shares and corresponding _basis from the buy lot.
          // The call to removeFirstShares(n) will also remove the entire
          // first lot if it was emptied.
          //--System.out.println("going to remove first shares");
@@ -167,7 +167,7 @@ bLot.message = "removed shares from buy lot while processing sell trade"; // wil
 
       /***********************************************************************
        * Buy lots built from wash sell lots.
-       * (This code is NOT yet in working order wrt basis/proceeds.)
+       * (This code is NOT yet in working order wrt _basis/_proceeds.)
        * (2/16 - Looks like it is working now. Need to test. zzz)
        **********************************************************************/
       // Get all sell trades within 30 days of this buy trade.
@@ -182,7 +182,7 @@ bLot.message = "removed shares from buy lot while processing sell trade"; // wil
          OldLot sLot = sLotSet.getFirstLossLot();
 
          while( buySharesToProcess > 0 && (sLot != null) )  {
-            // Figure out how many shares and how much basis and proceeds
+            // Figure out how many shares and how much _basis and _proceeds
             // will be transferred from the sell lot to the buy lot.
 
             // First assume that we'll be able to use the whole lot.
@@ -202,18 +202,18 @@ bLot.message = "removed shares from buy lot while processing sell trade"; // wil
             OldLot bLot = new OldLot(
                bt.ticker,          // ticker
                washLotID,          // id
-               n,                  // numShares
+               n,                  // _numShares
                sLot.buyDate,       // buyDate
                null,               // sellDate
                bt.sharePrice,      // buyPrice
                (float)0.0,         // sellPrice
-               bt.getBasis(n) + b, // carry forward basis
-               p                   // carry forward proceeds
+               bt.getBasis(n) + b, // carry forward _basis
+               p                   // carry forward _proceeds
                );
 bLot.message = "new sell lot from wash sale while processing buy trade";
             bLotSet.addLot(bLot);
 
-            // Remove the shares and corresponding basis and proceeds from the
+            // Remove the shares and corresponding _basis and _proceeds from the
             // sell lot.
             //--System.out.println("going to remove first shares");
             sLot.basis -= b;
@@ -248,13 +248,13 @@ sLot.message = "removed shares from wash sale lot while processing buy trade";
          OldLot bLot = new OldLot(
             bt.ticker,          // ticker
         	freshBuyLotID,           // id
-            buySharesToProcess,      // numShares
+            buySharesToProcess,      // _numShares
             bt.date,                 // buyDate
             null,                    // sellDate
             bt.sharePrice,           // buyPrice
             (float)0.0,              // sellPrice
-            bt.getBasis(buySharesToProcess),  // basis
-            (float)0.0                        // proceeds
+            bt.getBasis(buySharesToProcess),  // _basis
+            (float)0.0                        // _proceeds
             );
 bLot.message = "new buy lot while processing buy trade";
 

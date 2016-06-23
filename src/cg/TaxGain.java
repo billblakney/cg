@@ -50,7 +50,7 @@ public class TaxGain extends OldLot {
 	}
 
 	/**
-	 * Add a gain component to this tax gain. Note that proceeds, basis, gain,
+	 * Add a gain component to this tax gain. Note that _proceeds, _basis, gain,
 	 * and buyDate of this tax gain will be updated to include the component
 	 * values.
 	 */

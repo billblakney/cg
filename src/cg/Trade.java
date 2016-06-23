@@ -99,7 +99,7 @@ public class Trade implements TradeDataProvider, Comparable {
 	 * @param date Trade date.
 	 * @param tradeType Trade type (Either Trade.BUY or Trade.SELL.)
 	 * @param ticker The ticker symbol, e.g. CSCO.
-	 * @param numShares Number of shares.
+	 * @param _numShares Number of shares.
 	 * @param sharePrice Share price.
 	 * @param comm Commision.
 	 * @param note User note.

@@ -61,12 +61,12 @@ public class OldLot implements LotDataProvider {
    public int numShares;
 
    /**
-    * The basis for this lot.
+    * The _basis for this lot.
     */
    public float basis;
 
    /**
-    * The proceeds for this lot.
+    * The _proceeds for this lot.
     */
    public float proceeds;
 
@@ -205,6 +205,6 @@ public class OldLot implements LotDataProvider {
 		return new String("   lot: [" + id + "]" + ",shares=" + numShares
 				+ ",buyDate=" + buyDate + ",sellDate=" + sellDate
 				+ ",buyPrice=" + buyPrice + ",sellPrice=" + sellPrice
-				+ ",basis=" + basis + ",proceeds=" + proceeds + ",term=" + term);
+				+ ",_basis=" + basis + ",_proceeds=" + proceeds + ",term=" + term);
 	}
 }

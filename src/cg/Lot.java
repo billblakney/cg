@@ -33,31 +33,45 @@ public class Lot
 		}
 	}
 	
-	public Integer lotId;
-	public Integer parentId;
-	public boolean hasChildren;
-	public Integer triggerTradeId;
-	public Integer buyTradeId;
-	public Integer sellTradeId;
-	public int numShares;
-	public BigDecimal basis;
-	public BigDecimal proceeds;
-	public State state;
+   public Integer    _lotId;
+   public Integer    _parentId;
+   public boolean    _hasChildren;
+   public Integer    _triggerTradeId;
+   public Integer    _buyTradeId;
+   public Integer    _sellTradeId;
+   public int        _numShares;
+   public BigDecimal _basis;
+   public BigDecimal _proceeds;
+   public State      _state;
 	//public int term; //TODO enum
 	//public String note;
 
 	Lot()
 	{
-	   lotId = null;
-	   parentId = null;
-	   hasChildren = false;
-	   triggerTradeId = null;
-	   buyTradeId = null;
-	   sellTradeId = null;
-	   numShares = 0;
-	   basis = new BigDecimal(0.0);
-	   proceeds = new BigDecimal(0.0);
-	   state = State.eOpen;
+	   _lotId = null;
+	   _parentId = null;
+	   _hasChildren = false;
+	   _triggerTradeId = null;
+	   _buyTradeId = null;
+	   _sellTradeId = null;
+	   _numShares = 0;
+	   _basis = new BigDecimal(0.0);
+	   _proceeds = new BigDecimal(0.0);
+	   _state = State.eOpen;
+	}
+	
+	Lot(Lot tLot)
+	{
+	   _lotId = new Integer(tLot._lotId);
+	   _parentId = new Integer(tLot._parentId);
+	   _hasChildren = tLot._hasChildren;
+	   _triggerTradeId = new Integer(tLot._triggerTradeId);
+	   _buyTradeId = new Integer(tLot._buyTradeId);
+	   _sellTradeId = new Integer(tLot._sellTradeId);
+	   _numShares = tLot._numShares;
+	   _basis = new BigDecimal(tLot._basis.toString()); //TODO verify works
+	   _proceeds = new BigDecimal(tLot._proceeds.toString()); //TODO verify works
+	   _state = tLot._state;
 	}
 
 
@@ -106,9 +120,9 @@ public class Lot
 //                 SimpleDate sellDate,
 //                 float buyPrice,
 //                 float sellPrice,
-//                 long numShares,
-//                 float basis,
-//                 float proceeds,
+//                 long _numShares,
+//                 float _basis,
+//                 float _proceeds,
 //                 float gain) {
 //      this.ticker = ticker;
 ////	  this.buyTradeIndex = buyTradeIndex;
@@ -116,27 +130,27 @@ public class Lot
 //      this.sellDate = sellDate;
 //      this.buyPrice = buyPrice;
 //      this.sellPrice = sellPrice;
-//      this.numShares = numShares;
-//      this.basis = basis;
-//      this.proceeds = proceeds;
+//      this.numShares = _numShares;
+//      this.basis = _basis;
+//      this.proceeds = _proceeds;
 //      this.gain = gain;
 //      this.term = Term.computeTerm(buyDate,sellDate);
 //   }
 //
-//	public Lot(String ticker, String id, long numShares,
+//	public Lot(String ticker, String id, long _numShares,
 //			SimpleDate buyDate, SimpleDate sellDate,
-//			float buyPrice, float sellPrice, float basis, float proceeds) {
+//			float buyPrice, float sellPrice, float _basis, float _proceeds) {
 //		this.ticker = ticker;
 //		this.id = id;
 //		this.sequentialID = "Lot" + counter.getNext();
-//		this.numShares = numShares;
+//		this.numShares = _numShares;
 //		this.buyDate = buyDate;
 //		this.sellDate = sellDate;
 //		this.buyPrice = buyPrice;
 //		this.sellPrice = sellPrice;
-//		this.basis = basis;
-//		this.proceeds = proceeds;
-//		this.gain = proceeds - gain;
+//		this.basis = _basis;
+//		this.proceeds = _proceeds;
+//		this.gain = _proceeds - gain;
 //		this.term = Term.computeTerm(buyDate,sellDate);
 //	}
 //   
@@ -149,9 +163,9 @@ public class Lot
 //	 * @return String
 //	 */
 //	public String toString() {
-//		return new String("   lot: [" + id + "]" + ",shares=" + numShares
+//		return new String("   lot: [" + id + "]" + ",shares=" + _numShares
 //				+ ",buyDate=" + buyDate + ",sellDate=" + sellDate
 //				+ ",buyPrice=" + buyPrice + ",sellPrice=" + sellPrice
-//				+ ",basis=" + basis + ",proceeds=" + proceeds + ",term=" + term);
+//				+ ",_basis=" + _basis + ",_proceeds=" + _proceeds + ",term=" + term);
 //	}
 }

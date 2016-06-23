@@ -36,7 +36,7 @@ public class DatabaseInterface
    
    private String _insertLotSql =
          "INSERT INTO lot "
-         + "(parent_id,has_children,trigger_trade_id,buy_trade_id,sell_trade_id,num_shares,basis,proceeds,state)"
+         + "(parent_id,has_children,trigger_trade_id,buy_trade_id,sell_trade_id,num_shares,_basis,_proceeds,_state)"
          + " VALUES (?,?,?,?,?,?,?,?,?)";
    
    private String _updateLotHasChildrenSql =
@@ -467,15 +467,15 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
 
    /**
     * Insert lot.
-    * -> int lotId;
-    * -> int parentId;
-    * -> int triggerTradeId;
-	 * -> int buyTradeId;
-	 * -> int sellTradeId;
-	 * -> int numShares;
-	 * -> BigDecimal basis;
-	 * -> BigDecimal proceeds;
-	 * -> State state;
+    * -> int _lotId;
+    * -> int _parentId;
+    * -> int _triggerTradeId;
+	 * -> int _buyTradeId;
+	 * -> int _sellTradeId;
+	 * -> int _numShares;
+	 * -> BigDecimal _basis;
+	 * -> BigDecimal _proceeds;
+	 * -> State _state;
     */
    public void insertLot(Connection aConn,Lot aLot)
    {
@@ -487,15 +487,15 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
     	   * Build the prepared insert statement.
     	   */
     	  int tIdx = 1;
-    	  setIntOrNull(pstmt,tIdx++, aLot.parentId);
-    	  pstmt.setBoolean(tIdx++,aLot.hasChildren);
-    	  pstmt.setInt(tIdx++,aLot.triggerTradeId);
-    	  pstmt.setInt(tIdx++,aLot.buyTradeId);
-    	  setIntOrNull(pstmt,tIdx++,aLot.sellTradeId);
-    	  pstmt.setInt(tIdx++,aLot.numShares);
-    	  pstmt.setBigDecimal(tIdx++,aLot.basis);
-    	  pstmt.setBigDecimal(tIdx++,aLot.proceeds);
-    	  pstmt.setString(tIdx++,aLot.state.toString());
+    	  setIntOrNull(pstmt,tIdx++, aLot._parentId);
+    	  pstmt.setBoolean(tIdx++,aLot._hasChildren);
+    	  pstmt.setInt(tIdx++,aLot._triggerTradeId);
+    	  pstmt.setInt(tIdx++,aLot._buyTradeId);
+    	  setIntOrNull(pstmt,tIdx++,aLot._sellTradeId);
+    	  pstmt.setInt(tIdx++,aLot._numShares);
+    	  pstmt.setBigDecimal(tIdx++,aLot._basis);
+    	  pstmt.setBigDecimal(tIdx++,aLot._proceeds);
+    	  pstmt.setString(tIdx++,aLot._state.toString());
 
     	  /*
     	   * Execute the batch command to save the trades to database.
@@ -509,7 +509,7 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
     	  if (genKeys.next())
     	  {
     	     int tId = genKeys.getInt(1);
-    	     aLot.lotId = tId;
+    	     aLot._lotId = tId;
     	  }
     	  else
     	  {
@@ -536,8 +536,8 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
           * Build the prepared update statement.
           */
 
-         pstmt.setBoolean(1,aLot.hasChildren);
-         pstmt.setInt(2,aLot.lotId);
+         pstmt.setBoolean(1,aLot._hasChildren);
+         pstmt.setInt(2,aLot._lotId);
 
          /*
           * Execute the update.
