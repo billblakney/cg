@@ -5,6 +5,9 @@ import javax.swing.JTable;
 import javax.swing.table.TableRowSorter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.RowFilter;
+import bbj.swing.table.render.CustomTableCellRenderer;
+import bbj.swing.table.render.RenderInteger;
+import bbj.swing.table.render.RenderTableCellInfo;
 
 @SuppressWarnings("serial")
 public class YearlyGainsTable extends JTable {

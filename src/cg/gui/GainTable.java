@@ -8,6 +8,12 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.RowFilter;
+import bbj.swing.table.render.CustomTableCellRenderer;
+import bbj.swing.table.render.RenderColoredRows;
+import bbj.swing.table.render.RenderInteger;
+import bbj.swing.table.render.RenderTableCellInfo;
+import bbj.swing.table.render.TableCellColorSet;
+import bbj.swing.table.render.TableCellColorIndexChooser;
 
 @SuppressWarnings("serial")
 public class GainTable extends JTable {
@@ -80,7 +86,7 @@ public class GainTable extends JTable {
 		tColors.add(kGainColors);
 		tColors.add(kLossColors);
 		
-		TableRowColorChooser tColorChooser =
+		TableCellColorIndexChooser tColorChooser =
 		      (JLabel label,JTable table,Object value,boolean isSelected,
 		            boolean hasFocus, int row,int column) -> 
 		{

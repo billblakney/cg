@@ -10,6 +10,9 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableCellRenderer;
 import java.awt.Component;
 import javax.swing.RowFilter;
+import bbj.swing.table.render.CustomTableCellRenderer;
+import bbj.swing.table.render.RenderInteger;
+import bbj.swing.table.render.RenderTableCellInfo;
 
 @SuppressWarnings("serial")
 public class SecurityGainsTable extends JTable {
