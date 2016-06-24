@@ -23,7 +23,7 @@ public class LotData implements LotDataProvider
       return _numShares;
    }
 
-   public float getBuyPrice()
+   public Float getBuyPrice()
    {
       return _buyPrice;
    }

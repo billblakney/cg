@@ -17,7 +17,7 @@ public interface AccountDataProvider
 	public TradeList getTradeList();
 	public Vector getSharesHeldStats(); //TODO change raw vector?
 	public Vector getTaxGains(String ticker, String year); //TODO raw vec?
-	public Vector getTaxGainLots(String ticker, String year); //TODO raw vec?
+	public Vector getGains(String ticker, String year); //TODO raw vec?
 	public Vector getSecurityGains(); //TODO raw vec?
 	public Vector getYearlyGains(); //TODO raw vec?
 }

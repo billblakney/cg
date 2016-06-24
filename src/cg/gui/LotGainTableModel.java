@@ -1,10 +1,9 @@
 package cg.gui;
 
 import java.util.Vector;
-
 import javax.swing.table.AbstractTableModel;
 import javax.swing.RowFilter;
-
+import cg.GainProvider;
 import cg.OldLot;
 
 /*
@@ -73,30 +72,30 @@ public class LotGainTableModel extends AbstractTableModel implements GainColumnF
 			return ((Vector) (data.elementAt(arg0))).elementAt(arg1);
 	}
 
-	public void setData(Vector lots){
+	public void setData(Vector<GainProvider> aGains){
 		data = new Vector();
-		for (int i = 0; i < lots.size(); i++)
-			data.addElement(getDataRow(lots.elementAt(i)));
+		for (int i = 0; i < aGains.size(); i++)
+			data.addElement(getDataRow(aGains.elementAt(i)));
 		fireTableDataChanged();
 	}
 
 	/**
 	 * Get vector data for a gain.
 	 */
-	private Vector getDataRow(Object row) {
-		OldLot lot = (OldLot) row;
+	private Vector<GainProvider> getDataRow(Object row) {
+		GainProvider tGain = (GainProvider) row;
 
 		Vector v = new Vector();
-		v.addElement(new Integer(lot.numShares)); //0
-		v.addElement(lot.ticker); //1
-		v.addElement(lot.buyDate); //2
-		v.addElement(lot.buyPrice); //3
-		v.addElement(lot.sellDate); //4
-		v.addElement(lot.sellPrice); //5
-		v.addElement(new Integer(Math.round(lot.proceeds))); //6
-		v.addElement(new Integer(Math.round(lot.basis))); //7
-		v.addElement(new Integer(Math.round(lot.gain))); //8
-		v.addElement(lot.term); //9
+		v.addElement(tGain.getNumShares()); //0
+		v.addElement(tGain.getSymbol()); //1
+		v.addElement(tGain.getBuyDate()); //2
+		v.addElement(tGain.getBuyPrice()); //3
+		v.addElement(tGain.getSellDate()); //4
+		v.addElement(tGain.getSellPrice()); //5
+		v.addElement(new Integer(Math.round(tGain.getProceeds()))); //6
+		v.addElement(new Integer(Math.round(tGain.getBasis()))); //7
+		v.addElement(new Integer(Math.round(tGain.getGain()))); //8
+		v.addElement(tGain.getTerm()); //9
 //		v.addElement(new Integer(lot.computedTaxYear.intValue())); //10
 //		v.addElement(new Integer(lot.claimedTaxYear.intValue())); //11
 		return v;

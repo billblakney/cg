@@ -7,7 +7,7 @@ import java.util.*;
  * This class represents a single record of the cap gains for a sell trade. The
  * record corresponds to an entry that would be entered in a tax filing.
  */
-public class TaxGain extends OldLot {
+public class TaxGain extends OldLot implements GainProvider {
 
 	/**
 	 * The date of the most recent buy corresponding to this tax gain. The date
@@ -35,7 +35,7 @@ public class TaxGain extends OldLot {
 	/**
 	 * The gain components for this trade.
 	 */
-	protected Vector<OldLot> gainComps = new Vector<OldLot>();
+	protected Vector<GainProvider> gainComps = new Vector<GainProvider>();
 
 	/**
 	 * Constructor.
@@ -49,6 +49,93 @@ public class TaxGain extends OldLot {
 		this.sellDate = sellDate;
 	}
 
+	// using this one
+	public TaxGain(
+	      String ticker,
+	      SimpleDate buyDate,
+	      SimpleDate sellDate,
+	      float buyPrice,
+	      float sellPrice,
+	      int numShares,
+	      float basis,
+	      float proceeds,
+	      float gain)
+	{
+	   super(ticker,buyDate,sellDate,buyPrice,sellPrice,numShares,basis,
+	         proceeds,gain);
+	}
+
+	// maybe not used
+	public TaxGain(String ticker, String id, int numShares,
+			SimpleDate buyDate, SimpleDate sellDate,
+			float buyPrice, float sellPrice, float basis, float proceeds)
+	{
+	   super(ticker, id, numShares,
+			buyDate, sellDate,
+			buyPrice, sellPrice, basis, proceeds);
+	}
+
+   @Override
+   public String getSymbol()
+   {
+      return ticker;
+   }
+
+   @Override
+   public Integer getNumShares()
+   {
+      return numShares;
+   }
+
+   @Override
+   public SimpleDate getBuyDate()
+   {
+      return buyDate;
+   }
+
+   @Override
+   public Float getBuyPrice()
+   {
+      return buyPrice;
+   }
+
+   @Override
+   public SimpleDate getSellDate()
+   {
+      return sellDate;
+   }
+
+   @Override
+   public Float getSellPrice()
+   {
+      return sellPrice;
+   }
+
+   @Override
+   public Float getProceeds()
+   {
+      return proceeds;
+   }
+
+   @Override
+   public Float getBasis()
+   {
+      return basis;
+   }
+
+   @Override
+   public Float getGain()
+   {
+      return gain;
+   }
+
+   @Override
+   public Term getTerm()
+   {
+      return term;
+   }
+
+
 	/**
 	 * Add a gain component to this tax gain. Note that _proceeds, _basis, gain,
 	 * and buyDate of this tax gain will be updated to include the component
@@ -59,11 +146,7 @@ public class TaxGain extends OldLot {
 		proceeds = (float) 0.0;
 		basis = (float) 0.0;
 		gain = (float) 0.0;
-		gainComps = new Vector<OldLot>();
-	}
-
-	public float getGain() {
-		return gain;
+		gainComps = new Vector<GainProvider>();
 	}
 
 	/**
@@ -85,7 +168,7 @@ public class TaxGain extends OldLot {
 		this.basis += basis;
 		this.gain += componentGain;
 
-		OldLot gc = new OldLot(ticker, buyDate,sellDate,buyPrice,sellPrice,
+		GainProvider gc = new TaxGain(ticker, buyDate,sellDate,buyPrice,sellPrice,
 				numShares, basis, proceeds, componentGain);
 		gainComps.addElement(gc);
 
@@ -93,23 +176,23 @@ public class TaxGain extends OldLot {
 		// If there are more than one gain components, set buy date to
 		// "various".
 		if (gainComps.size() == 1) {
-			this.buyDate = gc.buyDate;
-			this.newestBuyDate = gc.buyDate;
-			this.term = gc.term;
-			buyDateRange.setBeginDate(gc.buyDate);
+			this.buyDate = gc.getBuyDate();
+			this.newestBuyDate = gc.getBuyDate();
+			this.term = gc.getTerm();
+			buyDateRange.setBeginDate(gc.getBuyDate());
 		} else {
 			// First, update term.
-			if (gc.term != this.term)
+			if (gc.getTerm() != this.term)
 				this.term = Term.MIXED;
 
 			// Next, update oldestBuyDate and newestBuyDate as appropriate.
-			if (gc.buyDate.before(this.buyDate) == true) {
-				this.buyDate = gc.buyDate;
-				buyDateRange.setBeginDate(gc.buyDate);
+			if (gc.getBuyDate().before(this.buyDate) == true) {
+				this.buyDate = gc.getBuyDate();
+				buyDateRange.setBeginDate(gc.getBuyDate());
 			}
-			if (gc.buyDate.after(this.newestBuyDate) == true) {
-				this.newestBuyDate = gc.buyDate;
-				buyDateRange.setEndDate(gc.buyDate);
+			if (gc.getBuyDate().after(this.newestBuyDate) == true) {
+				this.newestBuyDate = gc.getBuyDate();
+				buyDateRange.setEndDate(gc.getBuyDate());
 			}
 		}
 	}

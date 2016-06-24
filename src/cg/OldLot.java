@@ -181,7 +181,7 @@ public class OldLot implements LotDataProvider {
 	}
 
 	@Override
-   public float getBuyPrice()
+   public Float getBuyPrice()
 	{
 	   return buyPrice;
 	}
@@ -192,10 +192,6 @@ public class OldLot implements LotDataProvider {
 	   return term;
 	}
 
-   
-   public float getGain() {
-	   return gain;
-   }
 	/**
 	 * Builds a string representation of the Lot.
 	 * 

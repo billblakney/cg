@@ -75,7 +75,7 @@ public class AccountDataProxy extends AbstractAccountData
    }
 
    @Override
-   public Vector getTaxGainLots(String ticker, String year)
+   public Vector getGains(String ticker, String year)
    {
       // TODO Auto-generated method stub
       return null;
