@@ -9,7 +9,7 @@
 </listAttribute>
 <mapAttribute key="org.eclipse.debug.core.environmentVariables">
 <mapEntry key="CG_DATADIR" value="${workspace_loc}/cg/data"/>
-<mapEntry key="CG_TRADEFILE" value="${workspace_loc}/cg/data/EtMain/Current/allTrades.txt"/>
+<mapEntry key="CG_TRADEFILE" value="${workspace_loc}/cg/data/EtRoth/allTrades.txt"/>
 </mapAttribute>
 <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
