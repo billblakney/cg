@@ -4,3 +4,28 @@ http://justinmwright.com/?p=72
 create procedure atest() reads sql data dynamic result sets 1 begin atomic
 declare result scroll cursor with hold with return for select * from acct;
 open result; end
+
+Tax Gain Lots < GainProvider
+-----------------------------
+symbol      - sellTrade
+numShares   - lot
+buyDate     - buyTrade
+buyPrice    - buyTrade?
+sellDate    - sellTrade
+sellPrice   - sellTrade?
+proceeds    - lot
+basis       - lot
+gain        - computed:lot
+term        - lot?
+
+Existing Table             <--->        New Table
+All Trades (->Trades)                   Trades          # Just the trades themselves.
+All Trades (->Trades)                   Trade Results   # Some variation somehow showing results, like resulting gain, etc. Could be optional columns on (1).
+Shares Held (->Open Position - Summary) Open Positions  # Detail node.
+Lots Held (->Open Positions - Detail)   Open Positions  # Summary node.
+Tax Gains (->Gains - Summary)           Gains           # Summary node.
+Tax Gain Lots (->Gains - Detail)        Gains           # Detail node.
+Gains By Security                       Gains By Security # Maybe some enhancements or variation.
+Gains By Year                           Gains By Year     # Maybe some enhancements or variation.
+
+                 
