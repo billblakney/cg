@@ -12,9 +12,7 @@ import java.sql.Statement;
 import java.util.Collections;
 import java.util.Vector;
 import java.util.GregorianCalendar;
-import cg.AccountInfo;
 import cg.BuyTrade;
-import cg.Lot;
 import cg.LotData;
 import cg.LotDataProvider;
 import cg.SellTrade;
@@ -77,45 +75,25 @@ public class DatabaseInterface
 
       try
       {
-// begin
-         CallableStatement call = aConn.prepareCall("call atest()");
-//         call.setString(1, "Paul");
-//         call.setString(2, "Smith");
-         call.execute();
-         if (call.getMoreResults())
-         {
-System.out.println("Got result ==============================");
-             ResultSet result = call.getResultSet();
-            while (result.next())
-            {
-System.out.println("##################!!!!!!!!!!!!====================@@@@@@@@@@");
-               System.out.println("acct_id: " + result.getInt("acct_id"));
-               System.out.println("name: " + result.getString("name"));
-               System.out.println("acct_type_id: " + result.getInt("acct_type_id"));
-               System.out.println("investor_id: " + result.getInt("investor_id"));
-               System.out.println("broker_id: " + result.getInt("broker_id"));
-            }
-         }
-         call.close();
-         
-         
-//         Statement tSql1 = aConn.createStatement();
-//
-//         ResultSet tResults1 = tSql1.executeQuery("call atest()");
-//
-//         if (tResults1 != null)
+//// begin
+//         CallableStatement call = aConn.prepareCall("call atest()");
+//         call.execute();
+//         if (call.getMoreResults())
 //         {
-//            ResultSet rs = (ResultSet) tSql1.getObject(2);
-//            
-//System.out.println("==============================@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-//            while (tResults1.next())
+//System.out.println("Got result ==============================");
+//             ResultSet result = call.getResultSet();
+//            while (result.next())
 //            {
 //System.out.println("##################!!!!!!!!!!!!====================@@@@@@@@@@");
+//               System.out.println("acct_id: " + result.getInt("acct_id"));
+//               System.out.println("name: " + result.getString("name"));
+//               System.out.println("acct_type_id: " + result.getInt("acct_type_id"));
+//               System.out.println("investor_id: " + result.getInt("investor_id"));
+//               System.out.println("broker_id: " + result.getInt("broker_id"));
 //            }
 //         }
-//         tResults1.close();
-//         tSql1.close();
-// end
+//         call.close();
+//// end
          Statement tSql = aConn.createStatement();
 
          ResultSet tResults = tSql.executeQuery("select * from acct");

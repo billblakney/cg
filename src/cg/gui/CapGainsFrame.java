@@ -4,9 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.swing.*;
-
 import cg.*;
 import cg.db.*;
 //import CapGains.db.PostgreSQL_Loader;

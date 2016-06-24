@@ -6,8 +6,10 @@ import java.util.Iterator;
 import java.util.Observable;
 import java.util.TreeSet;
 import java.util.Vector;
+import cg.db.AccountInfo;
 import cg.db.ConnectionManager;
 import cg.db.DatabaseInterface;
+import cg.db.Lot;
 
 /*
  * Singleton class that manages the storage of data for this app.

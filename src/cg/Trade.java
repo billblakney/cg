@@ -257,10 +257,6 @@ public class Trade implements TradeDataProvider, Comparable {
 		return false;
 	}
 
-	TreeSet<Trade> getRelatedTrades() {
-		return new TreeSet<Trade>();
-	}
-
 	/**
 	 * Prints out the list of stockMgrIds.
 	 */

@@ -1,4 +1,4 @@
-package cg;
+package cg.db;
 
 import java.util.Vector;
 
