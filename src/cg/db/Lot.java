@@ -46,7 +46,7 @@ public class Lot
 	//public int term; //TODO enum
 	//public String note;
 
-	Lot()
+	public Lot()
 	{
 	   _lotId = null;
 	   _parentId = null;
@@ -60,7 +60,7 @@ public class Lot
 	   _state = State.eOpen;
 	}
 	
-	Lot(Lot tLot)
+	public Lot(Lot tLot)
 	{
 	   _lotId = new Integer(tLot._lotId);
 	   _parentId = new Integer(tLot._parentId);
