@@ -435,12 +435,29 @@ public class DataStore
       }
    }
 
-   protected Vector<Lot> getActiveOpenLots(String aTicker,int aQuantity)
+   /**
+    * Get the list of active open lots for a symbol ordered by FIFO.
+    * <p>
+    * The FIFO ordering is determined by the sequnce number of the lot's
+    * associted buy trade.
+    * <p>
+    * @param aSymbol The symbol of the lots being requested.
+    * @param aQuantity The minimum number of shares to be represented by the
+    *    returned lots.
+    * @return The list of lots ordered by FIFO and representing at least the
+    *    requested number of shares.
+    * 
+    * TODO get from db
+    */
+static int passes = 0;
+   protected Vector<Lot> getActiveOpenLots(String aSymbol,int aQuantity)
    {
       int tQuantityFound = 0;
       
       Vector<Lot> tLots = new Vector<Lot>();
       
+      _lots.sort((Lot lot1,Lot lot2)-> (lot1._buyTradeId - lot2._buyTradeId));
+
       for (Lot tLot: _lots)
       {
          if (tLot._hasChildren || tLot._state != Lot.State.eOpen){
@@ -453,7 +470,7 @@ public class DataStore
             System.exit(0);
          }
 
-         if (!tTrade.ticker.equals(aTicker)) {
+         if (!tTrade.ticker.equals(aSymbol)) {
             continue;
          }
          
@@ -464,6 +481,17 @@ public class DataStore
             break;
          }
       }
+      
+if(passes<2)
+{
+System.out.println("PASS: " + passes + " -------------------------");
+   for(int i = 0; i < tLots.size(); i++)
+      System.out.println("lotId: " + tLots.elementAt(i)._lotId + "\n"
+            + "buyTradeId: " + tLots.elementAt(i)._buyTradeId + "\n"
+            + "numShares: " + tLots.elementAt(i)._numShares
+            );
+}
+passes++;
       return tLots;
    }
    
