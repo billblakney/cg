@@ -28,4 +28,37 @@ Tax Gain Lots (->Gains - Detail)        Gains           # Detail node.
 Gains By Security                       Gains By Security # Maybe some enhancements or variation.
 Gains By Year                           Gains By Year     # Maybe some enhancements or variation.
 
+SELECT * 
+FROM (SELECT date, shares FROM trade WHERE trade_id=1) AS t1,
+ (SELECT ticker, price FROM trade WHERE trade_id=2);
+
+create view x as
+SELECT a.lot_id lot_id,
+            a.num_shares num_shares,
+            bt.date buy_date,
+            bt.price buy_price,
+            st.date sell_date,
+            st.price sell_price
+FROM lot a
+inner join trade bt
+ on a.buy_trade_id = bt.trade_id
+inner join trade st
+ on a.sell_trade_id = st.trade_id;
                  
+drop view x;
+create view x as
+SELECT a.lot_id lot_id,
+            bt.ticker symbol,
+            a.num_shares num_shares,
+            bt.trade_id bt_id,
+            bt.date buy_date,
+            bt.price buy_price,
+            st.trade_id st_id,
+            st.date sell_date,
+            st.price sell_price
+FROM lot a
+inner join trade bt
+ on a.buy_trade_id = bt.trade_id
+inner join trade st
+ on a.sell_trade_id = st.trade_id
+WHERE a.state = 'Closed';
