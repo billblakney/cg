@@ -35,7 +35,7 @@ public class DatabaseInterface
    
    private String _insertLotSql =
          "INSERT INTO lot "
-         + "(parent_id,has_children,trigger_trade_id,buy_trade_id,sell_trade_id,num_shares,_basis,_proceeds,_state)"
+         + "(parent_id,has_children,trigger_trade_id,buy_trade_id,sell_trade_id,num_shares,basis,proceeds,state)"
          + " VALUES (?,?,?,?,?,?,?,?,?)";
    
    private String _updateLotHasChildrenSql =
