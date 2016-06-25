@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.Vector;
 import java.util.GregorianCalendar;
 import cg.BuyTrade;
+import cg.GainData;
+import cg.GainProvider;
 import cg.LotData;
 import cg.LotDataProvider;
 import cg.SellTrade;
@@ -41,9 +43,11 @@ public class DatabaseInterface
    private String _updateLotHasChildrenSql =
          "UPDATE lot SET has_children = ? WHERE lot_id = ?";
    
-   private String _selectLotDataSql =
-         "SELECT symbol, buy_date, shares, buy_price FROM lotreport WHERE acct_id = ?";
+   private String _selectOpenPositionsSql =
+         "SELECT symbol, shares, buy_date, buy_price FROM openlotreport WHERE acct_id = ?";
    
+   private String _selectGainsSql =
+         "SELECT symbol, shares, buy_date, buy_price, sell_date, sell_price, basis, proceeds FROM closedlotreport WHERE acct_id = ?";
    /**
     * Constructor
     * @param aDbUrl
@@ -157,13 +161,13 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
    /**
     * Get lot report rows.
     */
-   public Vector<LotDataProvider> getLotData(Connection aConn,int aAccountId)
+   public Vector<LotDataProvider> getOpenPositions(Connection aConn,int aAccountId)
    {
       Vector<LotDataProvider> tLotDatas = new Vector<LotDataProvider>();
 
       try
       {
-         PreparedStatement tSql = aConn.prepareStatement(_selectLotDataSql);
+         PreparedStatement tSql = aConn.prepareStatement(_selectOpenPositionsSql);
          
          tSql.setInt(1,aAccountId);
 
@@ -175,8 +179,8 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
             {
                LotData tLotData = new LotData();
                tLotData.set_symbol(tResults.getString(1));
-               tLotData.set_buyDate(new SimpleDate(tResults.getDate(2)));
-               tLotData.set_numShares(tResults.getInt(3));
+               tLotData.set_numShares(tResults.getInt(2));
+               tLotData.set_buyDate(new SimpleDate(tResults.getDate(3)));
                tLotData.set_buyPrice(tResults.getFloat(4));
                tLotData.set_term(Term.MIXED);//TODO
 
@@ -192,6 +196,50 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
       }
       
       return tLotDatas;
+   }
+
+   /**
+    * Get TODO
+    */
+   public Vector<GainProvider> getGains(Connection aConn,int aAccountId)
+   {
+      Vector<GainProvider> tGains = new Vector<GainProvider>();
+
+      try
+      {
+         PreparedStatement tSql = aConn.prepareStatement(_selectGainsSql);
+         
+         tSql.setInt(1,aAccountId);
+
+         ResultSet tResults = tSql.executeQuery();
+
+         if (tResults != null)
+         {
+            while (tResults.next())
+            {
+               GainData tGain = new GainData();
+               tGain.set_symbol(tResults.getString(1));
+               tGain.set_numShares(tResults.getInt(2));
+               tGain.set_buyDate(new SimpleDate(tResults.getDate(3)));
+               tGain.set_buyPrice(tResults.getFloat(4));
+               tGain.set_sellDate(new SimpleDate(tResults.getDate(5)));
+               tGain.set_sellPrice(tResults.getFloat(6));
+               tGain.set_basis(tResults.getFloat(7));
+               tGain.set_proceeds(tResults.getFloat(8));
+               tGain.set_term(Term.MIXED);//TODO
+
+               tGains.add(tGain);
+            }
+         }
+         tResults.close();
+         tSql.close();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("***Exception:\n" + ex);
+      }
+      
+      return tGains;
    }
 
    /**

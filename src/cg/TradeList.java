@@ -130,7 +130,7 @@ public class TradeList extends Vector<Trade> {
 	 * Get the held lots for the specified year. Use "null" for year to get held
 	 * lots for all years.
 	 */
-	public Collection<LotDataProvider> getHeldLots(String year) {
+	public Collection<LotDataProvider> getOpenPositions(String year) {
 
 		Vector<LotDataProvider> heldLots = new Vector<LotDataProvider>();
 

@@ -189,16 +189,16 @@ public class DataStore
 
    //TODO don't really want this public, its only for AccountDataProxy use
 	public Vector<LotDataProvider>
-	getHeldLots(int aAccountId,String ticker, String year)
+	getOpenPositions(int aAccountId,String ticker, String year)
 	{
-		Vector<LotDataProvider> tHeldLots = new Vector<LotDataProvider>();
+		Vector<LotDataProvider> tOpenPositions = new Vector<LotDataProvider>();
 
       if (_cm != null)
       {
          Connection tConn = _cm.getConnection();
          if (tConn != null)
          {
-            tHeldLots = _dbi.getLotData(tConn, aAccountId);
+            tOpenPositions = _dbi.getOpenPositions(tConn, aAccountId);
             _cm.closeConnection(tConn);
          }
       }
@@ -207,7 +207,7 @@ public class DataStore
          //TODO
       }
 
-      return tHeldLots;
+      return tOpenPositions;
 //		Iterator<Map.Entry<String,SecurityTradeList>> i = mgrs.entrySet().iterator();
 //		while( i.hasNext() ){
 //			Map.Entry<String,SecurityTradeList> e = i.next();
@@ -215,7 +215,40 @@ public class DataStore
 //			if (ticker != null && (ticker.equals(mgr.ticker)) == false) {
 //				continue;
 //			}
-//			heldLots.addAll(mgr.getHeldLots(year));
+//			heldLots.addAll(mgr.getOpenPositions(year));
+//		}
+//		return heldLots;
+	}
+
+   //TODO don't really want this public, its only for AccountDataProxy use
+	public Vector<GainProvider>
+	getGains(int aAccountId,String ticker, String year)
+	{
+		Vector<GainProvider> tGains = new Vector<GainProvider>();
+
+      if (_cm != null)
+      {
+         Connection tConn = _cm.getConnection();
+         if (tConn != null)
+         {
+            tGains = _dbi.getGains(tConn, aAccountId);
+            _cm.closeConnection(tConn);
+         }
+      }
+      else
+      {
+         //TODO
+      }
+
+      return tGains;
+//		Iterator<Map.Entry<String,SecurityTradeList>> i = mgrs.entrySet().iterator();
+//		while( i.hasNext() ){
+//			Map.Entry<String,SecurityTradeList> e = i.next();
+//			SecurityTradeList mgr = e.getValue();
+//			if (ticker != null && (ticker.equals(mgr.ticker)) == false) {
+//				continue;
+//			}
+//			heldLots.addAll(mgr.getOpenPositions(year));
 //		}
 //		return heldLots;
 	}

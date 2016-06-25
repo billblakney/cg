@@ -164,7 +164,7 @@ public class Account extends AbstractAccountData implements AccountDataProvider 
 
 	@Override
 	public Vector<LotDataProvider>
-	getHeldLots(String ticker, String year) {
+	getOpenPositions(String ticker, String year) {
 	
 		Vector<LotDataProvider> heldLots = new Vector<LotDataProvider>();
 
@@ -175,7 +175,7 @@ public class Account extends AbstractAccountData implements AccountDataProvider 
 			if (ticker != null && (ticker.equals(mgr.ticker)) == false) {
 				continue;
 			}
-			heldLots.addAll(mgr.getHeldLots(year));
+			heldLots.addAll(mgr.getOpenPositions(year));
 		}
 		return heldLots;
 	}

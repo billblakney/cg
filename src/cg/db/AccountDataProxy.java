@@ -25,13 +25,9 @@ public class AccountDataProxy extends AbstractAccountData
       _ds = aDataStore;
    }
 
-//   @Override
-//   public Vector<LotDataProvider> getHeldLots(String ticker, String year)
-//   {
-//      // TODO Auto-generated method stub
-//      return null;
-//   }
-
+   /**
+    * Get the account name.
+    */
 	@Override
 	public String getName()
 	{
@@ -42,28 +38,35 @@ public class AccountDataProxy extends AbstractAccountData
 	   return _accountName;
 	}
 
+	/**
+	 * Get the trades of this account.
+	 */
 	public Vector<TradeDataProvider> getTrades()
 	{
       return _ds.getTrades(_accountId);
 	}
 
 	/**
+	 * Get the open positions for this account.
+	 * 
 	 * TODO may want to save ticker and year along with _lotData, and only
 	 * fetch when the ticker/year is in the request is different from the
 	 * last one. or may want to do the filtering here?
 	 */
 	@Override
 	public Vector<LotDataProvider>
-	getHeldLots(String ticker, String year)
+	getOpenPositions(String ticker, String year)
 	{
-	   return _ds.getHeldLots(_accountId,ticker,year);
+	   return _ds.getOpenPositions(_accountId,ticker,year);
 	}
 
+	/**
+	 * Get the capital gain components for this account.
+	 */
    @Override
    public Vector<GainProvider> getGains(String ticker, String year)
    {
-      // TODO Auto-generated method stub
-      return null;
+	   return _ds.getGains(_accountId,ticker,year);
    }
 
    @Override
