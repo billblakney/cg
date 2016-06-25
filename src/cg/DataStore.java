@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Observable;
 import java.util.TreeSet;
 import java.util.Vector;
+import cg.db.AccountDataProxy;
 import cg.db.AccountInfo;
 import cg.db.ConnectionManager;
 import cg.db.DatabaseInterface;
@@ -144,7 +145,7 @@ public class DataStore
 //	   return null;
 //   }
 //
-//	public Vector getTaxGains(String ticker, String year)
+//	public Vector getGains(String ticker, String year)
 //   {
 //	   return null;
 //   }
@@ -187,7 +188,7 @@ public class DataStore
    }
 
    //TODO don't really want this public, its only for AccountDataProxy use
-	protected Vector<LotDataProvider>
+	public Vector<LotDataProvider>
 	getHeldLots(int aAccountId,String ticker, String year)
 	{
 		Vector<LotDataProvider> tHeldLots = new Vector<LotDataProvider>();

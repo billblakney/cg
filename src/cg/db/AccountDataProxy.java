@@ -1,8 +1,13 @@
-package cg;
+package cg.db;
 
 import java.util.TreeSet;
 import java.util.Vector;
-import cg.db.ConnectionManager;
+import cg.AbstractAccountData;
+import cg.DataStore;
+import cg.GainProvider;
+import cg.LotDataProvider;
+import cg.TradeDataProvider;
+import cg.TradeList;
 
 public class AccountDataProxy extends AbstractAccountData
 {
@@ -14,7 +19,7 @@ public class AccountDataProxy extends AbstractAccountData
 
 	private Vector<LotDataProvider> _lotData = null;
    
-   AccountDataProxy(DataStore aDataStore, int aAccountId)
+   public AccountDataProxy(DataStore aDataStore, int aAccountId)
    {
       _accountId = aAccountId;
       _ds = aDataStore;
@@ -37,6 +42,11 @@ public class AccountDataProxy extends AbstractAccountData
 	   return _accountName;
 	}
 
+	public Vector<TradeDataProvider> getTrades()
+	{
+      return _ds.getTrades(_accountId);
+	}
+
 	/**
 	 * TODO may want to save ticker and year along with _lotData, and only
 	 * fetch when the ticker/year is in the request is different from the
@@ -49,10 +59,12 @@ public class AccountDataProxy extends AbstractAccountData
 	   return _ds.getHeldLots(_accountId,ticker,year);
 	}
 
-	public Vector<TradeDataProvider> getTrades()
-	{
-      return _ds.getTrades(_accountId);
-	}
+   @Override
+   public Vector<GainProvider> getGains(String ticker, String year)
+   {
+      // TODO Auto-generated method stub
+      return null;
+   }
 
    @Override
    public TradeList getTradeList()
@@ -62,20 +74,6 @@ public class AccountDataProxy extends AbstractAccountData
 
    @Override
    public Vector getSharesHeldStats()
-   {
-      // TODO Auto-generated method stub
-      return null;
-   }
-
-   @Override
-   public Vector getTaxGains(String ticker, String year)
-   {
-      // TODO Auto-generated method stub
-      return null;
-   }
-
-   @Override
-   public Vector getGains(String ticker, String year)
    {
       // TODO Auto-generated method stub
       return null;

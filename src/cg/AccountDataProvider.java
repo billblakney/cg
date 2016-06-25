@@ -11,13 +11,13 @@ public interface AccountDataProvider
 	 * 'year' gets held lots for all years.
 	 */
    public String getName();
-	public Vector<LotDataProvider> getHeldLots(String ticker, String year);
 	public Vector<TradeDataProvider> getTrades();
+	public Vector<LotDataProvider> getHeldLots(String ticker, String year);
+	public Vector<GainProvider> getGains(String ticker, String year);
 
 	public TradeList getTradeList();
 	public Vector getSharesHeldStats(); //TODO change raw vector?
-	public Vector getTaxGains(String ticker, String year); //TODO raw vec?
-	public Vector getGains(String ticker, String year); //TODO raw vec?
+//	public Vector getGains(String ticker, String year); //TODO raw vec?
 	public Vector getSecurityGains(); //TODO raw vec?
 	public Vector getYearlyGains(); //TODO raw vec?
 }

@@ -141,28 +141,6 @@ public class Account extends AbstractAccountData implements AccountDataProvider 
 	}
 
 	/**
-	 * Get all capital tax gains for the specified ticker and year. A value of
-	 * 'null' for 'ticker' gets gains for all tickers. A value of 'null' for
-	 * 'year' gets gains for all years.
-	 */
-	@Override
-	public Vector getTaxGains(String ticker, String year) {
-	
-		Vector gains = new Vector();
-
-		Iterator<Map.Entry<String,SecurityTradeList>> i = mgrs.entrySet().iterator();
-		while( i.hasNext() ){
-			Map.Entry<String,SecurityTradeList> e = i.next();
-			SecurityTradeList mgr = e.getValue();
-			if (ticker != null && (ticker.equals(mgr.ticker)) == false) {
-				continue;
-			}
-			gains.addAll(mgr.getGains(year));
-		}
-		return gains;
-	}
-
-	/**
 	 * Get all capital tax gain lots for the specified ticker and year. A value of
 	 * 'null' for 'ticker' gets gain lots for all tickers. A value of 'null' for
 	 * 'year' gets gain lots for all years.
