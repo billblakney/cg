@@ -7,10 +7,10 @@ import java.util.Observable;
 import java.util.TreeSet;
 import java.util.Vector;
 import cg.db.AccountDataProxy;
-import cg.db.AccountInfo;
+import cg.db.AccountRecord;
 import cg.db.ConnectionManager;
 import cg.db.DatabaseInterface;
-import cg.db.Lot;
+import cg.db.LotRecord;
 
 /*
  * Singleton class that manages the storage of data for this app.
@@ -26,15 +26,15 @@ public class DataStore
    
    Vector<Trade> _trades = new Vector<Trade>();
 
-   Vector<Lot> _lots = new Vector<Lot>();
+   Vector<LotRecord> _lots = new Vector<LotRecord>();
 
    /**
     * Print accounts.
     * TODO move, header?, etc
     */
-   public static void printAccountInfoVector(Vector<AccountInfo> aAccounts)
+   public static void printAccountInfoVector(Vector<AccountRecord> aAccounts)
    {
-	   for (AccountInfo tInfo: aAccounts)
+	   for (AccountRecord tInfo: aAccounts)
 	   {
 		   System.out.println(tInfo.toString());
 	   }
@@ -166,9 +166,9 @@ public class DataStore
 //   }
 
 
-   public Vector<AccountInfo> getAccountInfoVector()
+   public Vector<AccountRecord> getAccountInfoVector()
    {
-      Vector<AccountInfo> tAcctInfo = null;
+      Vector<AccountRecord> tAcctInfo = null;
 
       if (_cm != null)
       {
@@ -296,7 +296,7 @@ public class DataStore
       /*
        * Create a new buy lot.
        */
-      Lot tLot = new Lot();
+      LotRecord tLot = new LotRecord();
       tLot._lotId = null;
       tLot._parentId = null;
       tLot._hasChildren = false;
@@ -307,7 +307,7 @@ public class DataStore
 		float tBasis = ((float)aTrade.numShares) * aTrade.sharePrice + aTrade.comm.floatValue(); //TODO use method?
       tLot._basis = new BigDecimal(tBasis); //TODO
       tLot._proceeds = new BigDecimal(0.0);
-      tLot._state = Lot.State.eOpen;
+      tLot._state = LotRecord.State.eOpen;
       tLot._hasChildren = false;
 
       /*
@@ -331,14 +331,14 @@ public class DataStore
    {
       int tNumToDistribute = aTrade.numShares;
 
-      Vector<Lot> tLots = getActiveOpenLots(aTrade.ticker,aTrade.numShares);
-      Iterator<Lot> tIterator = tLots.iterator();
+      Vector<LotRecord> tLots = getActiveOpenLots(aTrade.ticker,aTrade.numShares);
+      Iterator<LotRecord> tIterator = tLots.iterator();
 
-      Vector<Lot> tNewLots = new Vector<Lot>();
+      Vector<LotRecord> tNewLots = new Vector<LotRecord>();
       
       while (tIterator.hasNext() && tNumToDistribute > 0)
       {
-         Lot tLot = tIterator.next();
+         LotRecord tLot = tIterator.next();
          /*
           * This is the case where the lot is bigger than the number of
           * shares left to be processed. This will produce two new lots:
@@ -349,7 +349,7 @@ public class DataStore
          {
             // two new lots and update old.hasChildren
             
-            Lot tNewClosedLot = new Lot();
+            LotRecord tNewClosedLot = new LotRecord();
             {
             tNewClosedLot._parentId = tLot._lotId;
             tNewClosedLot._hasChildren = false;
@@ -363,12 +363,12 @@ public class DataStore
                   ((float)tNumToDistribute) * aTrade.sharePrice.floatValue()
                      - aTrade.comm.floatValue();
             tNewClosedLot._proceeds = new BigDecimal(tProceeds);
-            tNewClosedLot._state = Lot.State.eClosed;
+            tNewClosedLot._state = LotRecord.State.eClosed;
             }
 
             tNewLots.add(tNewClosedLot);
 
-            Lot tNewOpenLot = new Lot();
+            LotRecord tNewOpenLot = new LotRecord();
             {
             tNewOpenLot._parentId = tLot._lotId;
             tNewOpenLot._hasChildren = false;
@@ -379,7 +379,7 @@ public class DataStore
             float tFactor = (float)tNewOpenLot._numShares/(float)tLot._numShares;
             tNewOpenLot._basis = new BigDecimal(tFactor*tLot._basis.floatValue());
             tNewOpenLot._proceeds = new BigDecimal(0.0);
-            tNewOpenLot._state = Lot.State.eOpen;
+            tNewOpenLot._state = LotRecord.State.eOpen;
             }
 
             tNewLots.add(tNewOpenLot);
@@ -395,7 +395,7 @@ public class DataStore
          {
             // new lot and update old.hasChildren
 
-            Lot tNewClosedLot = new Lot();
+            LotRecord tNewClosedLot = new LotRecord();
             {
             tNewClosedLot._parentId = tLot._lotId;
             tNewClosedLot._hasChildren = false;
@@ -408,7 +408,7 @@ public class DataStore
                   ((float)tNumToDistribute) * aTrade.sharePrice.floatValue()
                      - aTrade.comm.floatValue();
             tNewClosedLot._proceeds = new BigDecimal(tProceeds);
-            tNewClosedLot._state = Lot.State.eClosed;
+            tNewClosedLot._state = LotRecord.State.eClosed;
             }
 
             tNewLots.add(tNewClosedLot);
@@ -424,7 +424,7 @@ public class DataStore
          }
       }
       
-      for (Lot tLot: tNewLots)
+      for (LotRecord tLot: tNewLots)
       {
          if (aConn != null)
          {
@@ -450,17 +450,17 @@ public class DataStore
     * TODO get from db
     */
 static int passes = 0;
-   protected Vector<Lot> getActiveOpenLots(String aSymbol,int aQuantity)
+   protected Vector<LotRecord> getActiveOpenLots(String aSymbol,int aQuantity)
    {
       int tQuantityFound = 0;
       
-      Vector<Lot> tLots = new Vector<Lot>();
+      Vector<LotRecord> tLots = new Vector<LotRecord>();
       
-      _lots.sort((Lot lot1,Lot lot2)-> (lot1._buyTradeId - lot2._buyTradeId));
+      _lots.sort((LotRecord lot1,LotRecord lot2)-> (lot1._buyTradeId - lot2._buyTradeId));
 
-      for (Lot tLot: _lots)
+      for (LotRecord tLot: _lots)
       {
-         if (tLot._hasChildren || tLot._state != Lot.State.eOpen){
+         if (tLot._hasChildren || tLot._state != LotRecord.State.eOpen){
             continue;
          }
 

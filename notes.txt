@@ -46,7 +46,7 @@ inner join trade st
  on a.sell_trade_id = st.trade_id;
                  
 drop view x;
-create view x as
+create view tempViewClosedLots as
 SELECT a.lot_id lot_id,
             bt.ticker symbol,
             a.num_shares num_shares,

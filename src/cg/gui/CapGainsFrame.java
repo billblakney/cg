@@ -234,9 +234,9 @@ System.out.println("dbUrl: " + dbUrl);
 		if (_dataStore != null)
 		{
 		   // TODO kind of ugly; add method to get names directly
-		   Vector<AccountInfo> tAccounts = _dataStore.getAccountInfoVector();
-//		   tAccountNames = AccountInfo.getNames(tAccounts); //TODO maybe deprecate getNames
-		   for (AccountInfo tInfo: tAccounts)
+		   Vector<AccountRecord> tAccounts = _dataStore.getAccountInfoVector();
+//		   tAccountNames = AccountRecord.getNames(tAccounts); //TODO maybe deprecate getNames
+		   for (AccountRecord tInfo: tAccounts)
 		   {
 		      tAccountNames.put(tInfo.acct_id, tInfo.name);
 		   }
@@ -281,10 +281,10 @@ System.out.println("dbUrl: " + dbUrl);
 	@Deprecated
 	private void actionSelectAccount() {
 
-		Vector<AccountInfo> accts = _dataStore.getAccountInfoVector();
+		Vector<AccountRecord> accts = _dataStore.getAccountInfoVector();
 		Object[] choices = accts.toArray();
 
-		AccountInfo selected_acct = (AccountInfo) JOptionPane.showInputDialog(
+		AccountRecord selected_acct = (AccountRecord) JOptionPane.showInputDialog(
 				this, "Select an account", "Select Account",
 				JOptionPane.PLAIN_MESSAGE, null, choices, choices[0]);
 
@@ -310,8 +310,8 @@ System.out.println("dbUrl: " + dbUrl);
 	private void actionLoadAccountTradeFile()
 	{
 		// Get all accounts for dialog selection.
-		Vector<AccountInfo> tAccountInfo = _dataStore.getAccountInfoVector();
-		Vector<String> tAccountNames = AccountInfo.getNames(tAccountInfo);
+		Vector<AccountRecord> tAccountInfo = _dataStore.getAccountInfoVector();
+		Vector<String> tAccountNames = AccountRecord.getNames(tAccountInfo);
 //		DataStore.printAccountInfoVector(tAccountInfo);
 
 		// Launch the load trade file dialog.
@@ -324,7 +324,7 @@ System.out.println("dbUrl: " + dbUrl);
 
 			// Get info selected by user in the dialog.
 			String tAccountName = tDialog.getAccountName();
-			int tAccountId = AccountInfo.getAccountId(tAccountInfo, tAccountName);
+			int tAccountId = AccountRecord.getAccountId(tAccountInfo, tAccountName);
 			String tTradeFileName = tDialog.getTradeFileName();
 
 			System.out.println("user selected account " + tAccountName + ", id " + tAccountId);
