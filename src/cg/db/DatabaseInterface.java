@@ -29,25 +29,36 @@ public class DatabaseInterface
 {
    /** Singleton of this class. */
    static private DatabaseInterface _hsqldbLoader = null;
+
+   private String tClearTradesAndLots =
+      "DELETE FROM lot;" +
+      "DELETE FROM trade;" +
+      "ALTER TABLE lot ALTER COLUMN lot_id RESTART WITH 9000;" +
+      "ALTER TABLE trade ALTER COLUMN trade_id RESTART WITH 8000;";
    
    private String _insertTradeSql =
-         "INSERT INTO trade "
-         + "(acct_id,seqnum,date,buysell,ticker,shares,price,commission,special_rule)"
-         + " VALUES (?,?,?,?,?,?,?,?,?)";
+      "INSERT INTO trade "
+      + "(acct_id,seqnum,date,buysell,ticker,shares,price,commission,"
+      + "special_rule)"
+      + " VALUES (?,?,?,?,?,?,?,?,?)";
    
    private String _insertLotSql =
-         "INSERT INTO lot "
-         + "(parent_id,has_children,trigger_trade_id,buy_trade_id,sell_trade_id,num_shares,basis,proceeds,state)"
-         + " VALUES (?,?,?,?,?,?,?,?,?)";
+      "INSERT INTO lot "
+      + "(parent_id,has_children,trigger_trade_id,buy_trade_id,sell_trade_id,"
+      + "num_shares,basis,proceeds,state)"
+      + " VALUES (?,?,?,?,?,?,?,?,?)";
    
    private String _updateLotHasChildrenSql =
-         "UPDATE lot SET has_children = ? WHERE lot_id = ?";
+      "UPDATE lot SET has_children = ? WHERE lot_id = ?";
    
    private String _selectOpenPositionsSql =
-         "SELECT symbol, shares, buy_date, buy_price FROM openlotreport WHERE acct_id = ?";
+      "SELECT symbol, shares, buy_date, buy_price FROM openlotreport "
+      + "WHERE acct_id = ?";
    
    private String _selectGainsSql =
-         "SELECT lot_id, symbol, num_shares, buy_date, buy_price, sell_date, sell_price, basis, proceeds FROM closedlotreport WHERE acct_id = ?";
+      "SELECT lot_id,symbol,num_shares,buy_date,buy_price,sell_date,"
+      + "sell_price,basis,proceeds FROM closedlotreport WHERE acct_id = ?";
+
    /**
     * Constructor
     * @param aDbUrl
@@ -79,7 +90,13 @@ public class DatabaseInterface
 
       try
       {
-//// begin
+//// begin demonstrate getting a result set from a stored procedure
+////CREATE PROCEDURE atest()
+////READS SQL DATA DYNAMIC RESULT SETS 1
+////BEGIN ATOMIC
+////  DECLARE RESULT SCROLL CURSOR WITH HOLD WITH RETURN FOR SELECT * FROM acct;
+////  OPEN RESULT;
+////END
 //         CallableStatement call = aConn.prepareCall("call atest()");
 //         call.execute();
 //         if (call.getMoreResults())
@@ -98,6 +115,7 @@ public class DatabaseInterface
 //         }
 //         call.close();
 //// end
+
          Statement tSql = aConn.createStatement();
 
          ResultSet tResults = tSql.executeQuery("select * from acct");
@@ -126,6 +144,23 @@ public class DatabaseInterface
       }
 
       return accounts;
+   }
+
+   /**
+    * Clear all trades and lots.
+    */
+   public void clearAllTradesAndLots(Connection aConn)
+   {
+      try
+      {
+         Statement tStatement = aConn.createStatement();
+         tStatement.executeUpdate(tClearTradesAndLots);
+         tStatement.close();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("ERROR:\n" + ex);
+      }
    }
 
    public String getAccountName(Connection aConn,int aAccountId)

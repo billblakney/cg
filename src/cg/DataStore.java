@@ -61,6 +61,24 @@ public class DataStore
       _dbi = DatabaseInterface.getInstance();
    }
    
+   public void clearAllTradesAndLots()
+   {
+
+      if (_cm != null)
+      {
+         Connection tConn = _cm.getConnection();
+         if (tConn != null)
+         {
+            _dbi.clearAllTradesAndLots(tConn);
+            _cm.closeConnection(tConn);
+         }
+      }
+      else
+      {
+         //TODO
+      }
+   }
+
    public AbstractAccountData getAccountDataProvider(int aAccountId)
    {
       return new AccountDataProxy(this,aAccountId);

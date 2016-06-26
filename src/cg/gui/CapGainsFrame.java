@@ -305,6 +305,14 @@ System.out.println("dbUrl: " + dbUrl);
 	}
 
 	/**
+	 * Clears existing trades. Does this by replacing the existing account with
+	 * a new empty one.
+	 */
+	private void actionLegacyClearTrades() {
+		legacyAccount.removeAllTrades();
+	}
+
+	/**
 	 * TODO Using this routine to develop the DB capability.
 	 */
 	private void actionLoadAccountTradeFile()
@@ -346,6 +354,14 @@ System.out.println("dbUrl: " + dbUrl);
 	}
 
 	/**
+	 * Clears existing trades. Does this by replacing the existing account with
+	 * a new empty one.
+	 */
+	private void actionClearTrades() {
+		_dataStore.clearAllTradesAndLots();
+	}
+
+	/**
 	 * Loads new trades into the displayed account.
 	 * 
 	 * @param tradeFile
@@ -354,14 +370,6 @@ System.out.println("dbUrl: " + dbUrl);
 	private void actionLoadTrades(String tradeFile) {
 		TradeList trades = TradeFileReader.loadTradeFile(tradeFile);
 		legacyAccount.addTrades(trades);
-	}
-
-	/**
-	 * Clears existing trades. Does this by replacing the existing account with
-	 * a new empty one.
-	 */
-	private void actionClearTrades() {
-		legacyAccount.removeAllTrades();
 	}
 
 	/**
@@ -389,6 +397,7 @@ System.out.println("dbUrl: " + dbUrl);
 		final String SELECT_INVESTOR = "Select Investor";
 		final String SELECT_DB_ACCOUNT = "Select DB Account";
 		final String LEGACY_LOAD_TRADE_FILE = "LEGACY Load Account Trade File";
+		final String LEGACY_CLEAR_TRADES = "LEGACY Clear Trades";
 		final String LOAD_TRADE_FILE = "Load Account Trade File";
 		final String CLEAR_TRADES = "Clear Trades";
 		final String REMOVE_ALL_REPORTS = "Remove All Reports";
@@ -413,44 +422,51 @@ System.out.println("dbUrl: " + dbUrl);
 
 			// Create a "File" menu.
 			JMenu fileMenu = new JMenu("File");
+			
+			JMenuItem tItem;
 
 			// Add "Add Investor" menu item to the "File" menu.
-			JMenuItem itemAddInvestor = new JMenuItem(ADD_INVESTOR);
-			itemAddInvestor.addActionListener(this);
-			fileMenu.add(itemAddInvestor);
+			tItem = new JMenuItem(ADD_INVESTOR);
+			tItem.addActionListener(this);
+			fileMenu.add(tItem);
 
 			// Add "Select Investor" menu item to the "File" menu.
-			JMenuItem itemSelectInvestor = new JMenuItem(SELECT_INVESTOR);
-			itemSelectInvestor.addActionListener(this);
-			fileMenu.add(itemSelectInvestor);
+			tItem = new JMenuItem(SELECT_INVESTOR);
+			tItem.addActionListener(this);
+			fileMenu.add(tItem);
 
 			// Add "Select DB Account" menu item to the "File" menu.
-			JMenuItem itemSelectAccount = new JMenuItem(SELECT_DB_ACCOUNT);
-			itemSelectAccount.addActionListener(this);
+			tItem = new JMenuItem(SELECT_DB_ACCOUNT);
+			tItem.addActionListener(this);
 			if (dbUrl != null){
-			   itemSelectAccount.setEnabled(false);
+			   tItem.setEnabled(false);
 			}
-			fileMenu.add(itemSelectAccount);
+			fileMenu.add(tItem);
 
-			// Add "Select File Account" menu item to the "File" menu.
-			JMenuItem itemSelectFileAccount = new JMenuItem(LEGACY_LOAD_TRADE_FILE);
-			itemSelectFileAccount.addActionListener(this);
-			fileMenu.add(itemSelectFileAccount);
+			// Add "LEGACY Load Trades From File" menu item to the "File" menu.
+			tItem = new JMenuItem(LEGACY_LOAD_TRADE_FILE);
+			tItem.addActionListener(this);
+			fileMenu.add(tItem);
+
+			// Add "LEGACY Clear Trades" menu item to the "File" menu.
+			tItem = new JMenuItem(LEGACY_CLEAR_TRADES);
+			tItem.addActionListener(this);
+			fileMenu.add(tItem);
 
 			// Add "Load Trades From File" menu item to the "File" menu.
-			JMenuItem itemLoadTradeFile = new JMenuItem(LOAD_TRADE_FILE);
-			itemLoadTradeFile.addActionListener(this);
-			fileMenu.add(itemLoadTradeFile);
+			tItem = new JMenuItem(LOAD_TRADE_FILE);
+			tItem.addActionListener(this);
+			fileMenu.add(tItem);
 
 			// Add "Clear Trades" menu item to the "File" menu.
-			JMenuItem itemClearTrades = new JMenuItem(CLEAR_TRADES);
-			itemClearTrades.addActionListener(this);
-			fileMenu.add(itemClearTrades);
+			tItem = new JMenuItem(CLEAR_TRADES);
+			tItem.addActionListener(this);
+			fileMenu.add(tItem);
 
 			// Add "Remove All Reports" menu item to the "File" menu.
-			JMenuItem itemRemoveAllReports = new JMenuItem(REMOVE_ALL_REPORTS);
-			itemRemoveAllReports.addActionListener(this);
-			fileMenu.add(itemRemoveAllReports);
+			tItem = new JMenuItem(REMOVE_ALL_REPORTS);
+			tItem.addActionListener(this);
+			fileMenu.add(tItem);
 
 			// Add the "File" menu to the menu bar.
 			add(fileMenu);
@@ -554,6 +570,12 @@ System.out.println("dbUrl: " + dbUrl);
 				{
 					System.out.println("File selection canceled");
 				}
+			}
+			// Handle "LEGACY Clear Trades".
+			else if (e.getActionCommand().equals(LEGACY_CLEAR_TRADES)) {
+				System.out.println("User selected \"LEGACY Clear Trades\"");
+				// clear the trades
+				actionLegacyClearTrades();
 			}
 			// Handle "Yearly Gains Summary Report"
 			else if (e.getActionCommand().equals(YEARLY_GAINS_SUMMARY_REPORT)) {

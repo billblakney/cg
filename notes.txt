@@ -1,26 +1,3 @@
-http://hsqldb.org/doc/guide/sqlroutines-chapt.html#src_returning_data
-http://justinmwright.com/?p=72
-
-CREATE PROCEDURE atest()
-  READS SQL DATA DYNAMIC RESULT SETS 1
-  BEGIN ATOMIC
-    DECLARE RESULT SCROLL CURSOR WITH HOLD WITH RETURN FOR SELECT * FROM acct;
-    OPEN RESULT;
-  END
-
-Tax Gain Lots < GainProvider
------------------------------
-symbol      - sellTrade
-numShares   - lot
-buyDate     - buyTrade
-buyPrice    - buyTrade?
-sellDate    - sellTrade
-sellPrice   - sellTrade?
-proceeds    - lot
-basis       - lot
-gain        - computed:lot
-term        - lot?
-
 Existing Table             <--->        New Table
 All Trades (->Trades)                   Trades          # Just the trades themselves.
 All Trades (->Trades)                   Trade Results   # Some variation somehow showing results, like resulting gain, etc. Could be optional columns on (1).
@@ -31,37 +8,36 @@ Tax Gain Lots (->Gains - Detail)        Gains           # Detail node.
 Gains By Security                       Gains By Security # Maybe some enhancements or variation.
 Gains By Year                           Gains By Year     # Maybe some enhancements or variation.
 
+
+
+http://hsqldb.org/doc/guide/sqlroutines-chapt.html#src_returning_data
+http://justinmwright.com/?p=72
+
+// Example HSQLDB reads sql stored procedure returning results set.
+CREATE PROCEDURE atest()
+  READS SQL DATA DYNAMIC RESULT SETS 1
+  BEGIN ATOMIC
+    DECLARE RESULT SCROLL CURSOR WITH HOLD WITH RETURN FOR SELECT * FROM acct;
+    OPEN RESULT;
+  END
+
+// Example HSQLDB modify sql stored procedure.
+CREATE PROCEDURE updateLot(IN lot_id INT)
+   MODIFIES SQL DATA
+   BEGIN ATOMIC
+     UPDATE lot SET num_shares = 5001 WHERE lot_id = 1;
+   END
+
+// Example HSQLDB modify sql stored procedure.
+// Note that ALTER is not supported.
+CREATE PROCEDURE clearAllTrades()
+   MODIFIES SQL DATA
+   BEGIN ATOMIC
+     DELETE FROM lot;
+     DELETE FROM trade;
+   END
+
+// maybe not so useful select example
 SELECT * 
 FROM (SELECT date, shares FROM trade WHERE trade_id=1) AS t1,
  (SELECT ticker, price FROM trade WHERE trade_id=2);
-
-create view x as
-SELECT a.lot_id lot_id,
-            a.num_shares num_shares,
-            bt.date buy_date,
-            bt.price buy_price,
-            st.date sell_date,
-            st.price sell_price
-FROM lot a
-inner join trade bt
- on a.buy_trade_id = bt.trade_id
-inner join trade st
- on a.sell_trade_id = st.trade_id;
-                 
-drop view x;
-create view tempViewClosedLots as
-SELECT a.lot_id lot_id,
-            bt.ticker symbol,
-            a.num_shares num_shares,
-            bt.trade_id bt_id,
-            bt.date buy_date,
-            bt.price buy_price,
-            st.trade_id st_id,
-            st.date sell_date,
-            st.price sell_price
-FROM lot a
-inner join trade bt
- on a.buy_trade_id = bt.trade_id
-inner join trade st
- on a.sell_trade_id = st.trade_id
-WHERE a.state = 'Closed';
