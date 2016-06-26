@@ -47,7 +47,7 @@ public class DatabaseInterface
          "SELECT symbol, shares, buy_date, buy_price FROM openlotreport WHERE acct_id = ?";
    
    private String _selectGainsSql =
-         "SELECT symbol, shares, buy_date, buy_price, sell_date, sell_price, basis, proceeds FROM closedlotreport WHERE acct_id = ?";
+         "SELECT lot_id, symbol, num_shares, buy_date, buy_price, sell_date, sell_price, basis, proceeds FROM closedlotreport WHERE acct_id = ?";
    /**
     * Constructor
     * @param aDbUrl
@@ -199,7 +199,7 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
    }
 
    /**
-    * Get TODO
+    * Get TODO document
     */
    public Vector<GainProvider> getGains(Connection aConn,int aAccountId)
    {
@@ -217,15 +217,18 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
          {
             while (tResults.next())
             {
+//         "SELECT lot_id, symbol, num_shares, buy_date, buy_price, sell_date, sell_price, basis, proceeds FROM closedlotreport WHERE acct_id = ?";
                GainData tGain = new GainData();
-               tGain.set_symbol(tResults.getString(1));
-               tGain.set_numShares(tResults.getInt(2));
-               tGain.set_buyDate(new SimpleDate(tResults.getDate(3)));
-               tGain.set_buyPrice(tResults.getFloat(4));
-               tGain.set_sellDate(new SimpleDate(tResults.getDate(5)));
-               tGain.set_sellPrice(tResults.getFloat(6));
-               tGain.set_basis(tResults.getFloat(7));
-               tGain.set_proceeds(tResults.getFloat(8));
+               int i = 1;
+               tGain.set_lotId(tResults.getInt(i++));
+               tGain.set_symbol(tResults.getString(i++));
+               tGain.set_numShares(tResults.getInt(i++));
+               tGain.set_buyDate(new SimpleDate(tResults.getDate(i++)));
+               tGain.set_buyPrice(tResults.getFloat(i++));
+               tGain.set_sellDate(new SimpleDate(tResults.getDate(i++)));
+               tGain.set_sellPrice(tResults.getFloat(i++));
+               tGain.set_basis(tResults.getFloat(i++));
+               tGain.set_proceeds(tResults.getFloat(i++));
                tGain.set_term(Term.MIXED);//TODO
 
                tGains.add(tGain);

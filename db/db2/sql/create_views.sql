@@ -21,19 +21,22 @@ CREATE VIEW OpenLotReport (acct_id, symbol, shares, buy_date, buy_price) as
      AND lot.has_children=false
      AND lot.state='Open'
    ORDER BY acct.acct_id, trade.ticker, lot.num_shares;
-create view tempViewClosedLots as
-   SELECT a.lot_id lot_id,
-     bt.ticker symbol,
-     a.num_shares num_shares,
-     bt.trade_id bt_id,
-     bt.date buy_date,
-     bt.price buy_price,
-     st.trade_id st_id,
-     st.date sell_date,
-     st.price sell_price
-   FROM lot a
+CREATE VIEW ClosedLotReport AS
+  SELECT a.acct_id    acct_id,
+         l.lot_id     lot_id,
+         bt.ticker    symbol,
+         l.num_shares num_shares,
+         bt.date      buy_date,
+         bt.price     buy_price,
+         st.date      sell_date,
+         st.price     sell_price,
+         l.basis      basis,
+         l.proceeds   proceeds
+   FROM lot l
      INNER JOIN trade bt
-       oN a.buy_trade_id = bt.trade_id
+       ON l.buy_trade_id = bt.trade_id
      INNER JOIN trade st
-       ON a.sell_trade_id = st.trade_id
-   WHERE a.state = 'Closed';
+       ON l.sell_trade_id = st.trade_id
+     INNER JOIN acct a
+       ON a.acct_id = st.acct_id
+    WHERE l.state = 'Closed';

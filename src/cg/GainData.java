@@ -2,6 +2,7 @@ package cg;
 
 public class GainData implements GainProvider
 {
+   protected Integer    _lotId;
    protected String     _symbol;
    protected Integer    _numShares;
    protected SimpleDate _buyDate;
@@ -12,6 +13,11 @@ public class GainData implements GainProvider
    protected Float       _proceeds;
 //   protected Float       _gain;
    protected Term       _term;
+
+   public Integer getLotId()
+   {
+      return _lotId;
+   }
 
    @Override
    public String getSymbol()
@@ -71,6 +77,11 @@ public class GainData implements GainProvider
    public Term getTerm()
    {
       return _term;
+   }
+
+   public void set_lotId(Integer _lotId)
+   {
+      this._lotId = _lotId;
    }
 
    public void set_symbol(String _symbol)
