@@ -11,7 +11,7 @@ import java.util.Vector;
 //        	   FOREIGN KEY (investor_id) REFERENCES investor(investor_id),
 //        	   FOREIGN KEY (broker_id) REFERENCES broker(broker_id));
 
-public class AccountInfo {
+public class AccountRecord {
 	public int    acct_id;
 	public String name;
 	public int    acct_type_id;
@@ -23,11 +23,11 @@ public class AccountInfo {
 	 * @param aInfos
 	 * @return A vector of account names.
 	 */
-	public static Vector<String> getNames(Vector<AccountInfo> aInfos)
+	public static Vector<String> getNames(Vector<AccountRecord> aInfos)
 	{
 		Vector<String> tNames = new Vector<String>();
 
-		for (AccountInfo tInfo: aInfos)
+		for (AccountRecord tInfo: aInfos)
 		{
 			tNames.add(tInfo.name);
 		}
@@ -37,9 +37,9 @@ public class AccountInfo {
 	/*
 	 * Get the account id corresponding to an account name.
 	 */
-	public static int getAccountId(Vector<AccountInfo> aInfos,String aName)
+	public static int getAccountId(Vector<AccountRecord> aInfos,String aName)
 	{
-		for (AccountInfo tInfo: aInfos)
+		for (AccountRecord tInfo: aInfos)
 		{
 			if (tInfo.name.equals(aName))
 			{
@@ -49,7 +49,7 @@ public class AccountInfo {
 		return -1;
 	}
 
-	public AccountInfo() {
+	public AccountRecord() {
 	}
 	
 	public String toString() {

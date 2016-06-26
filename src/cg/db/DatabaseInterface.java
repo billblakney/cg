@@ -72,10 +72,10 @@ public class DatabaseInterface
    /**
     * Get accounts.
     */
-   public Vector<AccountInfo> getAccountInfoVector(Connection aConn)
+   public Vector<AccountRecord> getAccountInfoVector(Connection aConn)
    {
       
-      Vector<AccountInfo> accounts = new Vector<AccountInfo>();
+      Vector<AccountRecord> accounts = new Vector<AccountRecord>();
 
       try
       {
@@ -106,7 +106,7 @@ public class DatabaseInterface
          {
             while (tResults.next())
             {
-               AccountInfo acct = new AccountInfo();
+               AccountRecord acct = new AccountRecord();
                acct.acct_id = tResults.getInt("acct_id");
                acct.name = tResults.getString("name");
                acct.acct_type_id = tResults.getInt("acct_type_id");
@@ -546,7 +546,7 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
 	 * -> BigDecimal _proceeds;
 	 * -> State _state;
     */
-   public void insertLot(Connection aConn,Lot aLot)
+   public void insertLot(Connection aConn,LotRecord aLot)
    {
       try
       {
@@ -595,7 +595,7 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
 
    /**
     */
-   public void updateLotHasChildren(Connection aConn,Lot aLot)
+   public void updateLotHasChildren(Connection aConn,LotRecord aLot)
    {
       try
       {

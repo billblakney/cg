@@ -6,6 +6,6 @@ import cg.TradeList;
 //TODO not being used now
 public interface CapGainsDB {
 
-	public Vector<AccountInfo> getAccountInfoVector();
+	public Vector<AccountRecord> getAccountInfoVector();
 	public TradeList getTrades(int aAccountId);
 }

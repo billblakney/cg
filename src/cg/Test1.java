@@ -1,7 +1,7 @@
 package cg;
 
 import java.util.Vector;
-import cg.db.AccountInfo;
+import cg.db.AccountRecord;
 
 public class Test1
 {
@@ -39,8 +39,8 @@ public class Test1
 	   /*
 	    * Get all accounts from the db. //TODO put to DataStore
 	    */
-	   Vector<AccountInfo> tAccountInfo = tDataStore.getAccountInfoVector();
-//	   Vector<String> tAccountNames = AccountInfo.getNames(tAccountInfo);
+	   Vector<AccountRecord> tAccountInfo = tDataStore.getAccountInfoVector();
+//	   Vector<String> tAccountNames = AccountRecord.getNames(tAccountInfo);
 
 	   DataStore.printAccountInfoVector(tAccountInfo);
 
@@ -48,7 +48,7 @@ public class Test1
 	    * Load the trades from the trade file.
 	    */
 	   TradeList tTradeList = TradeFileReader.loadTradeFile(_tradeFile);
-	   int tAccountId = AccountInfo.getAccountId(tAccountInfo, "TestAccount");
+	   int tAccountId = AccountRecord.getAccountId(tAccountInfo, "TestAccount");
 	   System.out.println("tAccountId: " + tAccountId);
 	   
 	   /*

@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 
 /**
  */
-public class Lot
+public class LotRecord
 {
 	public enum State
 	{
@@ -46,7 +46,7 @@ public class Lot
 	//public int term; //TODO enum
 	//public String note;
 
-	public Lot()
+	public LotRecord()
 	{
 	   _lotId = null;
 	   _parentId = null;
@@ -60,7 +60,7 @@ public class Lot
 	   _state = State.eOpen;
 	}
 	
-	public Lot(Lot tLot)
+	public LotRecord(LotRecord tLot)
 	{
 	   _lotId = new Integer(tLot._lotId);
 	   _parentId = new Integer(tLot._parentId);
@@ -108,13 +108,13 @@ public class Lot
 //		return buyLotID + "," + st.buySellId;
 //	}
 //
-//   Lot(){
+//   LotRecord(){
 //   }
 //   
 //   /**
 //    * Constructor that specifies the information for this gain component.
 //    */
-//   Lot(
+//   LotRecord(
 //                 String ticker,
 //                 SimpleDate buyDate,
 //                 SimpleDate sellDate,
@@ -137,12 +137,12 @@ public class Lot
 //      this.term = Term.computeTerm(buyDate,sellDate);
 //   }
 //
-//	public Lot(String ticker, String id, long _numShares,
+//	public LotRecord(String ticker, String id, long _numShares,
 //			SimpleDate buyDate, SimpleDate sellDate,
 //			float buyPrice, float sellPrice, float _basis, float _proceeds) {
 //		this.ticker = ticker;
 //		this.id = id;
-//		this.sequentialID = "Lot" + counter.getNext();
+//		this.sequentialID = "LotRecord" + counter.getNext();
 //		this.numShares = _numShares;
 //		this.buyDate = buyDate;
 //		this.sellDate = sellDate;
@@ -158,7 +158,7 @@ public class Lot
 //	   return gain;
 //   }
 //	/**
-//	 * Builds a string representation of the Lot.
+//	 * Builds a string representation of the LotRecord.
 //	 * 
 //	 * @return String
 //	 */
