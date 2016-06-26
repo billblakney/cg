@@ -1,0 +1,8 @@
+Next
+-
+
+Major
+- Processing of trades for taxable account
+
+Minor
+- Option to clear trades by acct.
