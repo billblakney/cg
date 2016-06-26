@@ -8,7 +8,7 @@ public abstract class AbstractAccountData extends Observable implements AccountD
 {
 
 //   @Override
-//   public Vector<LotDataProvider> getOpenPositions(String ticker, String year)
+//   public Vector<OpenPositionAccessor> getOpenPositions(String ticker, String year)
 //   {
 //      // TODO Auto-generated method stub
 //      return null;

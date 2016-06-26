@@ -1,6 +1,6 @@
 package cg;
 
-public class LotData implements LotDataProvider
+public class OpenPosition implements OpenPositionAccessor
 {
    protected String     _symbol;
    protected Integer    _numShares;

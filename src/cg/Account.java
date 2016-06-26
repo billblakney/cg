@@ -146,9 +146,9 @@ public class Account extends AbstractAccountData implements AccountDataProvider 
 	 * 'year' gets gain lots for all years.
 	 */
 	@Override
-	public Vector<GainProvider> getGains(String ticker, String year) {
+	public Vector<GainAccessor> getGains(String ticker, String year) {
 	
-		Vector<GainProvider> tGains = new Vector<GainProvider>();
+		Vector<GainAccessor> tGains = new Vector<GainAccessor>();
 
 		Iterator<Map.Entry<String,SecurityTradeList>> i = mgrs.entrySet().iterator();
 		while( i.hasNext() ){
@@ -163,10 +163,10 @@ public class Account extends AbstractAccountData implements AccountDataProvider 
 	}
 
 	@Override
-	public Vector<LotDataProvider>
+	public Vector<OpenPositionAccessor>
 	getOpenPositions(String ticker, String year) {
 	
-		Vector<LotDataProvider> heldLots = new Vector<LotDataProvider>();
+		Vector<OpenPositionAccessor> heldLots = new Vector<OpenPositionAccessor>();
 
 		Iterator<Map.Entry<String,SecurityTradeList>> i = mgrs.entrySet().iterator();
 		while( i.hasNext() ){

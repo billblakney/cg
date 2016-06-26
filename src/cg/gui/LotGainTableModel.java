@@ -3,7 +3,7 @@ package cg.gui;
 import java.util.Vector;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.RowFilter;
-import cg.GainProvider;
+import cg.GainAccessor;
 import cg.OldLot;
 
 /*
@@ -84,7 +84,7 @@ public class LotGainTableModel extends AbstractTableModel implements
          return ((Vector) (data.elementAt(arg0))).elementAt(arg1);
    }
 
-   public void setData(Vector<GainProvider> aGains)
+   public void setData(Vector<GainAccessor> aGains)
    {
       data = new Vector();
       for (int i = 0; i < aGains.size(); i++)
@@ -95,9 +95,9 @@ public class LotGainTableModel extends AbstractTableModel implements
    /**
     * Get vector data for a gain.
     */
-   private Vector<GainProvider> getDataRow(Object row)
+   private Vector<GainAccessor> getDataRow(Object row)
    {
-      GainProvider tGain = (GainProvider) row;
+      GainAccessor tGain = (GainAccessor) row;
 
       Vector v = new Vector();
       v.addElement(tGain.getNumShares()); // 0

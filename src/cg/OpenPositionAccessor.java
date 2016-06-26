@@ -2,7 +2,7 @@ package cg;
 
 import java.math.BigDecimal;
 
-public interface LotDataProvider
+public interface OpenPositionAccessor
 {
    public String     getSymbol();
    public SimpleDate getBuyDate();

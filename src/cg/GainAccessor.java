@@ -1,6 +1,6 @@
 package cg;
 
-public interface GainProvider
+public interface GainAccessor
 {
    public String     getSymbol();
    public Integer    getNumShares();

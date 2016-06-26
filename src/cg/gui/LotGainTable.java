@@ -8,7 +8,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.RowFilter;
-import cg.GainProvider;
+import cg.GainAccessor;
 import bbj.swing.table.render.CustomTableCellRenderer;
 import bbj.swing.table.render.RenderColoredRows;
 import bbj.swing.table.render.RenderInteger;
@@ -108,7 +108,7 @@ public class LotGainTable extends JTable
       }
    }
 
-   public void setRows(Vector<GainProvider> aGains)
+   public void setRows(Vector<GainAccessor> aGains)
    {
       model.setData(aGains);
       updateTotalGain();

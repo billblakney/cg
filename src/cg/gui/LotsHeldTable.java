@@ -9,7 +9,7 @@ import javax.swing.RowFilter.*;
 import bbj.swing.table.render.CustomTableCellRenderer;
 import bbj.swing.table.render.RenderInteger;
 import bbj.swing.table.render.RenderTableCellInfo;
-import cg.LotDataProvider;
+import cg.OpenPositionAccessor;
 import cg.Term;
 
 public class LotsHeldTable extends JTable {
@@ -58,7 +58,7 @@ public class LotsHeldTable extends JTable {
 		}
 	}
 
-	public void setRows(Vector<LotDataProvider> lots) {
+	public void setRows(Vector<OpenPositionAccessor> lots) {
 		model.setData(lots);
 		updateSharesHeld();
 	}

@@ -103,7 +103,7 @@ public class LotGainPanel extends AccountReportPanel implements ActionListener
     */
    protected void updatePanel(AbstractAccountData acct)
    {
-      Vector<GainProvider> tGains = acct.getGains(null, null); // zzz
+      Vector<GainAccessor> tGains = acct.getGains(null, null); // zzz
       table.setRows(tGains);
       tickerFilterBox.update();
       yearFilterBox.update();

@@ -19,7 +19,7 @@ import util.IntegerCounter;
  * The SellTrade uses a Vector of GainComponents to store a set of cap
  * gain components.
  */
-public class OldLot implements LotDataProvider {
+public class OldLot implements OpenPositionAccessor {
 
 	public String id;
 	public String sequentialID;

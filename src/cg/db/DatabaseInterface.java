@@ -13,10 +13,10 @@ import java.util.Collections;
 import java.util.Vector;
 import java.util.GregorianCalendar;
 import cg.BuyTrade;
-import cg.GainData;
-import cg.GainProvider;
-import cg.LotData;
-import cg.LotDataProvider;
+import cg.Gain;
+import cg.GainAccessor;
+import cg.OpenPosition;
+import cg.OpenPositionAccessor;
 import cg.SellTrade;
 import cg.SimpleDate;
 import cg.Term;
@@ -196,9 +196,9 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
    /**
     * Get lot report rows.
     */
-   public Vector<LotDataProvider> getOpenPositions(Connection aConn,int aAccountId)
+   public Vector<OpenPositionAccessor> getOpenPositions(Connection aConn,int aAccountId)
    {
-      Vector<LotDataProvider> tLotDatas = new Vector<LotDataProvider>();
+      Vector<OpenPositionAccessor> tLotDatas = new Vector<OpenPositionAccessor>();
 
       try
       {
@@ -212,7 +212,7 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
          {
             while (tResults.next())
             {
-               LotData tLotData = new LotData();
+               OpenPosition tLotData = new OpenPosition();
                tLotData.set_symbol(tResults.getString(1));
                tLotData.set_numShares(tResults.getInt(2));
                tLotData.set_buyDate(new SimpleDate(tResults.getDate(3)));
@@ -236,9 +236,9 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
    /**
     * Get TODO document
     */
-   public Vector<GainProvider> getGains(Connection aConn,int aAccountId)
+   public Vector<GainAccessor> getGains(Connection aConn,int aAccountId)
    {
-      Vector<GainProvider> tGains = new Vector<GainProvider>();
+      Vector<GainAccessor> tGains = new Vector<GainAccessor>();
 
       try
       {
@@ -253,7 +253,7 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
             while (tResults.next())
             {
 //         "SELECT lot_id, symbol, num_shares, buy_date, buy_price, sell_date, sell_price, basis, proceeds FROM closedlotreport WHERE acct_id = ?";
-               GainData tGain = new GainData();
+               Gain tGain = new Gain();
                int i = 1;
                tGain.set_lotId(tResults.getInt(i++));
                tGain.set_symbol(tResults.getString(i++));

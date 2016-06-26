@@ -1,6 +1,6 @@
 package cg;
 
-public class GainData implements GainProvider
+public class Gain implements GainAccessor
 {
    protected Integer    _lotId;
    protected String     _symbol;

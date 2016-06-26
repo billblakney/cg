@@ -12,8 +12,8 @@ public interface AccountDataProvider
 	 */
    public String getName();
 	public Vector<TradeDataProvider> getTrades();
-	public Vector<LotDataProvider> getOpenPositions(String ticker, String year);
-	public Vector<GainProvider> getGains(String ticker, String year);
+	public Vector<OpenPositionAccessor> getOpenPositions(String ticker, String year);
+	public Vector<GainAccessor> getGains(String ticker, String year);
 
 	public TradeList getTradeList();
 	public Vector getSharesHeldStats(); //TODO change raw vector?

@@ -5,7 +5,7 @@ import java.util.Vector;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.RowFilter;
 
-import cg.LotDataProvider;
+import cg.OpenPositionAccessor;
 
 /*
  * Note: These three methods must be implemented to extend AbstractTableModel
@@ -61,7 +61,7 @@ public class LotsHeldTableModel extends AbstractTableModel {
 			return ((Vector) (data.elementAt(arg0))).elementAt(arg1);
 	}
 
-	public void setData(Vector<LotDataProvider> stats){
+	public void setData(Vector<OpenPositionAccessor> stats){
 		data = new Vector();
 		for (int i = 0; i < stats.size(); i++)
 			data.addElement(getDataRow(stats.elementAt(i)));
@@ -73,7 +73,7 @@ public class LotsHeldTableModel extends AbstractTableModel {
 	 */
 	private Vector getDataRow(Object row) {
 		
-		LotDataProvider lot = (LotDataProvider) row;
+		OpenPositionAccessor lot = (OpenPositionAccessor) row;
 		Vector v = new Vector();
 		v.addElement(lot.getSymbol()); //0
 		v.addElement(lot.getBuyDate()); //1

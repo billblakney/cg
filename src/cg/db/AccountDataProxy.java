@@ -4,8 +4,8 @@ import java.util.TreeSet;
 import java.util.Vector;
 import cg.AbstractAccountData;
 import cg.DataStore;
-import cg.GainProvider;
-import cg.LotDataProvider;
+import cg.GainAccessor;
+import cg.OpenPositionAccessor;
 import cg.TradeDataProvider;
 import cg.TradeList;
 
@@ -17,7 +17,7 @@ public class AccountDataProxy extends AbstractAccountData
    
    private String _accountName = null;
 
-	private Vector<LotDataProvider> _lotData = null;
+	private Vector<OpenPositionAccessor> _lotData = null;
    
    public AccountDataProxy(DataStore aDataStore, int aAccountId)
    {
@@ -54,7 +54,7 @@ public class AccountDataProxy extends AbstractAccountData
 	 * last one. or may want to do the filtering here?
 	 */
 	@Override
-	public Vector<LotDataProvider>
+	public Vector<OpenPositionAccessor>
 	getOpenPositions(String ticker, String year)
 	{
 	   return _ds.getOpenPositions(_accountId,ticker,year);
@@ -64,7 +64,7 @@ public class AccountDataProxy extends AbstractAccountData
 	 * Get the capital gain components for this account.
 	 */
    @Override
-   public Vector<GainProvider> getGains(String ticker, String year)
+   public Vector<GainAccessor> getGains(String ticker, String year)
    {
 	   return _ds.getGains(_accountId,ticker,year);
    }
