@@ -17,170 +17,168 @@ import bbj.swing.table.render.TableCellColorSet;
 import bbj.swing.table.render.TableCellColorIndexChooser;
 
 @SuppressWarnings("serial")
-public class LotGainTable extends JTable {
-	
+public class LotGainTable extends JTable
+{
+
    final static public TableCellColorSet kGainColors = new TableCellColorSet(
-         new Color (175, 255, 175),
-         new Color (175, 225, 175),
-         Color.white,
-         Color.black,
-         Color.black,
-         Color.black);
-	
+         new Color(175, 255, 175), new Color(175, 225, 175), Color.white,
+         Color.black, Color.black, Color.black);
+
    final static public TableCellColorSet kLossColors = new TableCellColorSet(
-         new Color (255, 204, 204),
-         new Color (225, 150, 150),
-         Color.white,
-         Color.black,
-         Color.black,
-         Color.black);
+         new Color(255, 204, 204), new Color(225, 150, 150), Color.white,
+         Color.black, Color.black, Color.black);
 
-	private LotGainTableModel model;
-	private TableRowSorter<LotGainTableModel> sorter = null;
+   private LotGainTableModel model;
+   private TableRowSorter<LotGainTableModel> sorter = null;
 
-	private RowFilter<AbstractTableModel,Integer> _tickerFilter = null;
-	private RowFilter<AbstractTableModel,Integer> _yearFilter = null;
+   private RowFilter<AbstractTableModel, Integer> _tickerFilter = null;
+   private RowFilter<AbstractTableModel, Integer> _yearFilter = null;
 
-	private RowFilter<AbstractTableModel, Integer> rowFilter;
+   private RowFilter<AbstractTableModel, Integer> rowFilter;
 
-	private TotalGain totalGain;
+   private TotalGain totalGain;
 
-	public LotGainTable() {
-		model = new LotGainTableModel();
-		setModel(model);
+   public LotGainTable()
+   {
+      model = new LotGainTableModel();
+      setModel(model);
 
-		sorter = new TableRowSorter<LotGainTableModel>(model);
-		setRowSorter(sorter);
+      sorter = new TableRowSorter<LotGainTableModel>(model);
+      setRowSorter(sorter);
 
-		totalGain = new TotalGain();
+      totalGain = new TotalGain();
 
-		setRenderers();
-	}
+      setRenderers();
+   }
 
-	private void setRenderers()
-	{
-		Vector<RenderTableCellInfo> tInfos = new Vector<RenderTableCellInfo>();
-		
-		/*
-		 * Set renders for comma separated integer columns.
-		 */
-		RenderInteger tIntRenderShares = new RenderInteger(
-		      RenderInteger.COMMA_FORMAT,LotGainTableModel.COL_SHARES);
-		tInfos.add(tIntRenderShares);
-		
-		RenderInteger tIntRenderGross = new RenderInteger(
-		      RenderInteger.COMMA_FORMAT,LotGainTableModel.COL_GROSS);
-		tInfos.add(tIntRenderGross);
-		
-		RenderInteger tIntRenderBasis = new RenderInteger(
-		      RenderInteger.COMMA_FORMAT,LotGainTableModel.COL_BASIS);
-		tInfos.add(tIntRenderBasis);
-		
-		RenderInteger tIntRenderGain = new RenderInteger(
-		      RenderInteger.COMMA_FORMAT,LotGainTableModel.COL_GAIN);
-		tInfos.add(tIntRenderGain);
+   private void setRenderers()
+   {
+      Vector<RenderTableCellInfo> tInfos = new Vector<RenderTableCellInfo>();
 
-		/*
-		 * Set the render for row coloring.
-		 */
-		Vector<TableCellColorSet> tColors = new Vector<TableCellColorSet>();
-		tColors.add(kGainColors);
-		tColors.add(kLossColors);
-		
-		TableCellColorIndexChooser tColorChooser =
-		      (JLabel label,JTable table,Object value,boolean isSelected,
-		            boolean hasFocus, int row,int column) -> 
-		{
-		   TableModel tModel = table.getModel();
-		   int tModelRow = sorter.convertRowIndexToModel(row);
+      /*
+       * Set renders for comma separated integer columns.
+       */
+      RenderInteger tIntRenderShares = new RenderInteger(
+            RenderInteger.COMMA_FORMAT, LotGainTableModel.COL_SHARES);
+      tInfos.add(tIntRenderShares);
 
-		   Integer gain = (Integer)tModel.getValueAt(
-		         tModelRow,LotGainTableModel.COL_GAIN);
+      RenderInteger tIntRenderGross = new RenderInteger(
+            RenderInteger.COMMA_FORMAT, LotGainTableModel.COL_GROSS);
+      tInfos.add(tIntRenderGross);
 
-		   return ((gain > 0) ? 0:1);
-		};
+      RenderInteger tIntRenderBasis = new RenderInteger(
+            RenderInteger.COMMA_FORMAT, LotGainTableModel.COL_BASIS);
+      tInfos.add(tIntRenderBasis);
 
-		RenderColoredRows tRowRender = new RenderColoredRows(
-		     tColors,tColorChooser);
-		tInfos.add(tRowRender);
+      RenderInteger tIntRenderGain = new RenderInteger(
+            RenderInteger.COMMA_FORMAT, LotGainTableModel.COL_GAIN);
+      tInfos.add(tIntRenderGain);
 
-		/*
-		 * Create the custom table cell renderer and apply it to all columns.
-		 */
-		CustomTableCellRenderer tRenderer = new CustomTableCellRenderer(tInfos);
+      /*
+       * Set the render for row coloring.
+       */
+      Vector<TableCellColorSet> tColors = new Vector<TableCellColorSet>();
+      tColors.add(kGainColors);
+      tColors.add(kLossColors);
 
-		for (int i = 0; i < getColumnCount(); i++)
-		{
-		    getColumnModel().getColumn(i).setCellRenderer(tRenderer);
-		}
-	}
+      TableCellColorIndexChooser tColorChooser = (JLabel label, JTable table,
+            Object value, boolean isSelected, boolean hasFocus, int row,
+            int column) -> {
+         TableModel tModel = table.getModel();
+         int tModelRow = sorter.convertRowIndexToModel(row);
 
-	public void setRows(Vector<GainProvider> aGains) {
+         Integer gain = (Integer) tModel.getValueAt(tModelRow,
+               LotGainTableModel.COL_GAIN);
 
-		model.setData(aGains);
-		updateTotalGain();
-	}
+         return ((gain > 0) ? 0 : 1);
+      };
 
-	public void filterOnTicker(RowFilter<AbstractTableModel,Integer> aFilter)
-	{
-	   _tickerFilter = aFilter;
-		setRowFilter();
-	}
+      RenderColoredRows tRowRender = new RenderColoredRows(tColors,
+            tColorChooser);
+      tInfos.add(tRowRender);
 
-	public void filterOnYear(RowFilter<AbstractTableModel,Integer> aFilter)
-	{
-	   _yearFilter = aFilter;
-		setRowFilter();
-	}
+      /*
+       * Create the custom table cell renderer and apply it to all columns.
+       */
+      CustomTableCellRenderer tRenderer = new CustomTableCellRenderer(tInfos);
 
-	private void setRowFilter()
-	{
-		List<RowFilter<AbstractTableModel, Integer>> filters =
-		      new Vector<RowFilter<AbstractTableModel, Integer>>();
+      for (int i = 0; i < getColumnCount(); i++)
+      {
+         getColumnModel().getColumn(i).setCellRenderer(tRenderer);
+      }
+   }
 
-		if (_tickerFilter != null)
-		{
-		   filters.add(_tickerFilter);
-		}
+   public void setRows(Vector<GainProvider> aGains)
+   {
+      model.setData(aGains);
+      updateTotalGain();
+   }
 
-		if (_yearFilter != null)
-		{
-		   filters.add(_yearFilter);
-		}
+   public void filterOnTicker(RowFilter<AbstractTableModel, Integer> aFilter)
+   {
+      _tickerFilter = aFilter;
+      setRowFilter();
+   }
 
-		rowFilter = RowFilter.andFilter(filters);
-		sorter.setRowFilter(rowFilter);
+   public void filterOnYear(RowFilter<AbstractTableModel, Integer> aFilter)
+   {
+      _yearFilter = aFilter;
+      setRowFilter();
+   }
 
-		updateTotalGain();
-	}
+   private void setRowFilter()
+   {
+      List<RowFilter<AbstractTableModel, Integer>> filters = new Vector<RowFilter<AbstractTableModel, Integer>>();
 
-	private void updateTotalGain() {
-		Integer g = model.getTotalGain(rowFilter);
-		totalGain.setValue(g);
-	}
+      if (_tickerFilter != null)
+      {
+         filters.add(_tickerFilter);
+      }
 
-	public LotGainTable.TotalGain getTotalGain() {
-		return totalGain;
-	}
+      if (_yearFilter != null)
+      {
+         filters.add(_yearFilter);
+      }
 
-	// The observers
-	public class TotalGain extends Observable {
+      rowFilter = RowFilter.andFilter(filters);
+      sorter.setRowFilter(rowFilter);
 
-		private Integer value;
+      updateTotalGain();
+   }
 
-		TotalGain() {
-			setValue(new Integer(0));
-		}
+   private void updateTotalGain()
+   {
+      Integer g = model.getTotalGain(rowFilter);
+      totalGain.setValue(g);
+   }
 
-		Integer getValue() {
-			return value;
-		}
+   public LotGainTable.TotalGain getTotalGain()
+   {
+      return totalGain;
+   }
 
-		private void setValue(Integer value) {
-			this.value = value;
-			setChanged();
-			notifyObservers(getValue());
-			// clearChanged() automatically called by notifyObservers()
-		}
-	}
+   // The observers
+   public class TotalGain extends Observable
+   {
+
+      private Integer value;
+
+      TotalGain()
+      {
+         setValue(new Integer(0));
+      }
+
+      Integer getValue()
+      {
+         return value;
+      }
+
+      private void setValue(Integer value)
+      {
+         this.value = value;
+         setChanged();
+         notifyObservers(getValue());
+         // clearChanged() automatically called by notifyObservers()
+      }
+   }
 }

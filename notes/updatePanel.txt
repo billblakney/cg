@@ -1,0 +1,23 @@
+SomePanel updatePanel(AbstractAccountData acct)
+   Vector<GainProvider> tGains = acct.getGains(null,null);
+   table.setRows(tGains);
+
+SomeTable void setRows(Vector<GainProvider> aGains) {
+   model.setData(aGains);
+
+SomeTableModel setData(Vector<GainProvider> aGains)
+{
+   data = new Vector();
+   for (int i = 0; i < aGains.size(); i++)
+      data.addElement(getDataRow(aGains.elementAt(i)));
+
+
+SomeTableModel Vector<GainProvider> getDataRow(Object row)
+{
+   GainProvider tGain = (GainProvider) row;
+
+   Vector v = new Vector();
+   v.addElement(tGain.getNumShares()); // 0
+   v.addElement(tGain.getSymbol()); // 1
+   ...
+   return v;

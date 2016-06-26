@@ -1,3 +1,6 @@
+###############################################################################
+Table migration
+###############################################################################
 Existing Table             <--->        New Table
 All Trades (->Trades)                   Trades          # Just the trades themselves.
 All Trades (->Trades)                   Trade Results   # Some variation somehow showing results, like resulting gain, etc. Could be optional columns on (1).
@@ -8,8 +11,24 @@ Tax Gain Lots (->Gains - Detail)        Gains           # Detail node.
 Gains By Security                       Gains By Security # Maybe some enhancements or variation.
 Gains By Year                           Gains By Year     # Maybe some enhancements or variation.
 
+###############################################################################
+Data classes
+###############################################################################
 
+LotRecord
+- representation of db record
 
+LotDataProvider
+- interface used by reports
+- relative to LotReord, contains some information from foreign key records;
+
+LotData
+- implementation of LotDataProvider
+- populated with data from db view, which provides fields beyond LotRecord fields
+
+###############################################################################
+SQL and HSQLDB
+###############################################################################
 http://hsqldb.org/doc/guide/sqlroutines-chapt.html#src_returning_data
 http://justinmwright.com/?p=72
 
