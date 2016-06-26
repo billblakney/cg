@@ -1,9 +1,12 @@
 http://hsqldb.org/doc/guide/sqlroutines-chapt.html#src_returning_data
 http://justinmwright.com/?p=72
 
-create procedure atest() reads sql data dynamic result sets 1 begin atomic
-declare result scroll cursor with hold with return for select * from acct;
-open result; end
+CREATE PROCEDURE atest()
+  READS SQL DATA DYNAMIC RESULT SETS 1
+  BEGIN ATOMIC
+    DECLARE RESULT SCROLL CURSOR WITH HOLD WITH RETURN FOR SELECT * FROM acct;
+    OPEN RESULT;
+  END
 
 Tax Gain Lots < GainProvider
 -----------------------------
