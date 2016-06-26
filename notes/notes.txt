@@ -18,13 +18,15 @@ Data classes
 LotRecord
 - representation of db record
 
-LotDataProvider
+OpenPositionAccessor
 - interface used by reports
 - relative to LotReord, contains some information from foreign key records;
 
-LotData
-- implementation of LotDataProvider
+OpenPosition
+- implementation of OpenPositionAccessor
 - populated with data from db view, which provides fields beyond LotRecord fields
+
+* similar for Gain and GainAccessor
 
 ###############################################################################
 SQL and HSQLDB
