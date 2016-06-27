@@ -32,15 +32,6 @@ CREATE VIEW vwOpenPositions AS
    WHERE lot.state='Open'
    ORDER BY acct_id, symbol, acquire_seqnum;
 ---------------------------------
--- TODO really need aquire and buy dates for wash view
-CREATE VIEW OpenLotReport (acct_id, symbol, shares, buy_date, buy_price) as
-   SELECT DISTINCT acct.acct_id, trade.ticker, lot.num_shares, trade.date, trade.price
-   FROM acct, trade, lot
-   WHERE lot.first_buy_trade_id=trade.trade_id
-     AND trade.acct_id=acct.acct_id
-     AND lot.has_children=false
-     AND lot.state='Open'
-   ORDER BY acct.acct_id, trade.ticker, lot.num_shares;
 -- TODO look at last_buy vs acquire issue
 CREATE VIEW ClosedLotReport AS
   SELECT a.acct_id    acct_id,

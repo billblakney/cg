@@ -52,11 +52,6 @@ public class DatabaseInterface
    private String _updateLotHasChildrenSql =
       "UPDATE lot SET has_children = ? WHERE lot_id = ?";
    
-   //TODO rm
-//   private String _selectOpenPositionsSql =
-//      "SELECT symbol, shares, buy_date, buy_price FROM openlotreport "
-//      + "WHERE acct_id = ?";
-   
    private String _selectOpenPositionsSql =
       "SELECT symbol, shares, acquire_seqnum, basis_date, buy_date, basis FROM vwOpenPositions"
       + "WHERE acct_id = ?";
@@ -218,15 +213,6 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
          {
             while (tResults.next())
             {
-               //TODO rm
-//      "SELECT symbol, shares, acquire_seqnum, basis_date, buy_date, basis FROM vwOpenPositions"
-//   protected String     _symbol;
-//   protected Integer    _numShares;
-//   protected Integer    _acquireSeqNum;
-//   protected SimpleDate _basisDate;
-//   protected SimpleDate _buyDate;
-//   protected Float      _basis;
-//   protected Term       _term;
                OpenPosition tLotData = new OpenPosition();
                int tIdx = 1;
                tLotData.set_symbol(tResults.getString(tIdx++));

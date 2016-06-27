@@ -2,12 +2,6 @@ package cg;
 
 public class OpenPosition implements OpenPositionAccessor
 {
-   //TODO rm
-//   protected String     _symbol;
-//   protected Integer    _numShares;
-//   protected SimpleDate _buyDate;
-//   protected Float      _buyPrice;
-//   protected Term       _term;
    protected String     _symbol;
    protected Integer    _numShares;
    protected Integer    _acquireSeqNum;
