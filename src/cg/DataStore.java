@@ -319,14 +319,15 @@ public class DataStore
       tLot._parentId = null;
       tLot._hasChildren = false;
       tLot._triggerTradeId = aTrade.tradeId;
-      tLot._buyTradeId = aTrade.tradeId;
-      tLot._sellTradeId = null;
+      tLot._acquireTradeId = aTrade.tradeId;
+      tLot._lastBuyTradeId = aTrade.tradeId;
+      tLot._lastSellTradeId = null;
       tLot._numShares = aTrade.numShares;
 		float tBasis = ((float)aTrade.numShares) * aTrade.sharePrice + aTrade.comm.floatValue(); //TODO use method?
       tLot._basis = new BigDecimal(tBasis); //TODO
       tLot._proceeds = new BigDecimal(0.0);
       tLot._state = LotRecord.State.eOpen;
-      tLot._hasChildren = false;
+      tLot._closeDate = null;
 
       /*
        * Save the lot to the db.
@@ -378,8 +379,9 @@ public class DataStore
             tNewClosedLot._parentId = tLot._lotId;
             tNewClosedLot._hasChildren = false;
             tNewClosedLot._triggerTradeId = aSellTrade.tradeId;
-            tNewClosedLot._buyTradeId = tLot._buyTradeId;
-            tNewClosedLot._sellTradeId = aSellTrade.tradeId;
+            tNewClosedLot._acquireTradeId = tLot._acquireTradeId;
+            tNewClosedLot._lastBuyTradeId = tLot._lastBuyTradeId;
+            tNewClosedLot._lastSellTradeId = aSellTrade.tradeId;
             tNewClosedLot._numShares = tNumToDistribute;
             float tLotFactor =
                   (float)tNewClosedLot._numShares/(float)tLot._numShares;
@@ -392,6 +394,7 @@ public class DataStore
                      - tTradeFactor * aSellTrade.comm.floatValue();
             tNewClosedLot._proceeds = new BigDecimal(tProceeds);
             tNewClosedLot._state = LotRecord.State.eClosed;
+            tNewClosedLot._closeDate = aSellTrade.date; //TODO ntx only
             }
 
             tNewLots.add(tNewClosedLot);
@@ -404,13 +407,15 @@ public class DataStore
             tNewOpenLot._parentId = tLot._lotId;
             tNewOpenLot._hasChildren = false;
             tNewOpenLot._triggerTradeId = aSellTrade.tradeId;
-            tNewOpenLot._buyTradeId = tLot._buyTradeId;
-            tNewOpenLot._sellTradeId = null;
+            tNewOpenLot._acquireTradeId = tLot._acquireTradeId;
+            tNewOpenLot._lastBuyTradeId = tLot._lastBuyTradeId;
+            tNewOpenLot._lastSellTradeId = null;
             tNewOpenLot._numShares = tLot._numShares - tNumToDistribute;
             float tFactor = (float)tNewOpenLot._numShares/(float)tLot._numShares;
             tNewOpenLot._basis = new BigDecimal(tFactor*tLot._basis.floatValue());
             tNewOpenLot._proceeds = new BigDecimal(0.0);
             tNewOpenLot._state = LotRecord.State.eOpen;
+            tNewOpenLot._closeDate = null;
             }
 
             tNewLots.add(tNewOpenLot);
@@ -428,11 +433,26 @@ public class DataStore
 
             LotRecord tNewClosedLot = new LotRecord();
             {
+//   public Integer    _lotId;
+//   public Integer    _parentId;
+//   public boolean    _hasChildren;
+//   public Integer    _triggerTradeId;
+//   public Integer    _acquireTradeId;
+//   public Integer    _lastBuyTradeId;
+//   public Integer    _lastSellTradeId;
+//   public int        _numShares;
+//   public BigDecimal _basis;
+//   public BigDecimal _proceeds;
+//   public State      _state;
+//   public SimpleDate _closeDate;
+//	//public int term; //TODO enum
+//	//public String note;
             tNewClosedLot._parentId = tLot._lotId;
             tNewClosedLot._hasChildren = false;
             tNewClosedLot._triggerTradeId = aSellTrade.tradeId;
-            tNewClosedLot._buyTradeId = tLot._buyTradeId;
-            tNewClosedLot._sellTradeId = aSellTrade.tradeId;
+            tNewClosedLot._acquireTradeId = tLot._acquireTradeId;
+            tNewClosedLot._lastBuyTradeId = tLot._lastBuyTradeId;
+            tNewClosedLot._lastSellTradeId = aSellTrade.tradeId;
             tNewClosedLot._numShares = tLot._numShares;
             tNewClosedLot._basis = new BigDecimal(tLot._basis.floatValue());
             float tTradeFactor =
@@ -442,6 +462,7 @@ public class DataStore
                      - tTradeFactor * aSellTrade.comm.floatValue();
             tNewClosedLot._proceeds = new BigDecimal(tProceeds);
             tNewClosedLot._state = LotRecord.State.eClosed;
+            tNewClosedLot._closeDate = aSellTrade.date;
             }
 
             tNewLots.add(tNewClosedLot);
@@ -489,7 +510,8 @@ static int passes = 0;
       
       Vector<LotRecord> tLots = new Vector<LotRecord>();
       
-      _lots.sort((LotRecord lot1,LotRecord lot2)-> (lot1._buyTradeId - lot2._buyTradeId));
+      //TODO need to sort on acquire date; need to add acquire date to LotRecord, or use view
+      _lots.sort((LotRecord lot1,LotRecord lot2)-> (lot1._lastBuyTradeId - lot2._lastBuyTradeId));
 
       for (LotRecord tLot: _lots)
       {
@@ -497,7 +519,7 @@ static int passes = 0;
             continue;
          }
 
-         Trade tTrade = getTradeById(tLot._buyTradeId);
+         Trade tTrade = getTradeById(tLot._lastBuyTradeId); //TODO acquire
          if (tTrade == null){
             System.out.println("ERROR: Need more open lots to sell!");
             System.exit(0);

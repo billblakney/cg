@@ -44,9 +44,10 @@ public class DatabaseInterface
    
    private String _insertLotSql =
       "INSERT INTO lot "
-      + "(parent_id,has_children,trigger_trade_id,buy_trade_id,sell_trade_id,"
-      + "num_shares,basis,proceeds,state)"
-      + " VALUES (?,?,?,?,?,?,?,?,?)";
+      + "(parent_id,has_children,trigger_trade_id,acquire_trade_id,"
+      + "last_buy_trade_id,last_sell_trade_id,num_shares,basis,"
+      + "proceeds,state,close_date)"
+      + " VALUES (?,?,?,?,?,?,?,?,?,?,?)";
    
    private String _updateLotHasChildrenSql =
       "UPDATE lot SET has_children = ? WHERE lot_id = ?";
@@ -590,16 +591,22 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
     	  /*
     	   * Build the prepared insert statement.
     	   */
+//      + "(parent_id,has_children,trigger_trade_id,acquire_trade_id,"
+//      + "last_buy_trade_id,last_sell_trade_id,num_shares,basis,"
+//      + "proceeds,state,close_date)"
+//      + " VALUES (?,?,?,?,?,?,?,?,?,?,?)";
     	  int tIdx = 1;
     	  setIntOrNull(pstmt,tIdx++, aLot._parentId);
     	  pstmt.setBoolean(tIdx++,aLot._hasChildren);
     	  pstmt.setInt(tIdx++,aLot._triggerTradeId);
-    	  pstmt.setInt(tIdx++,aLot._buyTradeId);
-    	  setIntOrNull(pstmt,tIdx++,aLot._sellTradeId);
+    	  pstmt.setInt(tIdx++,aLot._acquireTradeId);
+    	  pstmt.setInt(tIdx++,aLot._lastBuyTradeId);
+    	  setIntOrNull(pstmt,tIdx++,aLot._lastSellTradeId);
     	  pstmt.setInt(tIdx++,aLot._numShares);
     	  pstmt.setBigDecimal(tIdx++,aLot._basis);
     	  pstmt.setBigDecimal(tIdx++,aLot._proceeds);
     	  pstmt.setString(tIdx++,aLot._state.toString());
+        setDateOrNull(pstmt,tIdx++,aLot._closeDate);
 
     	  /*
     	   * Execute the batch command to save the trades to database.
@@ -624,7 +631,7 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
       }
       catch (Exception ex)
       {
-         System.out.println("Exception writing lot to db:\n" + ex);
+         System.out.println("Exception inserting lot to db:\n" + ex);
       }
    }
 
@@ -652,7 +659,7 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
       }
       catch (Exception ex)
       {
-         System.out.println("Exception writing lot to db:\n" + ex);
+         System.out.println("Exception updating lot to db:\n" + ex);
       }
    }
 
@@ -674,6 +681,26 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
          else
          {
             aStatement.setInt(aIndex,aInteger);
+         }
+      }
+      catch (Exception ex)
+      {
+         System.out.println("Exception in setIntIfPositive:\n" + ex);
+      }
+   }
+
+   private void setDateOrNull(
+         PreparedStatement aStatement,int aIndex,SimpleDate aDate)
+   {
+      try
+      {
+         if (aDate == null)
+         {
+            aStatement.setNull(aIndex,java.sql.Types.DATE);
+         }
+         else
+         {
+            aStatement.setDate(aIndex,new Date(aDate.getDate().getTime()));
          }
       }
       catch (Exception ex)
