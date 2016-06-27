@@ -515,16 +515,6 @@ static int passes = 0;
          }
       }
       
-if(passes<2)
-{
-System.out.println("PASS: " + passes + " -------------------------");
-   for(int i = 0; i < tLots.size(); i++)
-      System.out.println("lotId: " + tLots.elementAt(i)._lotId + "\n"
-            + "buyTradeId: " + tLots.elementAt(i)._buyTradeId + "\n"
-            + "numShares: " + tLots.elementAt(i)._numShares
-            );
-}
-passes++;
       return tLots;
    }
    
