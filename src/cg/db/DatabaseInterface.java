@@ -52,8 +52,13 @@ public class DatabaseInterface
    private String _updateLotHasChildrenSql =
       "UPDATE lot SET has_children = ? WHERE lot_id = ?";
    
+   //TODO rm
+//   private String _selectOpenPositionsSql =
+//      "SELECT symbol, shares, buy_date, buy_price FROM openlotreport "
+//      + "WHERE acct_id = ?";
+   
    private String _selectOpenPositionsSql =
-      "SELECT symbol, shares, buy_date, buy_price FROM openlotreport "
+      "SELECT symbol, shares, acquire_seqnum, basis_date, buy_date, basis FROM vwOpenPositions"
       + "WHERE acct_id = ?";
    
    private String _selectGainsSql =
@@ -213,11 +218,23 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
          {
             while (tResults.next())
             {
+               //TODO rm
+//      "SELECT symbol, shares, acquire_seqnum, basis_date, buy_date, basis FROM vwOpenPositions"
+//   protected String     _symbol;
+//   protected Integer    _numShares;
+//   protected Integer    _acquireSeqNum;
+//   protected SimpleDate _basisDate;
+//   protected SimpleDate _buyDate;
+//   protected Float      _basis;
+//   protected Term       _term;
                OpenPosition tLotData = new OpenPosition();
-               tLotData.set_symbol(tResults.getString(1));
-               tLotData.set_numShares(tResults.getInt(2));
-               tLotData.set_buyDate(new SimpleDate(tResults.getDate(3)));
-               tLotData.set_buyPrice(tResults.getFloat(4));
+               int tIdx = 1;
+               tLotData.set_symbol(tResults.getString(tIdx++));
+               tLotData.set_numShares(tResults.getInt(tIdx++));
+               tLotData.set_acquireSeqNum(tResults.getInt(tIdx++));
+               tLotData.set_basisDate(new SimpleDate(tResults.getDate(tIdx++)));
+               tLotData.set_buyDate(new SimpleDate(tResults.getDate(tIdx++)));
+               tLotData.set_basis(tResults.getFloat(tIdx++));
                tLotData.set_term(Term.MIXED);//TODO
 
                tLotDatas.add(tLotData);

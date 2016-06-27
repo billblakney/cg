@@ -2,10 +2,18 @@ package cg;
 
 public class OpenPosition implements OpenPositionAccessor
 {
+   //TODO rm
+//   protected String     _symbol;
+//   protected Integer    _numShares;
+//   protected SimpleDate _buyDate;
+//   protected Float      _buyPrice;
+//   protected Term       _term;
    protected String     _symbol;
    protected Integer    _numShares;
+   protected Integer    _acquireSeqNum;
+   protected SimpleDate _basisDate;
    protected SimpleDate _buyDate;
-   protected Float      _buyPrice;
+   protected Float      _basis;
    protected Term       _term;
 
    @Override
@@ -29,7 +37,7 @@ public class OpenPosition implements OpenPositionAccessor
    @Override
    public Float getBuyPrice()
    {
-      return _buyPrice;
+      return _basis/(float)_numShares;
    }
 
    @Override
@@ -48,14 +56,24 @@ public class OpenPosition implements OpenPositionAccessor
       this._numShares = _numShares;
    }
 
+   public void set_acquireSeqNum(Integer _acquireSeqNum)
+   {
+      this._acquireSeqNum = _acquireSeqNum;
+   }
+
+   public void set_basisDate(SimpleDate _basisDate)
+   {
+      this._basisDate = _basisDate;
+   }
+
    public void set_buyDate(SimpleDate _buyDate)
    {
       this._buyDate = _buyDate;
    }
 
-   public void set_buyPrice(float _buyPrice)
+   public void set_basis(float _basis)
    {
-      this._buyPrice = _buyPrice;
+      this._basis = _basis;
    }
 
    public void set_term(Term _term)
