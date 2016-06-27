@@ -1,9 +1,10 @@
 INSERT INTO investor (name) VALUES ('Me');
 INSERT INTO broker (name) VALUES ('E*Trade');
 INSERT INTO broker (name) VALUES ('TD Ameritrade');
-INSERT INTO acct_type (acct_type_id,label) VALUES (0,'Taxable');
-INSERT INTO acct_type (acct_type_id,label) VALUES (1,'Rollover IRA');
-INSERT INTO acct_type (acct_type_id,label) VALUES (2,'Roth IRA');
+INSERT INTO acct_type (acct_type_id,is_taxable,label) VALUES (0,'TRUE','Taxable');
+INSERT INTO acct_type (acct_type_id,is_taxable,label) VALUES (1,'FALSE','Rollover IRA');
+INSERT INTO acct_type (acct_type_id,is_taxable,label) VALUES (2,'FALSE','Roth IRA');
+INSERT INTO acct (name,acct_type_id,investor_id,broker_id) VALUES ('Test',0,0,0);
 INSERT INTO acct (name,acct_type_id,investor_id,broker_id) VALUES ('EtMain',0,0,0);
 INSERT INTO acct (name,acct_type_id,investor_id,broker_id) VALUES ('EtTrade',0,0,0);
 INSERT INTO acct (name,acct_type_id,investor_id,broker_id) VALUES ('EtRoll1',1,0,0);

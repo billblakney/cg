@@ -206,13 +206,13 @@ System.out.println("dbUrl: " + dbUrl);
 //		reportTabbedPane.removeAll();
 
 		reportTabbedPane.addReport(ReportType.ALL_TRADES,acct);
-		reportTabbedPane.addReport(ReportType.SHARES_HELD,acct);
-		reportTabbedPane.addReport(ReportType.LOTS_HELD,acct);
-
-		reportTabbedPane.addReport(ReportType.TAX_GAINS,acct);
+//		reportTabbedPane.addReport(ReportType.SHARES_HELD,acct);
+//		reportTabbedPane.addReport(ReportType.LOTS_HELD,acct);
+//
+//		reportTabbedPane.addReport(ReportType.TAX_GAINS,acct);
 		reportTabbedPane.addReport(ReportType.TAX_GAIN_LOTS,acct);
-		reportTabbedPane.addReport(ReportType.GAINS_BY_SECURITY,acct);
-		reportTabbedPane.addReport(ReportType.GAINS_BY_YEAR,acct);
+//		reportTabbedPane.addReport(ReportType.GAINS_BY_SECURITY,acct);
+//		reportTabbedPane.addReport(ReportType.GAINS_BY_YEAR,acct);
 	}
 
 	/**

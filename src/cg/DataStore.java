@@ -381,11 +381,15 @@ public class DataStore
             tNewClosedLot._buyTradeId = tLot._buyTradeId;
             tNewClosedLot._sellTradeId = aSellTrade.tradeId;
             tNewClosedLot._numShares = tNumToDistribute;
-            float tFactor = (float)tNewClosedLot._numShares/(float)tLot._numShares;
-            tNewClosedLot._basis = new BigDecimal(tFactor*tLot._basis.floatValue());
+            float tLotFactor =
+                  (float)tNewClosedLot._numShares/(float)tLot._numShares;
+            tNewClosedLot._basis =
+                  new BigDecimal(tLotFactor*tLot._basis.floatValue());
+            float tTradeFactor =
+                  (float)tNumToDistribute/(float)aSellTrade.numShares;
             float tProceeds =
                   ((float)tNumToDistribute) * aSellTrade.sharePrice.floatValue()
-                     - aSellTrade.comm.floatValue();
+                     - tTradeFactor * aSellTrade.comm.floatValue();
             tNewClosedLot._proceeds = new BigDecimal(tProceeds);
             tNewClosedLot._state = LotRecord.State.eClosed;
             }
@@ -431,9 +435,11 @@ public class DataStore
             tNewClosedLot._sellTradeId = aSellTrade.tradeId;
             tNewClosedLot._numShares = tLot._numShares;
             tNewClosedLot._basis = new BigDecimal(tLot._basis.floatValue());
+            float tTradeFactor =
+                  (float)tLot._numShares/(float)aSellTrade.numShares;
             float tProceeds =
                   ((float)tLot._numShares) * aSellTrade.sharePrice.floatValue()
-                     - aSellTrade.comm.floatValue();
+                     - tTradeFactor * aSellTrade.comm.floatValue();
             tNewClosedLot._proceeds = new BigDecimal(tProceeds);
             tNewClosedLot._state = LotRecord.State.eClosed;
             }

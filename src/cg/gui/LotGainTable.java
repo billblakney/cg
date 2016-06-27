@@ -95,7 +95,7 @@ public class LotGainTable extends JTable
 
       RenderColoredRows tRowRender = new RenderColoredRows(tColors,
             tColorChooser);
-      tInfos.add(tRowRender);
+//      tInfos.add(tRowRender);
 
       /*
        * Create the custom table cell renderer and apply it to all columns.
