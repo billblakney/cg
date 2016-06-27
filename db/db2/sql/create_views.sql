@@ -13,11 +13,30 @@ CREATE VIEW OpenPositions as
      AND lot.has_children=false
      AND lot.state='Open'
    ORDER BY trade.ticker, lot.num_shares;
+---------------------------------
+CREATE VIEW vwOpenPositions AS
+   SELECT acct.acct_id   acct_id,
+          fbt.ticker     symbol,
+          lot.num_shares shares,
+          fbt.seqnum     acquire_seqnum,
+          fbt.date       basis_date,
+          lbt.date       buy_date,
+          lot.basis      basis
+   FROM lot lot
+     INNER JOIN trade fbt
+       ON lot.first_buy_trade_id = fbt.trade_id
+     INNER JOIN trade lbt
+       ON lot.last_buy_trade_id = lbt.trade_id
+     INNER JOIN acct acct
+       ON acct.acct_id = fbt.acct_id
+   WHERE lot.state='Open'
+   ORDER BY acct_id, symbol, acquire_seqnum;
+---------------------------------
 -- TODO really need aquire and buy dates for wash view
 CREATE VIEW OpenLotReport (acct_id, symbol, shares, buy_date, buy_price) as
    SELECT DISTINCT acct.acct_id, trade.ticker, lot.num_shares, trade.date, trade.price
    FROM acct, trade, lot
-   WHERE lot.last_buy_trade_id=trade.trade_id
+   WHERE lot.first_buy_trade_id=trade.trade_id
      AND trade.acct_id=acct.acct_id
      AND lot.has_children=false
      AND lot.state='Open'
@@ -38,7 +57,7 @@ CREATE VIEW ClosedLotReport AS
      INNER JOIN trade bt
        ON l.last_buy_trade_id = bt.trade_id
      INNER JOIN trade st
-       ON l.last_sell_trade_id = st.trade_id
+       ON l.sell_trade_id = st.trade_id
      INNER JOIN acct a
        ON a.acct_id = st.acct_id
     WHERE l.state = 'Closed';

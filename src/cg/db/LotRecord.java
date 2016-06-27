@@ -38,9 +38,9 @@ public class LotRecord
    public Integer    _parentId;
    public boolean    _hasChildren;
    public Integer    _triggerTradeId;
-   public Integer    _acquireTradeId;
+   public Integer    _firstBuyTradeId;
    public Integer    _lastBuyTradeId;
-   public Integer    _lastSellTradeId;
+   public Integer    _sellTradeId;
    public int        _numShares;
    public BigDecimal _basis;
    public BigDecimal _proceeds;
@@ -55,9 +55,9 @@ public class LotRecord
 	   _parentId = null;
 	   _hasChildren = false;
 	   _triggerTradeId = null;
-	   _acquireTradeId = null;
+	   _firstBuyTradeId = null;
 	   _lastBuyTradeId = null;
-	   _lastSellTradeId = null;
+	   _sellTradeId = null;
 	   _numShares = 0;
 	   _basis = new BigDecimal(0.0);
 	   _proceeds = new BigDecimal(0.0);
@@ -71,9 +71,9 @@ public class LotRecord
 	   _parentId = new Integer(tLot._parentId);
 	   _hasChildren = tLot._hasChildren;
 	   _triggerTradeId = new Integer(tLot._triggerTradeId);
-	   _acquireTradeId = new Integer(tLot._acquireTradeId);
+	   _firstBuyTradeId = new Integer(tLot._firstBuyTradeId);
 	   _lastBuyTradeId = new Integer(tLot._lastBuyTradeId);
-	   _lastSellTradeId = new Integer(tLot._lastSellTradeId);
+	   _sellTradeId = new Integer(tLot._sellTradeId);
 	   _numShares = tLot._numShares;
 	   _basis = new BigDecimal(tLot._basis.toString()); //TODO verify works
 	   _proceeds = new BigDecimal(tLot._proceeds.toString()); //TODO verify works

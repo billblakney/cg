@@ -44,8 +44,8 @@ public class DatabaseInterface
    
    private String _insertLotSql =
       "INSERT INTO lot "
-      + "(parent_id,has_children,trigger_trade_id,acquire_trade_id,"
-      + "last_buy_trade_id,last_sell_trade_id,num_shares,basis,"
+      + "(parent_id,has_children,trigger_trade_id,first_buy_trade_id,"
+      + "last_buy_trade_id,sell_trade_id,num_shares,basis,"
       + "proceeds,state,close_date)"
       + " VALUES (?,?,?,?,?,?,?,?,?,?,?)";
    
@@ -575,7 +575,7 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
     * -> int _lotId;
     * -> int _parentId;
     * -> int _triggerTradeId;
-	 * -> int _buyTradeId;
+	 * -> int _firstBuyTradeId;
 	 * -> int _sellTradeId;
 	 * -> int _numShares;
 	 * -> BigDecimal _basis;
@@ -591,17 +591,17 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
     	  /*
     	   * Build the prepared insert statement.
     	   */
-//      + "(parent_id,has_children,trigger_trade_id,acquire_trade_id,"
-//      + "last_buy_trade_id,last_sell_trade_id,num_shares,basis,"
+//      + "(parent_id,has_children,trigger_trade_id,first_buy_trade_id,"
+//      + "last_buy_trade_id,sell_trade_id,num_shares,basis,"
 //      + "proceeds,state,close_date)"
 //      + " VALUES (?,?,?,?,?,?,?,?,?,?,?)";
     	  int tIdx = 1;
     	  setIntOrNull(pstmt,tIdx++, aLot._parentId);
     	  pstmt.setBoolean(tIdx++,aLot._hasChildren);
     	  pstmt.setInt(tIdx++,aLot._triggerTradeId);
-    	  pstmt.setInt(tIdx++,aLot._acquireTradeId);
+    	  pstmt.setInt(tIdx++,aLot._firstBuyTradeId);
     	  pstmt.setInt(tIdx++,aLot._lastBuyTradeId);
-    	  setIntOrNull(pstmt,tIdx++,aLot._lastSellTradeId);
+    	  setIntOrNull(pstmt,tIdx++,aLot._sellTradeId);
     	  pstmt.setInt(tIdx++,aLot._numShares);
     	  pstmt.setBigDecimal(tIdx++,aLot._basis);
     	  pstmt.setBigDecimal(tIdx++,aLot._proceeds);
