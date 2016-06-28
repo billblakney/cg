@@ -4,9 +4,9 @@ public class OpenPosition implements OpenPositionAccessor
 {
    protected String     _symbol;
    protected Integer    _numShares;
-   protected Integer    _acquireSeqNum;
-   protected SimpleDate _basisDate;
-   protected SimpleDate _buyDate;
+   protected Integer    _firstBuySeqNum;
+   protected SimpleDate _firstBuyDate;
+   protected SimpleDate _lastBuyDate;
    protected Float      _basis;
    protected Term       _term;
 
@@ -25,7 +25,7 @@ public class OpenPosition implements OpenPositionAccessor
    @Override
    public SimpleDate getBuyDate()
    {
-      return _buyDate;
+      return _lastBuyDate;
    }
 
    @Override
@@ -40,6 +40,16 @@ public class OpenPosition implements OpenPositionAccessor
       return _term;
    }
 
+   public SimpleDate get_firstBuyDate()
+   {
+      return _firstBuyDate;
+   }
+
+   public int get_firstBuySeqNum()
+   {
+      return _firstBuySeqNum;
+   }
+
    public void set_symbol(String _symbol)
    {
       this._symbol = _symbol;
@@ -50,19 +60,19 @@ public class OpenPosition implements OpenPositionAccessor
       this._numShares = _numShares;
    }
 
-   public void set_acquireSeqNum(Integer _acquireSeqNum)
+   public void set_firstBuySeqNum(Integer _firstBuySeqNum)
    {
-      this._acquireSeqNum = _acquireSeqNum;
+      this._firstBuySeqNum = _firstBuySeqNum;
    }
 
-   public void set_basisDate(SimpleDate _basisDate)
+   public void set_firstBuyDate(SimpleDate _firstBuyDate)
    {
-      this._basisDate = _basisDate;
+      this._firstBuyDate = _firstBuyDate;
    }
 
-   public void set_buyDate(SimpleDate _buyDate)
+   public void set_lastBuyDate(SimpleDate _lastBuyDate)
    {
-      this._buyDate = _buyDate;
+      this._lastBuyDate = _lastBuyDate;
    }
 
    public void set_basis(float _basis)

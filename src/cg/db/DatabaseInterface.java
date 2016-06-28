@@ -217,9 +217,9 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
                int tIdx = 1;
                tLotData.set_symbol(tResults.getString(tIdx++));
                tLotData.set_numShares(tResults.getInt(tIdx++));
-               tLotData.set_acquireSeqNum(tResults.getInt(tIdx++));
-               tLotData.set_basisDate(new SimpleDate(tResults.getDate(tIdx++)));
-               tLotData.set_buyDate(new SimpleDate(tResults.getDate(tIdx++)));
+               tLotData.set_firstBuySeqNum(tResults.getInt(tIdx++));
+               tLotData.set_firstBuyDate(new SimpleDate(tResults.getDate(tIdx++)));
+               tLotData.set_lastBuyDate(new SimpleDate(tResults.getDate(tIdx++)));
                tLotData.set_basis(tResults.getFloat(tIdx++));
                tLotData.set_term(Term.MIXED);//TODO
 

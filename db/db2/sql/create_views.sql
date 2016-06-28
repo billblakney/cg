@@ -1,26 +1,23 @@
+--
+-- Accounts view.
+--
 CREATE VIEW Accounts (investor, broker, account, label) AS
-   SELECT DISTINCT investor.name, broker.name, acct.name, acct_type.label
+   SELECT investor.name, broker.name, acct.name, acct_type.label
    FROM acct, acct_type, broker, investor
    WHERE acct.broker_id=broker.broker_id
      AND acct.investor_id=investor.investor_id
      AND acct.acct_type_id=acct_type.acct_type_id
    ORDER BY investor.name, broker.name;
-CREATE VIEW OpenPositions as
-   SELECT DISTINCT acct.acct_id "AcctID", trade.ticker "Symbol", lot.num_shares "Shares"
-   FROM acct, trade, lot
-   WHERE lot.trigger_trade_id=trade.trade_id
-     AND trade.acct_id=acct.acct_id
-     AND lot.has_children=false
-     AND lot.state='Open'
-   ORDER BY trade.ticker, lot.num_shares;
----------------------------------
+--
+-- OpenPositions: used for open positions (lots held) table row
+--
 CREATE VIEW vwOpenPositions AS
    SELECT acct.acct_id   acct_id,
           fbt.ticker     symbol,
           lot.num_shares shares,
-          fbt.seqnum     acquire_seqnum,
-          fbt.date       basis_date,
-          lbt.date       buy_date,
+          fbt.seqnum     first_buy_seqnum,
+          fbt.date       first_buy_date,
+          lbt.date       last_buy_date,
           lot.basis      basis
    FROM lot lot
      INNER JOIN trade fbt
@@ -30,9 +27,11 @@ CREATE VIEW vwOpenPositions AS
      INNER JOIN acct acct
        ON acct.acct_id = fbt.acct_id
    WHERE lot.state='Open'
-   ORDER BY acct_id, symbol, acquire_seqnum;
----------------------------------
+   ORDER BY acct_id, symbol, first_buy_seqnum;
+--
+-- ClosedLotReport: used for lot gain table rows
 -- TODO look at last_buy vs acquire issue
+--
 CREATE VIEW ClosedLotReport AS
   SELECT a.acct_id    acct_id,
          l.lot_id     lot_id,
@@ -52,3 +51,15 @@ CREATE VIEW ClosedLotReport AS
      INNER JOIN acct a
        ON a.acct_id = st.acct_id
     WHERE l.state = 'Closed';
+--
+-- OpenPositions view: not used (was used for POC)
+-- TODO rm
+--
+CREATE VIEW OpenPositions as
+   SELECT acct.acct_id "AcctID", trade.ticker "Symbol", lot.num_shares "Shares"
+   FROM acct, trade, lot
+   WHERE lot.trigger_trade_id=trade.trade_id
+     AND trade.acct_id=acct.acct_id
+     AND lot.has_children=false
+     AND lot.state='Open'
+   ORDER BY trade.ticker, lot.num_shares;
