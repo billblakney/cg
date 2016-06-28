@@ -207,7 +207,7 @@ System.out.println("dbUrl: " + dbUrl);
 
 		reportTabbedPane.addReport(ReportType.ALL_TRADES,acct);
 //		reportTabbedPane.addReport(ReportType.SHARES_HELD,acct);
-//		reportTabbedPane.addReport(ReportType.LOTS_HELD,acct);
+		reportTabbedPane.addReport(ReportType.LOTS_HELD,acct);
 //
 //		reportTabbedPane.addReport(ReportType.TAX_GAINS,acct);
 		reportTabbedPane.addReport(ReportType.TAX_GAIN_LOTS,acct);

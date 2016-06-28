@@ -53,8 +53,8 @@ public class DatabaseInterface
       "UPDATE lot SET has_children = ? WHERE lot_id = ?";
    
    private String _selectOpenPositionsSql =
-      "SELECT symbol, shares, acquire_seqnum, basis_date, buy_date, basis FROM vwOpenPositions"
-      + "WHERE acct_id = ?";
+      "SELECT symbol, shares, first_buy_seqnum, first_buy_date, last_buy_date, basis FROM vwOpenPositions"
+      + " WHERE acct_id = ?";
    
    private String _selectGainsSql =
       "SELECT lot_id,symbol,num_shares,buy_date,buy_price,sell_date,"

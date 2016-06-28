@@ -26,7 +26,8 @@ CREATE VIEW vwOpenPositions AS
        ON lot.last_buy_trade_id = lbt.trade_id
      INNER JOIN acct acct
        ON acct.acct_id = fbt.acct_id
-   WHERE lot.state='Open'
+   WHERE lot.has_children=false
+     AND lot.state='Open'
    ORDER BY acct_id, symbol, first_buy_seqnum;
 --
 -- ClosedLotReport: used for lot gain table rows
