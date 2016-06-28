@@ -224,18 +224,13 @@ public class DataStore
       {
          //TODO
       }
+      
+      if (ticker != null)
+      {
+         tOpenPositions.removeIf(p -> p.getSymbol().equals(ticker));
+      }
 
       return tOpenPositions;
-//		Iterator<Map.Entry<String,SecurityTradeList>> i = mgrs.entrySet().iterator();
-//		while( i.hasNext() ){
-//			Map.Entry<String,SecurityTradeList> e = i.next();
-//			SecurityTradeList mgr = e.getValue();
-//			if (ticker != null && (ticker.equals(mgr.ticker)) == false) {
-//				continue;
-//			}
-//			heldLots.addAll(mgr.getOpenPositions(year));
-//		}
-//		return heldLots;
 	}
 
    //TODO don't really want this public, its only for AccountDataProxy use
