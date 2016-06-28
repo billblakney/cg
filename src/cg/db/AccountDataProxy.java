@@ -54,7 +54,7 @@ public class AccountDataProxy extends AbstractAccountData
 	 * last one. or may want to do the filtering here?
 	 */
 	@Override
-	public Vector<OpenPositionAccessor>
+	public Vector<? extends OpenPositionAccessor>
 	getOpenPositions(String ticker, String year)
 	{
 	   return _ds.getOpenPositions(_accountId,ticker,year);

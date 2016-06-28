@@ -197,9 +197,9 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
    /**
     * Get lot report rows.
     */
-   public Vector<OpenPositionAccessor> getOpenPositions(Connection aConn,int aAccountId)
+   public Vector<OpenPosition> getOpenPositions(Connection aConn,int aAccountId)
    {
-      Vector<OpenPositionAccessor> tLotDatas = new Vector<OpenPositionAccessor>();
+      Vector<OpenPosition> tLotDatas = new Vector<OpenPosition>();
 
       try
       {

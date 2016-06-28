@@ -206,10 +206,10 @@ public class DataStore
    }
 
    //TODO don't really want this public, its only for AccountDataProxy use
-	public Vector<OpenPositionAccessor>
+	public Vector<OpenPosition>
 	getOpenPositions(int aAccountId,String ticker, String year)
 	{
-		Vector<OpenPositionAccessor> tOpenPositions = new Vector<OpenPositionAccessor>();
+		Vector<OpenPosition> tOpenPositions = new Vector<OpenPosition>();
 
       if (_cm != null)
       {

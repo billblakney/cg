@@ -102,7 +102,7 @@ public class LotsHeldPanel extends AccountReportPanel implements ActionListener 
 	 * updateReplace the currently displayed account with a new one.
 	 */
 	protected void updatePanel(AbstractAccountData acct) {
-		Vector<OpenPositionAccessor> lots = acct.getOpenPositions(null,null); //TODO null,null?
+		Vector<? extends OpenPositionAccessor> lots = acct.getOpenPositions(null,null); //TODO null,null?
 		table.setRows(lots);
 		tickerFilterBox.update();
 		termFilterBox.update();

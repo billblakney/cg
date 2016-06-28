@@ -58,7 +58,7 @@ public class LotsHeldTable extends JTable {
 		}
 	}
 
-	public void setRows(Vector<OpenPositionAccessor> lots) {
+	public void setRows(Vector<? extends OpenPositionAccessor> lots) {
 		model.setData(lots);
 		updateSharesHeld();
 	}

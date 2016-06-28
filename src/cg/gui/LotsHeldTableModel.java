@@ -61,7 +61,7 @@ public class LotsHeldTableModel extends AbstractTableModel {
 			return ((Vector) (data.elementAt(arg0))).elementAt(arg1);
 	}
 
-	public void setData(Vector<OpenPositionAccessor> stats){
+	public void setData(Vector<? extends OpenPositionAccessor> stats){
 		data = new Vector();
 		for (int i = 0; i < stats.size(); i++)
 			data.addElement(getDataRow(stats.elementAt(i)));

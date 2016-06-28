@@ -12,7 +12,7 @@ public interface AccountDataProvider
 	 */
    public String getName();
 	public Vector<TradeDataProvider> getTrades();
-	public Vector<OpenPositionAccessor> getOpenPositions(String ticker, String year);
+	public Vector<? extends OpenPositionAccessor> getOpenPositions(String ticker, String year);
 	public Vector<GainAccessor> getGains(String ticker, String year);
 
 	public TradeList getTradeList();
