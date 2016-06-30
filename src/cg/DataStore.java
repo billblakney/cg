@@ -11,6 +11,7 @@ import cg.db.AccountRecord;
 import cg.db.ConnectionManager;
 import cg.db.DatabaseInterface;
 import cg.db.LotRecord;
+import cg.db.LotRecord.State;
 
 /*
  * Singleton class that manages the storage of data for this app.
@@ -26,7 +27,8 @@ public class DataStore
    
    Vector<Trade> _trades = new Vector<Trade>();
 
-   Vector<LotRecord> _lots = new Vector<LotRecord>();
+   Vector<LotRecord> _lotRecords = new Vector<LotRecord>();
+   Vector<NewLot> _lots = new Vector<NewLot>();
 
    /**
     * Print accounts.
@@ -234,6 +236,29 @@ public class DataStore
 	}
 
    //TODO don't really want this public, its only for AccountDataProxy use
+	public Vector<NewLot>
+	getOpenPositions_new(int aAccountId,String ticker, String year)
+	{
+		Vector<NewLot> tOpenPositions = new Vector<NewLot>(_lots);
+
+		/*
+		 * Remove any parent lots and lots that are not open.
+		 */
+		tOpenPositions.removeIf( p ->
+		      (p.lotRecord._hasChildren || !(p.lotRecord._state == State.eOpen)));
+      
+		/*
+		 * Filter by ticker if ticker is present.
+		 */
+      if (ticker != null)
+      {
+         tOpenPositions.removeIf(p -> p.getSymbol().equals(ticker));
+      }
+
+      return tOpenPositions;
+	}
+
+   //TODO don't really want this public, its only for AccountDataProxy use
 	public Vector<GainAccessor>
 	getGains(int aAccountId,String ticker, String year)
 	{
@@ -335,7 +360,8 @@ public class DataStore
       /*
        * Save the lot to the cache.
        */
-      _lots.add(tLot);
+      _lotRecords.add(tLot);
+      _lots.add(new NewLot(tLot));
    }
    
    /*
@@ -480,7 +506,8 @@ public class DataStore
             _dbi.insertLot(aConn,tLot);
          }
          
-         _lots.add(tLot);
+         _lotRecords.add(tLot);
+         _lots.add(new NewLot(tLot));
       }
    }
 
@@ -506,9 +533,9 @@ static int passes = 0;
       Vector<LotRecord> tLots = new Vector<LotRecord>();
       
       //TODO need to sort on acquire date; need to add acquire date to LotRecord, or use view
-      _lots.sort((LotRecord lot1,LotRecord lot2)-> (lot1._lastBuyTradeId - lot2._lastBuyTradeId));
+      _lotRecords.sort((LotRecord lot1,LotRecord lot2)-> (lot1._lastBuyTradeId - lot2._lastBuyTradeId));
 
-      for (LotRecord tLot: _lots)
+      for (LotRecord tLot: _lotRecords)
       {
          if (tLot._hasChildren || tLot._state != LotRecord.State.eOpen){
             continue;
@@ -535,13 +562,16 @@ static int passes = 0;
       return tLots;
    }
    
-   protected Trade getTradeById(int aTradeId)
+   protected Trade getTradeById(Integer aTradeId)
    {
-      for (Trade tTrade: _trades)
+      if (aTradeId != null)
       {
-         if (tTrade.tradeId == aTradeId)
+         for (Trade tTrade: _trades)
          {
-            return tTrade;
+            if (tTrade.tradeId == aTradeId)
+            {
+               return tTrade;
+            }
          }
       }
       return null;

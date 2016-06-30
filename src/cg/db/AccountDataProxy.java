@@ -57,7 +57,8 @@ public class AccountDataProxy extends AbstractAccountData
 	public Vector<? extends OpenPositionAccessor>
 	getOpenPositions(String ticker, String year)
 	{
-	   return _ds.getOpenPositions(_accountId,ticker,year);
+//	   return _ds.getOpenPositions(_accountId,ticker,year);
+	   return _ds.getOpenPositions_new(_accountId,ticker,year);
 	}
 
 	/**
