@@ -21,9 +21,10 @@ import cg.SellTrade;
 import cg.SimpleDate;
 import cg.Term;
 import cg.OldTrade;
-import cg.TradeData;
+import cg.Trade;
 import cg.TradeDataProvider;
 import cg.TradeList;
+import cg.TradeRecord;
 
 public class DatabaseInterface
 {
@@ -358,9 +359,9 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
    /**
     * Get trades.
     */
-   public Vector<TradeDataProvider> getTrades(Connection aConn,int aAccountId)
+   public Vector<TradeRecord> getTrades(Connection aConn,int aAccountId)
    {
-      Vector<TradeDataProvider> tTrades = new Vector<TradeDataProvider>();
+      Vector<TradeRecord> tTrades = new Vector<TradeRecord>();
 
       // run query
       try
@@ -401,19 +402,18 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
                OldTrade.SpecialInstruction instr = OldTrade.SpecialInstruction
                      .getEnumValue(special_rule);
 
-               TradeData tTrade = new TradeData();
-               tTrade.set_tradeId(trade_id);
-               tTrade.set_date(new SimpleDate(date));
-               tTrade.set_tradeType(tradeType);
-               tTrade.set_symbol(ticker);
-               tTrade.set_numShares(shares);
-               tTrade.set_numSharesHeld(0);
-               tTrade.set_numSharesSold(0);
-               tTrade.set_sharePrice(price);
-               tTrade.set_commission(commission);
-               tTrade.set_claimedTaxYear(0);
-               tTrade.set_note("");
-               
+               TradeRecord tTrade = new TradeRecord();
+               tTrade._tradeId = trade_id;
+               tTrade._date = new SimpleDate(date);
+               tTrade._tradeType = tradeType;
+               tTrade._symbol = ticker;
+               tTrade._numShares = shares;
+               tTrade._numSharesHeld = new Integer(0);
+               tTrade._numSharesSold = new Integer(0);
+               tTrade._sharePrice = price;
+               tTrade._commission = commission;
+               tTrade._claimedTaxYear = new Integer(0);
+               tTrade._note = "";
                tTrades.add(tTrade);
             }
          }

@@ -5,7 +5,9 @@ import java.util.Vector;
 import cg.AbstractAccountData;
 import cg.DataStore;
 import cg.GainAccessor;
+import cg.Lot;
 import cg.OpenPositionAccessor;
+import cg.Trade;
 import cg.TradeDataProvider;
 import cg.TradeList;
 
@@ -41,7 +43,7 @@ public class AccountDataProxy extends AbstractAccountData
 	/**
 	 * Get the trades of this account.
 	 */
-	public Vector<TradeDataProvider> getTrades()
+	public Vector<Trade> getTrades()
 	{
       return _ds.getTrades(_accountId);
 	}
@@ -54,7 +56,7 @@ public class AccountDataProxy extends AbstractAccountData
 	 * last one. or may want to do the filtering here?
 	 */
 	@Override
-	public Vector<? extends OpenPositionAccessor>
+	public Vector<Lot>
 	getOpenPositions(String ticker, String year)
 	{
 //	   return _ds.getOpenPositions(_accountId,ticker,year);

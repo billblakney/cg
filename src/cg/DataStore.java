@@ -128,22 +128,30 @@ public class DataStore
       return tTradeList;
    }
 
-   public Vector<OldTrade> getTrades(int aAccountId)
+   public Vector<Trade> getTrades(int aAccountId)
    {
-      Vector<OldTrade> tTrades = null;
+      Vector<TradeRecord> tTradeRecords = null;
 
       if (_cm != null)
       {
          Connection tConn = _cm.getConnection();
          if (tConn != null)
          {
-            tTrades = _dbi.getTrades(tConn,aAccountId);
+            tTradeRecords = _dbi.getTrades(tConn,aAccountId);
             _cm.closeConnection(tConn);
          }
       }
       else
       {
          //TODO
+      }
+      
+//      Vector<OldTrade> tTrades = null;
+      Vector<Trade> tTrades = new Vector<Trade>();
+
+      for (TradeRecord tRecord: tTradeRecords)
+      {
+         tTrades.add(new Trade(tRecord));
       }
 
       return tTrades;

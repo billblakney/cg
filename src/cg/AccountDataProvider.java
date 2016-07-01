@@ -11,7 +11,7 @@ public interface AccountDataProvider
 	 * 'year' gets held lots for all years.
 	 */
    public String getName();
-	public Vector<TradeDataProvider> getTrades();
+	public Vector<? extends TradeDataProvider> getTrades();
 	public Vector<? extends OpenPositionAccessor> getOpenPositions(String ticker, String year);
 	public Vector<GainAccessor> getGains(String ticker, String year);
 
