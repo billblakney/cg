@@ -21,3 +21,12 @@ SomeTableModel Vector<GainProvider> getDataRow(Object row)
    v.addElement(tGain.getSymbol()); // 1
    ...
    return v;
+
+   ----------------------------------
+
+SomePanel.updatePanel(...)
+   Vector<? extends SomeInterface> vector = acct.getSomething();
+
+SomeTable.setRows(Vector<? extends SomeInterface> rows)
+
+SomeTableModel.setData(Vector<? extends SomeInterface> data)

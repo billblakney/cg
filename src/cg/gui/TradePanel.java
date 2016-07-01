@@ -120,7 +120,7 @@ public class TradePanel extends AccountReportPanel implements ActionListener {
 	 * updateReplace the currently displayed account with a new one.
 	 */
 	protected void updatePanel(AbstractAccountData acct) {
-		Vector<TradeDataProvider> tTrades = acct.getTrades();
+		Vector<? extends TradeDataProvider> tTrades = acct.getTrades();
 System.out.println("updatePanel tradeList.size: " + tTrades.size());
 		table.setRows(tTrades);
 		yearFilterBox.update();

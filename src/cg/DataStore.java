@@ -128,9 +128,9 @@ public class DataStore
       return tTradeList;
    }
 
-   public Vector<TradeDataProvider> getTrades(int aAccountId)
+   public Vector<Trade> getTrades(int aAccountId)
    {
-      Vector<TradeDataProvider> tTrades = null;
+      Vector<Trade> tTrades = null;
 
       if (_cm != null)
       {

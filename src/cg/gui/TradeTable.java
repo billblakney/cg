@@ -123,7 +123,7 @@ public class TradeTable extends JTable {
 		}
 	}
 
-	public void setRows(Vector<TradeDataProvider> trades) {
+	public void setRows(Vector<? extends TradeDataProvider> trades) {
 
 		model.setData(trades);
 		updateSharesHeld();

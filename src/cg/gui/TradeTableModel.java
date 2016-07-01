@@ -37,8 +37,6 @@ public class TradeTableModel extends AbstractTableModel {
 
 	private Vector data;
 	
-	private Vector<TradeDataProvider> trades;
-	
 	TradeTableModel() {
 		data = new Vector(0);
 	}
@@ -71,8 +69,7 @@ public class TradeTableModel extends AbstractTableModel {
 			return ((Vector)(data.elementAt(arg0))).elementAt(arg1);
 	}
 
-	public void setData(Vector<TradeDataProvider> trades){
-		this.trades = trades;
+	public void setData(Vector<? extends TradeDataProvider> trades){
 		data = new Vector();
 		for (int i = 0; i < trades.size(); i++)
 			data.addElement(getDataRow(trades.elementAt(i)));
