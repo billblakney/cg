@@ -28,7 +28,7 @@ public class DataStore
    Vector<Trade> _trades = new Vector<Trade>();
 
    Vector<LotRecord> _lotRecords = new Vector<LotRecord>();
-   Vector<NewLot> _lots = new Vector<NewLot>();
+   Vector<Lot> _lots = new Vector<Lot>();
 
    /**
     * Print accounts.
@@ -236,10 +236,10 @@ public class DataStore
 	}
 
    //TODO don't really want this public, its only for AccountDataProxy use
-	public Vector<NewLot>
+	public Vector<Lot>
 	getOpenPositions_new(int aAccountId,String ticker, String year)
 	{
-		Vector<NewLot> tOpenPositions = new Vector<NewLot>(_lots);
+		Vector<Lot> tOpenPositions = new Vector<Lot>(_lots);
 
 		/*
 		 * Remove any parent lots and lots that are not open.
@@ -361,7 +361,7 @@ public class DataStore
        * Save the lot to the cache.
        */
       _lotRecords.add(tLot);
-      _lots.add(new NewLot(tLot));
+      _lots.add(new Lot(tLot));
    }
    
    /*
@@ -507,7 +507,7 @@ public class DataStore
          }
          
          _lotRecords.add(tLot);
-         _lots.add(new NewLot(tLot));
+         _lots.add(new Lot(tLot));
       }
    }
 

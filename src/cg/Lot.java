@@ -10,7 +10,7 @@ import cg.db.LotRecord;
 //   public Float      getBuyPrice();
 //   public Term       getTerm();
 //}
-public class NewLot implements OpenPositionAccessor
+public class Lot implements OpenPositionAccessor
 {
    LotRecord lotRecord;
    Trade triggerTrade;
@@ -18,7 +18,7 @@ public class NewLot implements OpenPositionAccessor
    Trade lastBuyTrade;
    Trade sellTrade;
 
-   NewLot(LotRecord aLot)
+   Lot(LotRecord aLot)
    {
       lotRecord = aLot;
 
@@ -29,7 +29,7 @@ public class NewLot implements OpenPositionAccessor
       sellTrade = tDataStore.getTradeById(aLot._sellTradeId);
    }
    
-   NewLot(NewLot aNewLot)
+   Lot(Lot aNewLot)
    {
       lotRecord = aNewLot.lotRecord;
       triggerTrade = aNewLot.triggerTrade;
