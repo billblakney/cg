@@ -7,7 +7,7 @@ import java.math.BigDecimal;
  * This base class encapsulates data common to buy and sell trades. BuyTrade and
  * SellTrade are derived from this class.
  */
-public class Trade implements TradeDataProvider, Comparable {
+public class OldTrade implements TradeDataProvider, Comparable {
 
 	public enum Type
 	{
@@ -87,7 +87,7 @@ public class Trade implements TradeDataProvider, Comparable {
 	/**
 	 * Default constructor.
 	 */
-	public Trade() {
+	public OldTrade() {
 	}
 
 	/**
@@ -107,9 +107,9 @@ public class Trade implements TradeDataProvider, Comparable {
 	 * TODO Need to better hide this constructor so only BuyTrade and SellTrade
 	 * can use it.
 	 */
-	protected Trade(int tradeId, cg.SimpleDate date, Trade.Type tradeType,
+	protected OldTrade(int tradeId, cg.SimpleDate date, OldTrade.Type tradeType,
 			String ticker, int numShares, float sharePrice, BigDecimal comm,
-			Trade.SpecialInstruction instruction, String note) {
+			OldTrade.SpecialInstruction instruction, String note) {
 
 		this.tradeId = tradeId;
 		this.date = date;
@@ -131,7 +131,7 @@ public class Trade implements TradeDataProvider, Comparable {
 	 */
 	public int compareTo(Object o) {
 
-		Trade otherTrade = (Trade) o;
+		OldTrade otherTrade = (OldTrade) o;
 
 		// First comparison is trade date.
 		if (date.before(otherTrade.date) == true) {
@@ -166,7 +166,7 @@ public class Trade implements TradeDataProvider, Comparable {
    }
 
 	@Override
-   public Trade.Type getTradeType()
+   public OldTrade.Type getTradeType()
    {
       return tradeType;
    }
@@ -240,14 +240,14 @@ public class Trade implements TradeDataProvider, Comparable {
 	}
 
 	public boolean isBuyTrade() {
-		if (tradeType == Trade.Type.BUY)
+		if (tradeType == OldTrade.Type.BUY)
 			return true;
 		else
 			return false;
 	}
 
 	public boolean isSellTrade() {
-		if (tradeType == Trade.Type.SELL)
+		if (tradeType == OldTrade.Type.SELL)
 			return true;
 		else
 			return false;

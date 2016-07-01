@@ -20,7 +20,7 @@ import cg.OpenPositionAccessor;
 import cg.SellTrade;
 import cg.SimpleDate;
 import cg.Term;
-import cg.Trade;
+import cg.OldTrade;
 import cg.TradeData;
 import cg.TradeDataProvider;
 import cg.TradeList;
@@ -324,13 +324,13 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
                SimpleDate tdate = new SimpleDate(date);
 
                // Convert buysell to format needed by the Trade constructor
-               Trade.Type tradeType = Trade.Type.getEnumValue(buysell);
+               OldTrade.Type tradeType = OldTrade.Type.getEnumValue(buysell);
 
                // Convert special_rule to format needed by the Trade constructor
-               Trade.SpecialInstruction instr = Trade.SpecialInstruction
+               OldTrade.SpecialInstruction instr = OldTrade.SpecialInstruction
                      .getEnumValue(special_rule);
 
-               if (tradeType == Trade.Type.BUY)
+               if (tradeType == OldTrade.Type.BUY)
                {
                   BuyTrade bt = new BuyTrade(trade_id, tdate, tradeType, ticker,
                         shares, price, commission, instr, "");
@@ -395,10 +395,10 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
                SimpleDate tdate = new SimpleDate(date);
 
                // Convert buysell to format needed by the Trade constructor
-               Trade.Type tradeType = Trade.Type.getEnumValue(buysell);
+               OldTrade.Type tradeType = OldTrade.Type.getEnumValue(buysell);
 
                // Convert special_rule to format needed by the Trade constructor
-               Trade.SpecialInstruction instr = Trade.SpecialInstruction
+               OldTrade.SpecialInstruction instr = OldTrade.SpecialInstruction
                      .getEnumValue(special_rule);
 
                TradeData tTrade = new TradeData();
@@ -441,7 +441,7 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
     * -> commission REAL NOT NULL,
     * -> special_rule varchar(10),
     */
-   public void insertTrades(Connection aConn,int aAccountId,Vector<Trade> aTrades)
+   public void insertTrades(Connection aConn,int aAccountId,Vector<OldTrade> aTrades)
    {
       insertTrades_Batch(aConn,aAccountId,aTrades);
 //      insertTrades_OneByOne(aConn,aAccountId,aTrades);
@@ -450,7 +450,7 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
    /**
     * Insert trades one-by-one.
     */
-   private void insertTrades_OneByOne(Connection aConn,int aAccountId,Vector<Trade> aTrades)
+   private void insertTrades_OneByOne(Connection aConn,int aAccountId,Vector<OldTrade> aTrades)
    {
       // run query
       try
@@ -459,7 +459,7 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
 
     	  int tTradeIndex = 0;
     	  
-    	  for (Trade tTrade: aTrades)
+    	  for (OldTrade tTrade: aTrades)
     	  {
     	     /*
     	      * Build the prepared insert statement.
@@ -511,7 +511,7 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
    /**
     * Get trades.
     */
-   private void insertTrades_Batch(Connection aConn,int aAccountId,Vector<Trade> aTrades)
+   private void insertTrades_Batch(Connection aConn,int aAccountId,Vector<OldTrade> aTrades)
    {
       // run query
       try
@@ -520,7 +520,7 @@ System.out.println("queried account name for id " + aAccountId + ": " + tName);
     	  
     	  PreparedStatement pstmt = aConn.prepareStatement(_insertTradeSql,Statement.RETURN_GENERATED_KEYS);
 
-    	  for (Trade tTrade: aTrades)
+    	  for (OldTrade tTrade: aTrades)
     	  {
     	     /*
     	      * Build the prepared insert statement.

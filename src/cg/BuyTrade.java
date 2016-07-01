@@ -8,11 +8,11 @@ import java.math.BigDecimal;
  * initialized by the constructor to match the number of shares in the trade,
  * and can be decremented via decrementUnsoldShares().
  */
-public class BuyTrade extends Trade {
+public class BuyTrade extends OldTrade {
 
-	public BuyTrade(int tradeId, cg.SimpleDate date, Trade.Type tradeType,
+	public BuyTrade(int tradeId, cg.SimpleDate date, OldTrade.Type tradeType,
 			String ticker, int numShares, float sharePrice, BigDecimal comm,
-			Trade.SpecialInstruction instruction, String note) {
+			OldTrade.SpecialInstruction instruction, String note) {
 
 		super(tradeId, date, tradeType, ticker, numShares, sharePrice, comm,
 				instruction, note);

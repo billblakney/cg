@@ -10,16 +10,16 @@ import java.math.BigDecimal;
  * @todo Change the data members of this to protected, and add accessor methods.
  *       (Currently access to these data members is public.)
  */
-public class SellTrade extends Trade {
+public class SellTrade extends OldTrade {
 
 	/**
 	 * The computed tax gain for this sell trade.
 	 */
 	TaxGain taxGain;
 
-	public SellTrade(int tradeId, cg.SimpleDate date, Trade.Type tradeType,
+	public SellTrade(int tradeId, cg.SimpleDate date, OldTrade.Type tradeType,
 			String ticker, int numShares, float sharePrice, BigDecimal comm,
-			Trade.SpecialInstruction instruction, String note) {
+			OldTrade.SpecialInstruction instruction, String note) {
 		
 		super(tradeId, date, tradeType, ticker, numShares, sharePrice, comm,
 				instruction, note);

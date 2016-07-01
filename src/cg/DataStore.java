@@ -25,7 +25,7 @@ public class DataStore
    
    DatabaseInterface _dbi = null;
    
-   Vector<Trade> _trades = new Vector<Trade>();
+   Vector<OldTrade> _trades = new Vector<OldTrade>();
 
    Vector<LotRecord> _lotRecords = new Vector<LotRecord>();
    Vector<Lot> _lots = new Vector<Lot>();
@@ -128,9 +128,9 @@ public class DataStore
       return tTradeList;
    }
 
-   public Vector<Trade> getTrades(int aAccountId)
+   public Vector<OldTrade> getTrades(int aAccountId)
    {
-      Vector<Trade> tTrades = null;
+      Vector<OldTrade> tTrades = null;
 
       if (_cm != null)
       {
@@ -306,7 +306,7 @@ public class DataStore
          _dbi.insertTrades(tConn,aAccountId,aTradeList);
       }
 
-      for (Trade tTrade: aTradeList)
+      for (OldTrade tTrade: aTradeList)
       {
          _trades.add(tTrade);
 
@@ -541,7 +541,7 @@ static int passes = 0;
             continue;
          }
 
-         Trade tTrade = getTradeById(tLot._lastBuyTradeId); //TODO acquire
+         OldTrade tTrade = getTradeById(tLot._lastBuyTradeId); //TODO acquire
          if (tTrade == null){
             System.out.println("ERROR: Need more open lots to sell!");
             System.exit(0);
@@ -562,11 +562,11 @@ static int passes = 0;
       return tLots;
    }
    
-   protected Trade getTradeById(Integer aTradeId)
+   protected OldTrade getTradeById(Integer aTradeId)
    {
       if (aTradeId != null)
       {
-         for (Trade tTrade: _trades)
+         for (OldTrade tTrade: _trades)
          {
             if (tTrade.tradeId == aTradeId)
             {

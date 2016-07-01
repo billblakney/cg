@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Vector;
 import java.util.TreeSet;
 
-public class TradeList extends Vector<Trade> {
+public class TradeList extends Vector<OldTrade> {
 
 	public TradeList() {
 	}
@@ -14,11 +14,11 @@ public class TradeList extends Vector<Trade> {
 		addTrades(tl);
 	}
 
-	public TradeList(Vector<Trade> trades) {
+	public TradeList(Vector<OldTrade> trades) {
 		addTrades(trades);
 	}
 
-	public void addTrades(Vector<Trade> trades){
+	public void addTrades(Vector<OldTrade> trades){
 		for (int i = 0; i < trades.size(); i++)
 			add(trades.elementAt(i));
 		sortByDate();
@@ -30,7 +30,7 @@ public class TradeList extends Vector<Trade> {
 		sortByDate();
 	}
 
-	public void addTrade(Trade t){
+	public void addTrade(OldTrade t){
 		add(t);
 		sortByDate();
 	}
@@ -38,7 +38,7 @@ public class TradeList extends Vector<Trade> {
 	public TreeSet<String> getTickers() {
 		TreeSet<String> tickers = new TreeSet<String>();
 		for( int i = 0; i < size(); i++ ){
-			Trade t = (Trade)elementAt(i);
+			OldTrade t = (OldTrade)elementAt(i);
 			tickers.add(t.ticker);
 		}
 		return tickers;
@@ -47,7 +47,7 @@ public class TradeList extends Vector<Trade> {
 	public TreeSet<Integer> getYears(Boolean includeIdleYears) {
 		TreeSet<Integer> years = new TreeSet<Integer>();
 		for( int i = 0; i < size(); i++ ){
-			Trade t = (Trade)elementAt(i);
+			OldTrade t = (OldTrade)elementAt(i);
 			years.add(t.date.getYear());
 		}
 		if( years.size() > 0 && includeIdleYears == true ){
@@ -85,7 +85,7 @@ public class TradeList extends Vector<Trade> {
 		Vector<TaxGain> taxGains = new Vector<TaxGain>();
 
 		for (int i = 0; i < size(); i++) {
-			if (((Trade) elementAt(i)).tradeType != Trade.Type.SELL) {
+			if (((OldTrade) elementAt(i)).tradeType != OldTrade.Type.SELL) {
 				continue;
 			}
 			SellTrade sellTrade = (SellTrade) elementAt(i);
@@ -109,7 +109,7 @@ public class TradeList extends Vector<Trade> {
 		Vector<GainAccessor> tGains = new Vector<GainAccessor>();
 
 		for (int i = 0; i < size(); i++) {
-			if (((Trade) elementAt(i)).tradeType != Trade.Type.SELL) {
+			if (((OldTrade) elementAt(i)).tradeType != OldTrade.Type.SELL) {
 				continue;
 			}
 			SellTrade sellTrade = (SellTrade) elementAt(i);
@@ -135,7 +135,7 @@ public class TradeList extends Vector<Trade> {
 		Vector<OpenPositionAccessor> heldLots = new Vector<OpenPositionAccessor>();
 
 		for (int i = 0; i < size(); i++) {
-			if (((Trade) elementAt(i)).tradeType != Trade.Type.BUY) {
+			if (((OldTrade) elementAt(i)).tradeType != OldTrade.Type.BUY) {
 				continue;
 			}
 			BuyTrade buyTrade = (BuyTrade) elementAt(i);
@@ -160,7 +160,7 @@ public class TradeList extends Vector<Trade> {
 		float ttlGain = 0;
 		
 		for (int i = 0; i < size(); i++) {
-			if (((Trade) elementAt(i)).tradeType != Trade.Type.SELL) {
+			if (((OldTrade) elementAt(i)).tradeType != OldTrade.Type.SELL) {
 				continue;
 			}
 			SellTrade sellTrade = (SellTrade) elementAt(i);
@@ -180,7 +180,7 @@ public class TradeList extends Vector<Trade> {
 
 		System.out.println(header);
 		for (int i = 0; i < size(); i++) {
-			Trade t = elementAt(i);
+			OldTrade t = elementAt(i);
 			System.out.println(t.buySellId);
 		}
 	}
@@ -192,7 +192,7 @@ public class TradeList extends Vector<Trade> {
 
 		System.out.println(header);
 		for (int i = 0; i < size(); i++) {
-			Trade t = elementAt(i);
+			OldTrade t = elementAt(i);
 			t.z_print();
 			if (t.history.length() > 0)
 				System.out.println(t.history);

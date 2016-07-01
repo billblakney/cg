@@ -90,7 +90,7 @@ public class Account extends AbstractAccountData implements AccountDataProvider 
 	@Override
 	public Vector<TradeDataProvider> getTrades() {
 	   Vector<TradeDataProvider> tTrades = new Vector<TradeDataProvider>();
-	   for (Trade tTrade: allTrades)
+	   for (OldTrade tTrade: allTrades)
 	   {
 	      tTrades.add(tTrade);
 	   }
@@ -111,9 +111,9 @@ public class Account extends AbstractAccountData implements AccountDataProvider 
 	public TradeList getTradeList(int year) {
 		TradeList trades = new TradeList();
 		
-		Iterator<Trade> i = allTrades.iterator();
+		Iterator<OldTrade> i = allTrades.iterator();
 		while( i.hasNext() ){
-			Trade t = i.next();
+			OldTrade t = i.next();
 			if( t.date.getYear() == year ){
 				trades.add(t);
 			}
@@ -242,7 +242,7 @@ public class Account extends AbstractAccountData implements AccountDataProvider 
 	private void addTradesToStockMgrs(TradeList trades) {
 		for (int i = 0; i < trades.size(); i++) {
 			// Get the trade's ticker.
-			Trade trade = trades.elementAt(i);
+			OldTrade trade = trades.elementAt(i);
 			String ticker = trade.ticker;
 
 			// If we already have a manager for this stock, add the trade to it.

@@ -21,14 +21,14 @@ public class SecurityTradeList extends TradeList {
 		this.ticker = ticker;
 	}
 	
-	public SecurityTradeList(String ticker, Vector<Trade> trades) {
+	public SecurityTradeList(String ticker, Vector<OldTrade> trades) {
 		this.ticker = ticker;
 		addTrades(trades);
 	}
 
-	public void addTrades(Vector<Trade> trades){
+	public void addTrades(Vector<OldTrade> trades){
 		for (int i = 0; i < trades.size(); i++){
-			Trade t = trades.elementAt(i);
+			OldTrade t = trades.elementAt(i);
 			if( (null != ticker) && (t.ticker.equals(ticker) == false) )
 				continue;
 			else
@@ -37,7 +37,7 @@ public class SecurityTradeList extends TradeList {
 		sortByDate();
 	}
 
-	public void addTrade(Trade t){
+	public void addTrade(OldTrade t){
 		if( t.ticker.equals(ticker) == false )
 			return; // later, throw exception again, like used to
 		add(t);
@@ -120,9 +120,9 @@ public class SecurityTradeList extends TradeList {
 		return numHeld;
 	}
 
-	Trade getFirstTradeWithLots(Trade.Type tradeType) {
+	OldTrade getFirstTradeWithLots(OldTrade.Type tradeType) {
 		for (int i = 0; i < size(); i++) {
-			Trade t = elementAt(i);
+			OldTrade t = elementAt(i);
 			if (t.tradeType != tradeType)
 				continue;
 			OldLot lot = t.lotSet.getFirstLot();
@@ -137,7 +137,7 @@ public class SecurityTradeList extends TradeList {
 	 */
 	void resetGains() {
 		for (int i = 0; i < size(); i++) {
-			Trade t = elementAt(i);
+			OldTrade t = elementAt(i);
 			if (t.isSellTrade()) {
 				SellTrade st = (SellTrade) t;
 				st.resetTaxGain();
@@ -150,7 +150,7 @@ public class SecurityTradeList extends TradeList {
 	 */
 	void resetLots() {
 		for (int i = 0; i < size(); i++) {
-			Trade t = elementAt(i);
+			OldTrade t = elementAt(i);
 			t.lotSet.clearLots();
 		}
 	}
@@ -203,7 +203,7 @@ public class SecurityTradeList extends TradeList {
 	void resetNumSharesHeld() {
 
 		for (int i = 0; i < size(); i++) {
-			Trade t = elementAt(i);
+			OldTrade t = elementAt(i);
 			t.numSharesHeld = new Integer(0);
 			t.numSharesSold = new Integer(0);
 		}

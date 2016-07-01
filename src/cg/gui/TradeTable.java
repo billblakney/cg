@@ -15,7 +15,7 @@ import bbj.swing.table.render.RenderInteger;
 import bbj.swing.table.render.RenderTableCellInfo;
 import bbj.swing.table.render.TableCellColorSet;
 import bbj.swing.table.render.TableCellColorIndexChooser;
-import cg.Trade;
+import cg.OldTrade;
 import cg.TradeDataProvider;
 
 @SuppressWarnings("serial")
@@ -102,10 +102,10 @@ public class TradeTable extends JTable {
 		   TableModel tModel = table.getModel();
 		   int tModelRow = sorter.convertRowIndexToModel(row);
 
-		   Trade.Type tTradeType = (Trade.Type)tModel.getValueAt(
+		   OldTrade.Type tTradeType = (OldTrade.Type)tModel.getValueAt(
 		         tModelRow,TradeTableModel.COL_BUYSELL);
 
-		   return ((tTradeType==Trade.Type.BUY)?0:1);
+		   return ((tTradeType==OldTrade.Type.BUY)?0:1);
 		};
 
 		RenderColoredRows tRowRender = new RenderColoredRows(

@@ -120,12 +120,12 @@ public class TradeFileReader extends VectorFileReader {
 
 			// Initialize all of the items that will be parsed from 'line'.
 			int tradeID = 0;
-			Trade.Type tradeType = Trade.Type.BUY;
+			OldTrade.Type tradeType = OldTrade.Type.BUY;
 			String ticker = new String();
 			int numShares = 0;
 			float sharePrice;
 			BigDecimal comm;
-			Trade.SpecialInstruction instruction = Trade.SpecialInstruction.NO_INSTRUCTION;
+			OldTrade.SpecialInstruction instruction = OldTrade.SpecialInstruction.NO_INSTRUCTION;
 			String note = new String();
 
 			// Create a string tokenizer for the line to be parsed.
@@ -140,9 +140,9 @@ public class TradeFileReader extends VectorFileReader {
 			// BUY or SELL
 			String typeStr = tok.nextToken();
 			if (typeStr.equals("Buy"))
-				tradeType = Trade.Type.BUY;
+				tradeType = OldTrade.Type.BUY;
 			else
-				tradeType = Trade.Type.SELL;
+				tradeType = OldTrade.Type.SELL;
 
 			// ticker
 			ticker = tok.nextToken();
@@ -162,10 +162,10 @@ public class TradeFileReader extends VectorFileReader {
 				note = tok.nextToken();
 
 			if (note.startsWith("NO_WASH"))
-				instruction = Trade.SpecialInstruction.NO_WASH;
+				instruction = OldTrade.SpecialInstruction.NO_WASH;
 
 			// Instantiate the Trade that represents 'line'.
-			if (tradeType == Trade.Type.BUY) {
+			if (tradeType == OldTrade.Type.BUY) {
 				bt = new BuyTrade(tradeID, date, tradeType, ticker, numShares,
 						sharePrice, comm, instruction, note);
 				return bt;

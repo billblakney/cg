@@ -6,7 +6,7 @@ public class TradeData implements TradeDataProvider
 {
    protected Integer    _tradeId;
    protected SimpleDate _date;
-   protected Trade.Type _tradeType;
+   protected OldTrade.Type _tradeType;
    protected String     _symbol;
    protected Integer    _numShares;
    protected Integer    _numSharesHeld;
@@ -29,7 +29,7 @@ public class TradeData implements TradeDataProvider
    }
 
    @Override
-   public Trade.Type getTradeType()
+   public OldTrade.Type getTradeType()
    {
       return _tradeType;
    }
@@ -92,7 +92,7 @@ public class TradeData implements TradeDataProvider
       this._date = _date;
    }
 
-   public void set_tradeType(Trade.Type _tradeType)
+   public void set_tradeType(OldTrade.Type _tradeType)
    {
       this._tradeType = _tradeType;
    }

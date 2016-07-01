@@ -42,7 +42,7 @@ class GainsCalculator {
 	   // Loop over all trades, which are expected to be in order from oldest
 	   // to newest.
        for (int i = 0; i < trades.size(); i++) {
-          Trade t = (Trade)(trades.elementAt(i));
+          OldTrade t = (OldTrade)(trades.elementAt(i));
 
           //trades.clearLotMessages();          
           if ( t.isBuyTrade()) {
@@ -90,7 +90,7 @@ class GainsCalculator {
       while ( sharesToProcess > 0 ){
 
          // Get the first buy trade that has remaining buy lots.
-         Trade t = trades.getFirstTradeWithLots(Trade.Type.BUY);
+         OldTrade t = trades.getFirstTradeWithLots(OldTrade.Type.BUY);
          BuyTrade bt = (BuyTrade)t;
 
          // Get the first buy lot available.
@@ -271,7 +271,7 @@ bLot.message = "new buy lot while processing buy trade";
 
       for (int i = 0; i < trades.size(); i++) {
 
-         Trade t = (Trade)(trades.elementAt(i));
+         OldTrade t = (OldTrade)(trades.elementAt(i));
 
          // No need to process buy trades.
          if ( t.isBuyTrade() )
@@ -311,14 +311,14 @@ return recentSellTrades;
       //  into recentSellTrades.
       for (int i = 0; i < trades.size(); i++) {
 
-         Trade t = trades.elementAt(i);
+         OldTrade t = trades.elementAt(i);
 
          // Pass over trades outside of the 30 day window.
          if( t.date.before(firstWashDate) == true )
             continue;
 
          // Pass over trades with the NO_WASH instruction..
-         if( t.instruction == Trade.SpecialInstruction.NO_WASH ){
+         if( t.instruction == OldTrade.SpecialInstruction.NO_WASH ){
             continue;
          }
 
@@ -327,7 +327,7 @@ return recentSellTrades;
             break;
 
          // We're only looking for sell trades with negative gains.
-         if ( ( (Trade) (trades.elementAt(i))).isSellTrade() ){
+         if ( ( (OldTrade) (trades.elementAt(i))).isSellTrade() ){
             SellTrade sellTrade = (SellTrade)trades.elementAt(i);
             recentSellTrades.add(sellTrade);
          } // end if

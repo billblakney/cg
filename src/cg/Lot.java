@@ -13,10 +13,10 @@ import cg.db.LotRecord;
 public class Lot implements OpenPositionAccessor
 {
    LotRecord lotRecord;
-   Trade triggerTrade;
-   Trade firstBuyTrade;
-   Trade lastBuyTrade;
-   Trade sellTrade;
+   OldTrade triggerTrade;
+   OldTrade firstBuyTrade;
+   OldTrade lastBuyTrade;
+   OldTrade sellTrade;
 
    Lot(LotRecord aLot)
    {
