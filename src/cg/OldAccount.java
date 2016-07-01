@@ -12,7 +12,7 @@ import java.util.*;
  * StockMgr maintains all of the trades for a particular stock (e.g. CSCO).
  */
 
-public class Account extends AbstractAccountData implements AccountDataProvider {
+public class OldAccount extends AbstractAccountData implements AccountDataProvider {
 
 	public final String DEFAULT_ACCT_NAME = "Default Account";
 	String name;
@@ -35,7 +35,7 @@ public class Account extends AbstractAccountData implements AccountDataProvider 
 	/**
 	 * Default constructor, which creates an empty account with default name.
 	 */
-	public Account(String aName) {
+	public OldAccount(String aName) {
 		name = aName;
 	}
 
@@ -43,7 +43,7 @@ public class Account extends AbstractAccountData implements AccountDataProvider 
 	 * Constructor that creates a account and initializes it with a set of
 	 * trades and default name.
 	 */
-	public Account(String aName,TradeList trades) {
+	public OldAccount(String aName,TradeList trades) {
 		name = aName;
 		addTrades(trades);
 	}

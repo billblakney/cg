@@ -17,19 +17,19 @@ public class AccountTreeModel extends DefaultTreeModel {
     DefaultMutableTreeNode root;
 
     // constructor
-    public AccountTreeModel(Account p){
+    public AccountTreeModel(OldAccount p){
         super(new DefaultMutableTreeNode("All Stocks"));
         init(p,ALL);
     }
 
     // constructor
-    public AccountTreeModel(Account p,int filter){
+    public AccountTreeModel(OldAccount p,int filter){
         super(new DefaultMutableTreeNode("All Stocks"));
         init(p,filter);
     }
 
     // build the tree model
-    void init(Account p,int filter){
+    void init(OldAccount p,int filter){
 
         root = (DefaultMutableTreeNode)getRoot();
 

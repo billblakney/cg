@@ -24,7 +24,6 @@ import cg.OldTrade;
 import cg.Trade;
 import cg.TradeDataProvider;
 import cg.TradeList;
-import cg.TradeRecord;
 
 public class DatabaseInterface
 {

@@ -11,6 +11,7 @@ import cg.db.AccountRecord;
 import cg.db.ConnectionManager;
 import cg.db.DatabaseInterface;
 import cg.db.LotRecord;
+import cg.db.TradeRecord;
 import cg.db.LotRecord.State;
 
 /*

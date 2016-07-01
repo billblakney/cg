@@ -1,6 +1,7 @@
 package cg;
 
 import java.math.BigDecimal;
+import cg.db.TradeRecord;
 
 public class Trade implements TradeDataProvider
 {

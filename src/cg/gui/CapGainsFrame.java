@@ -61,7 +61,7 @@ public class CapGainsFrame extends JFrame {
 	/**
 	 * The account that is currently displayed.
 	 */
-	private Account legacyAccount = null;
+	private OldAccount legacyAccount = null;
 
 	/**
 	 * The tabbed pane that displays reports.
@@ -121,7 +121,7 @@ public class CapGainsFrame extends JFrame {
 if( tradeFile != null)
 {
 TradeList trades = TradeFileReader.loadTradeFile(tradeFile);
-Account acct = new Account("TODO",trades);
+OldAccount acct = new OldAccount("TODO",trades);
 showAccount(acct);
 }
 	}
@@ -200,7 +200,7 @@ System.out.println("dbUrl: " + dbUrl);
 	 * @param acct Account to be displayed.
 	 */
 	@Deprecated
-	public void showAccount(Account acct)
+	public void showAccount(OldAccount acct)
 	{
 	   legacyAccount = acct;
 //		reportTabbedPane.removeAll();
@@ -291,7 +291,7 @@ System.out.println("dbUrl: " + dbUrl);
 		System.out.println("Selected account: " + selected_acct.name);
 
 		TradeList trades = _dataStore.getTradeList(selected_acct.acct_id);
-		Account acct = new Account(selected_acct.name,trades);
+		OldAccount acct = new OldAccount(selected_acct.name,trades);
 		showAccount(acct);
 	}
 
@@ -300,7 +300,7 @@ System.out.println("dbUrl: " + dbUrl);
 	 */
 	private void actionLegacyLoadAccountTradeFile(String tradeFile) {
 		TradeList trades = TradeFileReader.loadTradeFile(tradeFile);
-		Account acct = new Account("LEGACY",trades);
+		OldAccount acct = new OldAccount("LEGACY",trades);
 		showAccount(acct);
 	}
 

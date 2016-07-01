@@ -1,6 +1,9 @@
-package cg;
+package cg.db;
 
 import java.math.BigDecimal;
+import cg.OldTrade;
+import cg.SimpleDate;
+import cg.OldTrade.Type;
 
 public class TradeRecord
 {
