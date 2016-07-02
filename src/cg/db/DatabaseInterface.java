@@ -30,6 +30,9 @@ public class DatabaseInterface
    /** Singleton of this class. */
    static private DatabaseInterface _hsqldbLoader = null;
 
+   private String tSelectInvestorsSql =
+         "SELECT * FROM investor";
+
    private String tClearTradesAndLots =
       "DELETE FROM lot;" +
       "DELETE FROM trade;" +
@@ -79,6 +82,46 @@ public class DatabaseInterface
          _hsqldbLoader = new DatabaseInterface();
       }
       return _hsqldbLoader;
+   }
+   /**
+    * Get investors.
+    */
+   public Vector<InvestorRecord> getInvestors(Connection aConn)
+   {
+      Vector<InvestorRecord> tInvestors = new Vector<InvestorRecord>();
+
+      // run query
+      try
+      {
+         Statement tSql = aConn.createStatement();
+
+         ResultSet tResults = tSql.executeQuery(tSelectInvestorsSql);
+
+         if (tResults != null)
+         {
+            while (tResults.next())
+            {
+               // convert all fields from the db record
+               int investor_id = tResults.getInt("investor_id");
+               String name = tResults.getString("name");
+
+               InvestorRecord tInvestor = new InvestorRecord();
+
+               tInvestor._investorId = investor_id;
+               tInvestor._name = name;
+
+               tInvestors.add(tInvestor);
+            }
+         }
+         tResults.close();
+         tSql.close();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("***Exception:\n" + ex);
+      }
+
+      return tInvestors;
    }
 
    /**

@@ -28,15 +28,6 @@ public class Lot implements OpenPositionAccessor
       lastBuyTrade = tDataStore.getTradeById(aLot._lastBuyTradeId);
       sellTrade = tDataStore.getTradeById(aLot._sellTradeId);
    }
-   
-   Lot(Lot aNewLot)
-   {
-      lotRecord = aNewLot.lotRecord;
-      triggerTrade = aNewLot.triggerTrade;
-      firstBuyTrade = aNewLot.firstBuyTrade;
-      lastBuyTrade = aNewLot.lastBuyTrade;
-      sellTrade = aNewLot.sellTrade;
-   }
 
    @Override // OpenPositionAccessor
    public String getSymbol()
