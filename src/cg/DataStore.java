@@ -26,6 +26,13 @@ public class DataStore
    
    DatabaseInterface _dbi = null;
    
+   //TODO load
+   Vector<Investor> _investors = new Vector<Investor>();
+   
+   //TODO load
+   Vector<Broker> _brokers = new Vector<Broker>();
+
+   //TODO load
    Vector<OldTrade> _trades = new Vector<OldTrade>();
 
    Vector<LotRecord> _lotRecords = new Vector<LotRecord>();
@@ -569,6 +576,36 @@ static int passes = 0;
       }
       
       return tLots;
+   }
+   
+   protected Investor getInvestorById(Integer aInvestorId)
+   {
+      if (aInvestorId != null)
+      {
+         for (Investor tInvestor: _investors)
+         {
+            if (tInvestor.getInvestorId() == aInvestorId)
+            {
+               return tInvestor;
+            }
+         }
+      }
+      return null;
+   }
+   
+   protected Broker getBrokerById(Integer aBrokerId)
+   {
+      if (aBrokerId != null)
+      {
+         for (Broker tBroker: _brokers)
+         {
+            if (tBroker.getBrokerId() == aBrokerId)
+            {
+               return tBroker;
+            }
+         }
+      }
+      return null;
    }
    
    protected OldTrade getTradeById(Integer aTradeId)
