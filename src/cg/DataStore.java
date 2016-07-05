@@ -3,13 +3,16 @@ package cg;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Observable;
 import java.util.TreeSet;
 import java.util.Vector;
 import cg.db.AccountDataProxy;
 import cg.db.AccountRecord;
+import cg.db.BrokerRecord;
 import cg.db.ConnectionManager;
 import cg.db.DatabaseInterface;
+import cg.db.InvestorRecord;
 import cg.db.LotRecord;
 import cg.db.TradeRecord;
 import cg.db.LotRecord.State;
@@ -31,11 +34,16 @@ public class DataStore
    
    //TODO load
    Vector<Broker> _brokers = new Vector<Broker>();
+   
+   //TODO load
+   Vector<AccountType> _accountTypes = new Vector<AccountType>();
+   
+   //TODO load
+   Vector<Account> _accounts = new Vector<Account>();
 
    //TODO load
    Vector<OldTrade> _trades = new Vector<OldTrade>();
 
-   Vector<LotRecord> _lotRecords = new Vector<LotRecord>();
    Vector<Lot> _lots = new Vector<Lot>();
 
    /**
@@ -69,6 +77,13 @@ public class DataStore
       _cm.setDbUrl(aDbUrl);
       
       _dbi = DatabaseInterface.getInstance();
+      
+      Connection tConn = _cm.getConnection();
+      
+      _investors = Investor.getInvestors(_dbi.getInvestorRecords(tConn));
+      _brokers = Broker.getBrokers(_dbi.getBrokerRecords(tConn));
+      _accountTypes = AccountType.getAccountTypes(_dbi.getAccountTypeRecords(tConn));
+      _accounts = Account.getAccounts(_dbi.getAccountRecords(tConn));
    }
    
    public void clearAllTradesAndLots()
@@ -87,6 +102,8 @@ public class DataStore
       {
          //TODO
       }
+      _trades = new Vector<OldTrade>();
+      _lots = new Vector<Lot>();
    }
 
    public AbstractAccountData getAccountDataProvider(int aAccountId)
@@ -94,6 +111,7 @@ public class DataStore
       return new AccountDataProxy(this,aAccountId);
    }
    
+   //TODO from cache
    public String getAccountName(int aAccountId)
    {
       String tName = null;
@@ -113,6 +131,11 @@ public class DataStore
       }
 
       return tName;
+   }
+   
+   public LinkedHashMap<Integer,String> getAccountNameMap()
+   {
+      return Account.getAccountNameMap(_accounts);
    }
 
    public TradeList getTradeList(int aAccountId)
@@ -202,7 +225,7 @@ public class DataStore
 //   }
 
 
-   public Vector<AccountRecord> getAccountInfoVector()
+   public Vector<AccountRecord> getAccounts()
    {
       Vector<AccountRecord> tAcctInfo = null;
 
@@ -211,7 +234,7 @@ public class DataStore
          Connection tConn = _cm.getConnection();
          if (tConn != null)
          {
-            tAcctInfo = _dbi.getAccountInfoVector(tConn);
+            tAcctInfo = _dbi.getAccountRecords(tConn);
             _cm.closeConnection(tConn);
          }
       }
@@ -255,20 +278,24 @@ public class DataStore
 	public Vector<Lot>
 	getOpenPositions_new(int aAccountId,String ticker, String year)
 	{
+System.out.println("_lots.size(): " + _lots.size());
 		Vector<Lot> tOpenPositions = new Vector<Lot>(_lots);
+System.out.println("tOpenPositions.size(): " + tOpenPositions.size());
 
 		/*
 		 * Remove any parent lots and lots that are not open.
 		 */
 		tOpenPositions.removeIf( p ->
 		      (p.lotRecord._hasChildren || !(p.lotRecord._state == State.eOpen)));
+System.out.println("tOpenPositions.size(): " + tOpenPositions.size());
       
 		/*
 		 * Filter by ticker if ticker is present.
 		 */
       if (ticker != null)
       {
-         tOpenPositions.removeIf(p -> p.getSymbol().equals(ticker));
+         tOpenPositions.removeIf(p -> !p.getSymbol().equals(ticker));
+System.out.println("tOpenPositions.size(): " + tOpenPositions.size());
       }
 
       return tOpenPositions;
@@ -376,7 +403,6 @@ public class DataStore
       /*
        * Save the lot to the cache.
        */
-      _lotRecords.add(tLot);
       _lots.add(new Lot(tLot));
    }
    
@@ -522,7 +548,6 @@ public class DataStore
             _dbi.insertLot(aConn,tLot);
          }
          
-         _lotRecords.add(tLot);
          _lots.add(new Lot(tLot));
       }
    }
@@ -530,8 +555,8 @@ public class DataStore
    /**
     * Get the list of active open lots for a symbol ordered by FIFO.
     * <p>
-    * The FIFO ordering is determined by the sequnce number of the lot's
-    * associted buy trade.
+    * The FIFO ordering is determined by the sequence number of the lot's
+    * associated buy trade.
     * <p>
     * @param aSymbol The symbol of the lots being requested.
     * @param aQuantity The minimum number of shares to be represented by the
@@ -541,7 +566,6 @@ public class DataStore
     * 
     * TODO get from db
     */
-static int passes = 0;
    protected Vector<LotRecord> getActiveOpenLots(String aSymbol,int aQuantity)
    {
       int tQuantityFound = 0;
@@ -549,9 +573,10 @@ static int passes = 0;
       Vector<LotRecord> tLots = new Vector<LotRecord>();
       
       //TODO need to sort on acquire date; need to add acquire date to LotRecord, or use view
-      _lotRecords.sort((LotRecord lot1,LotRecord lot2)-> (lot1._lastBuyTradeId - lot2._lastBuyTradeId));
+      Vector<LotRecord> tLotRecords = Lot.getLotRecords(_lots);
+      tLotRecords.sort((LotRecord lot1,LotRecord lot2)-> (lot1._lastBuyTradeId - lot2._lastBuyTradeId));
 
-      for (LotRecord tLot: _lotRecords)
+      for (LotRecord tLot: tLotRecords)
       {
          if (tLot._hasChildren || tLot._state != LotRecord.State.eOpen){
             continue;
@@ -602,6 +627,21 @@ static int passes = 0;
             if (tBroker.getBrokerId() == aBrokerId)
             {
                return tBroker;
+            }
+         }
+      }
+      return null;
+   }
+   
+   protected AccountType getAccountTypeById(Integer aAccountTypeId)
+   {
+      if (aAccountTypeId != null)
+      {
+         for (AccountType tAccountType: _accountTypes)
+         {
+            if (tAccountType.getAccountTypeId() == aAccountTypeId)
+            {
+               return tAccountType;
             }
          }
       }

@@ -1,5 +1,6 @@
 package cg;
 
+import java.util.Vector;
 import cg.db.LotRecord;
 
 //public interface OpenPositionAccessor
@@ -17,8 +18,20 @@ public class Lot implements OpenPositionAccessor
    OldTrade firstBuyTrade;
    OldTrade lastBuyTrade;
    OldTrade sellTrade;
+   
+   public static Vector<LotRecord> getLotRecords(Vector<Lot> aLots)
+   {
+      Vector<LotRecord> tRecords = new Vector<LotRecord>();
+      
+      for (Lot tLot: aLots)
+      {
+         tRecords.add(tLot.lotRecord);
+      }
+      
+      return tRecords;
+   }
 
-   Lot(LotRecord aLot)
+   public Lot(LotRecord aLot)
    {
       lotRecord = aLot;
 

@@ -33,6 +33,12 @@ public class DatabaseInterface
    private String tSelectInvestorsSql =
          "SELECT * FROM investor";
 
+   private String tSelectBrokersSql =
+         "SELECT * FROM broker";
+
+   private String tSelectAccountTypesSql =
+         "SELECT * FROM acct_type";
+
    private String tClearTradesAndLots =
       "DELETE FROM lot;" +
       "DELETE FROM trade;" +
@@ -83,10 +89,11 @@ public class DatabaseInterface
       }
       return _hsqldbLoader;
    }
+
    /**
     * Get investors.
     */
-   public Vector<InvestorRecord> getInvestors(Connection aConn)
+   public Vector<InvestorRecord> getInvestorRecords(Connection aConn)
    {
       Vector<InvestorRecord> tInvestors = new Vector<InvestorRecord>();
 
@@ -125,9 +132,93 @@ public class DatabaseInterface
    }
 
    /**
+    * Get brokers.
+    */
+   public Vector<BrokerRecord> getBrokerRecords(Connection aConn)
+   {
+      Vector<BrokerRecord> tBrokers = new Vector<BrokerRecord>();
+
+      // run query
+      try
+      {
+         Statement tSql = aConn.createStatement();
+
+         ResultSet tResults = tSql.executeQuery(tSelectBrokersSql);
+
+         if (tResults != null)
+         {
+            while (tResults.next())
+            {
+               // convert all fields from the db record
+               int broker_id = tResults.getInt("broker_id");
+               String name = tResults.getString("name");
+
+               BrokerRecord tBroker = new BrokerRecord();
+
+               tBroker._brokerId = broker_id;
+               tBroker._name = name;
+
+               tBrokers.add(tBroker);
+            }
+         }
+         tResults.close();
+         tSql.close();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("***Exception:\n" + ex);
+      }
+
+      return tBrokers;
+   }
+
+   /**
+    * Get accountTypes.
+    */
+   public Vector<AccountTypeRecord> getAccountTypeRecords(Connection aConn)
+   {
+      Vector<AccountTypeRecord> tAccountTypes = new Vector<AccountTypeRecord>();
+
+      // run query
+      try
+      {
+         Statement tSql = aConn.createStatement();
+
+         ResultSet tResults = tSql.executeQuery(tSelectAccountTypesSql);
+
+         if (tResults != null)
+         {
+            while (tResults.next())
+            {
+               // convert all fields from the db record
+               int accountTypeId = tResults.getInt("acct_type_id");
+               boolean isTaxable = tResults.getBoolean("is_taxable");
+               String label = tResults.getString("label");
+
+               AccountTypeRecord tAccountType = new AccountTypeRecord();
+
+               tAccountType._accountTypeId = accountTypeId;
+               tAccountType._isTaxable = isTaxable;
+               tAccountType._label = label;
+
+               tAccountTypes.add(tAccountType);
+            }
+         }
+         tResults.close();
+         tSql.close();
+      }
+      catch (Exception ex)
+      {
+         System.out.println("***Exception:\n" + ex);
+      }
+
+      return tAccountTypes;
+   }
+
+   /**
     * Get accounts.
     */
-   public Vector<AccountRecord> getAccountInfoVector(Connection aConn)
+   public Vector<AccountRecord> getAccountRecords(Connection aConn)
    {
       
       Vector<AccountRecord> accounts = new Vector<AccountRecord>();

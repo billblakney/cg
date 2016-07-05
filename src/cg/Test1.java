@@ -39,7 +39,7 @@ public class Test1
 	   /*
 	    * Get all accounts from the db. //TODO put to DataStore
 	    */
-	   Vector<AccountRecord> tAccountInfo = tDataStore.getAccountInfoVector();
+	   Vector<AccountRecord> tAccountInfo = tDataStore.getAccounts();
 //	   Vector<String> tAccountNames = AccountRecord.getNames(tAccountInfo);
 
 	   DataStore.printAccountInfoVector(tAccountInfo);

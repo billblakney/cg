@@ -233,13 +233,14 @@ System.out.println("dbUrl: " + dbUrl);
 		Map<Integer,String> tAccountNames = new LinkedHashMap<Integer,String>();
 		if (_dataStore != null)
 		{
-		   // TODO kind of ugly; add method to get names directly
-		   Vector<AccountRecord> tAccounts = _dataStore.getAccountInfoVector();
-//		   tAccountNames = AccountRecord.getNames(tAccounts); //TODO maybe deprecate getNames
-		   for (AccountRecord tInfo: tAccounts)
-		   {
-		      tAccountNames.put(tInfo.acct_id, tInfo.name);
-		   }
+		   tAccountNames = _dataStore.getAccountNameMap();
+//		   // TODO kind of ugly; add method to get names directly
+//		   Vector<AccountRecord> tAccounts = _dataStore.getAccounts();
+////		   tAccountNames = AccountRecord.getNames(tAccounts); //TODO maybe deprecate getNames
+//		   for (AccountRecord tInfo: tAccounts)
+//		   {
+//		      tAccountNames.put(tInfo.acct_id, tInfo.name);
+//		   }
 		}
 		else
 		{
@@ -281,7 +282,7 @@ System.out.println("dbUrl: " + dbUrl);
 	@Deprecated
 	private void actionSelectAccount() {
 
-		Vector<AccountRecord> accts = _dataStore.getAccountInfoVector();
+		Vector<AccountRecord> accts = _dataStore.getAccounts();
 		Object[] choices = accts.toArray();
 
 		AccountRecord selected_acct = (AccountRecord) JOptionPane.showInputDialog(
@@ -318,7 +319,7 @@ System.out.println("dbUrl: " + dbUrl);
 	private void actionLoadAccountTradeFile()
 	{
 		// Get all accounts for dialog selection.
-		Vector<AccountRecord> tAccountInfo = _dataStore.getAccountInfoVector();
+		Vector<AccountRecord> tAccountInfo = _dataStore.getAccounts();
 		Vector<String> tAccountNames = AccountRecord.getNames(tAccountInfo);
 //		DataStore.printAccountInfoVector(tAccountInfo);
 

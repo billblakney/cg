@@ -1,18 +1,40 @@
 package cg;
 
-public enum AccountType {
-	NORMAL("Normal (taxable)"),
-	ROLLOVER_IRA("Rollover IRA"),
-	ROTH_IRA("Roth IRA"),
-	A401K("401k");
+import java.util.Vector;
+import cg.db.AccountTypeRecord;
 
-	private final String name;
-
-	private AccountType(String name) {
-		this.name = name;
-	}
-
-	public String toString() {
-		return name;
-	}
+public class AccountType
+{
+   AccountTypeRecord accountTypeRecord;
+   
+   public static Vector<AccountType> getAccountTypes(Vector<AccountTypeRecord> aRecords)
+   {
+      Vector<AccountType> tAccountTypes = new Vector<AccountType>();
+      
+      for (AccountTypeRecord tRecord: aRecords)
+      {
+         tAccountTypes.add(new AccountType(tRecord));
+      }
+      return tAccountTypes;
+   }
+   
+   public AccountType(AccountTypeRecord aRecord)
+   {
+      accountTypeRecord = aRecord;
+   }
+   
+   public Integer getAccountTypeId()
+   {
+      return accountTypeRecord._accountTypeId;
+   }
+   
+   public boolean getIsTaxable()
+   {
+      return accountTypeRecord._isTaxable;
+   }
+   
+   public String getLabel()
+   {
+      return accountTypeRecord._label;
+   }
 }
