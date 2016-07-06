@@ -9,9 +9,9 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import javax.swing.RowFilter;
 import bbj.swing.table.render.CustomTableCellRenderer;
-import bbj.swing.table.render.RenderColoredRows;
-import bbj.swing.table.render.RenderInteger;
-import bbj.swing.table.render.RenderTableCellInfo;
+import bbj.swing.table.render.RenderColorsRule;
+import bbj.swing.table.render.RenderIntegerRule;
+import bbj.swing.table.render.RenderRule;
 import bbj.swing.table.render.TableCellColorSet;
 import bbj.swing.table.render.TableCellColorIndexChooser;
 
@@ -58,25 +58,25 @@ public class GainTable extends JTable {
 
 	private void setRenderers()
 	{
-		Vector<RenderTableCellInfo> tInfos = new Vector<RenderTableCellInfo>();
+		Vector<RenderRule> tInfos = new Vector<RenderRule>();
 		
 		/*
 		 * Set renders for comma separated integer columns.
 		 */
-		RenderInteger tIntRenderShares = new RenderInteger(
-		      RenderInteger.COMMA_FORMAT,GainTableModel.COL_SHARES);
+		RenderIntegerRule tIntRenderShares = new RenderIntegerRule(
+		      RenderIntegerRule.COMMA_FORMAT,GainTableModel.COL_SHARES);
 		tInfos.add(tIntRenderShares);
 		
-		RenderInteger tIntRenderGross = new RenderInteger(
-		      RenderInteger.COMMA_FORMAT,GainTableModel.COL_GROSS);
+		RenderIntegerRule tIntRenderGross = new RenderIntegerRule(
+		      RenderIntegerRule.COMMA_FORMAT,GainTableModel.COL_GROSS);
 		tInfos.add(tIntRenderGross);
 		
-		RenderInteger tIntRenderBasis = new RenderInteger(
-		      RenderInteger.COMMA_FORMAT,GainTableModel.COL_BASIS);
+		RenderIntegerRule tIntRenderBasis = new RenderIntegerRule(
+		      RenderIntegerRule.COMMA_FORMAT,GainTableModel.COL_BASIS);
 		tInfos.add(tIntRenderBasis);
 		
-		RenderInteger tIntRenderGain = new RenderInteger(
-		      RenderInteger.COMMA_FORMAT,GainTableModel.COL_GAIN);
+		RenderIntegerRule tIntRenderGain = new RenderIntegerRule(
+		      RenderIntegerRule.COMMA_FORMAT,GainTableModel.COL_GAIN);
 		tInfos.add(tIntRenderGain);
 
 		/*
@@ -99,7 +99,7 @@ public class GainTable extends JTable {
 		   return ((gain > 0) ? 0:1);
 		};
 
-		RenderColoredRows tRowRender = new RenderColoredRows(
+		RenderColorsRule tRowRender = new RenderColorsRule(
 		     tColors,tColorChooser);
 		tInfos.add(tRowRender);
 

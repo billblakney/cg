@@ -10,9 +10,9 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import bbj.swing.table.render.CustomTableCellRenderer;
-import bbj.swing.table.render.RenderColoredRows;
-import bbj.swing.table.render.RenderInteger;
-import bbj.swing.table.render.RenderTableCellInfo;
+import bbj.swing.table.render.RenderColorsRule;
+import bbj.swing.table.render.RenderIntegerRule;
+import bbj.swing.table.render.RenderRule;
 import bbj.swing.table.render.TableCellColorSet;
 import bbj.swing.table.render.TableCellColorIndexChooser;
 import cg.OldTrade;
@@ -71,21 +71,21 @@ public class TradeTable extends JTable {
 
 	private void setRenderers()
 	{
-		Vector<RenderTableCellInfo> tInfos = new Vector<RenderTableCellInfo>();
+		Vector<RenderRule> tInfos = new Vector<RenderRule>();
 		
 		/*
 		 * Set renders for comma separated integer columns.
 		 */
-		RenderInteger tIntRenderShares = new RenderInteger(
-		      RenderInteger.COMMA_FORMAT,TradeTableModel.COL_SHARES);
+		RenderIntegerRule tIntRenderShares = new RenderIntegerRule(
+		      RenderIntegerRule.COMMA_FORMAT,TradeTableModel.COL_SHARES);
 		tInfos.add(tIntRenderShares);
 		
-		RenderInteger tIntRenderSharesHeld = new RenderInteger(
-		      RenderInteger.COMMA_FORMAT,TradeTableModel.COL_SHARESHELD);
+		RenderIntegerRule tIntRenderSharesHeld = new RenderIntegerRule(
+		      RenderIntegerRule.COMMA_FORMAT,TradeTableModel.COL_SHARESHELD);
 		tInfos.add(tIntRenderSharesHeld);
 		
-		RenderInteger tIntRenderSharesSold = new RenderInteger(
-		      RenderInteger.COMMA_FORMAT,TradeTableModel.COL_SHARESSOLD);
+		RenderIntegerRule tIntRenderSharesSold = new RenderIntegerRule(
+		      RenderIntegerRule.COMMA_FORMAT,TradeTableModel.COL_SHARESSOLD);
 		tInfos.add(tIntRenderSharesSold);
 
 		/*
@@ -108,7 +108,7 @@ public class TradeTable extends JTable {
 		   return ((tTradeType==OldTrade.Type.BUY)?0:1);
 		};
 
-		RenderColoredRows tRowRender = new RenderColoredRows(
+		RenderColorsRule tRowRender = new RenderColorsRule(
 		     tColors,tColorChooser);
 //		tInfos.add(tRowRender);
 

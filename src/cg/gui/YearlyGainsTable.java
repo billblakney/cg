@@ -6,8 +6,8 @@ import javax.swing.table.TableRowSorter;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.RowFilter;
 import bbj.swing.table.render.CustomTableCellRenderer;
-import bbj.swing.table.render.RenderInteger;
-import bbj.swing.table.render.RenderTableCellInfo;
+import bbj.swing.table.render.RenderIntegerRule;
+import bbj.swing.table.render.RenderRule;
 
 @SuppressWarnings("serial")
 public class YearlyGainsTable extends JTable {
@@ -33,13 +33,13 @@ public class YearlyGainsTable extends JTable {
 
 	private void setRenderers()
 	{
-		Vector<RenderTableCellInfo> tInfos = new Vector<RenderTableCellInfo>();
+		Vector<RenderRule> tInfos = new Vector<RenderRule>();
 		
 		/*
 		 * Set renders for comma separated integer columns.
 		 */
-		RenderInteger tIntRenderGains = new RenderInteger(
-		      RenderInteger.COMMA_FORMAT,YearlyGainsTableModel.COL_GAIN);
+		RenderIntegerRule tIntRenderGains = new RenderIntegerRule(
+		      RenderIntegerRule.COMMA_FORMAT,YearlyGainsTableModel.COL_GAIN);
 		tInfos.add(tIntRenderGains);
 
 		/*

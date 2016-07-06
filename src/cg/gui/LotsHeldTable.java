@@ -7,8 +7,8 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.RowFilter;
 import javax.swing.RowFilter.*;
 import bbj.swing.table.render.CustomTableCellRenderer;
-import bbj.swing.table.render.RenderInteger;
-import bbj.swing.table.render.RenderTableCellInfo;
+import bbj.swing.table.render.RenderIntegerRule;
+import bbj.swing.table.render.RenderRule;
 import cg.OpenPositionAccessor;
 import cg.Term;
 
@@ -38,13 +38,13 @@ public class LotsHeldTable extends JTable {
 
 	private void setRenderers()
 	{
-		Vector<RenderTableCellInfo> tInfos = new Vector<RenderTableCellInfo>();
+		Vector<RenderRule> tInfos = new Vector<RenderRule>();
 
 		/*
 		 * Set renders for comma separated integer columns.
 		 */
-		RenderInteger tIntRenderShares = new RenderInteger(
-		      RenderInteger.COMMA_FORMAT,LotsHeldTableModel.COL_SHARES);
+		RenderIntegerRule tIntRenderShares = new RenderIntegerRule(
+		      RenderIntegerRule.COMMA_FORMAT,LotsHeldTableModel.COL_SHARES);
 		tInfos.add(tIntRenderShares);
 	   
 		/*
