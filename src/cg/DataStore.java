@@ -80,10 +80,10 @@ public class DataStore
       
       Connection tConn = _cm.getConnection();
       
-      _investors = Investor.getInvestors(_dbi.getInvestorRecords(tConn));
-      _brokers = Broker.getBrokers(_dbi.getBrokerRecords(tConn));
-      _accountTypes = AccountType.getAccountTypes(_dbi.getAccountTypeRecords(tConn));
-      _accounts = Account.getAccounts(_dbi.getAccountRecords(tConn));
+      _investors = Investor.getInvestors(_dbi.selectInvestors(tConn));
+      _brokers = Broker.getBrokers(_dbi.selectBrokers(tConn));
+      _accountTypes = AccountType.getAccountTypes(_dbi.selectAccountTypes(tConn));
+      _accounts = Account.getAccounts(_dbi.selectAccounts(tConn));
    }
    
    public void clearAllTradesAndLots()
@@ -94,7 +94,7 @@ public class DataStore
          Connection tConn = _cm.getConnection();
          if (tConn != null)
          {
-            _dbi.clearAllTradesAndLots(tConn);
+            _dbi.deleteAllTradesAndLots(tConn);
             _cm.closeConnection(tConn);
          }
       }
@@ -234,7 +234,7 @@ public class DataStore
          Connection tConn = _cm.getConnection();
          if (tConn != null)
          {
-            tAcctInfo = _dbi.getAccountRecords(tConn);
+            tAcctInfo = _dbi.selectAccounts(tConn);
             _cm.closeConnection(tConn);
          }
       }

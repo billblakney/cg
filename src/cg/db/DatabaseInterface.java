@@ -93,7 +93,7 @@ public class DatabaseInterface
    /**
     * Get investors.
     */
-   public Vector<InvestorRecord> getInvestorRecords(Connection aConn)
+   public Vector<InvestorRecord> selectInvestors(Connection aConn)
    {
       Vector<InvestorRecord> tInvestors = new Vector<InvestorRecord>();
 
@@ -134,7 +134,7 @@ public class DatabaseInterface
    /**
     * Get brokers.
     */
-   public Vector<BrokerRecord> getBrokerRecords(Connection aConn)
+   public Vector<BrokerRecord> selectBrokers(Connection aConn)
    {
       Vector<BrokerRecord> tBrokers = new Vector<BrokerRecord>();
 
@@ -175,7 +175,7 @@ public class DatabaseInterface
    /**
     * Get accountTypes.
     */
-   public Vector<AccountTypeRecord> getAccountTypeRecords(Connection aConn)
+   public Vector<AccountTypeRecord> selectAccountTypes(Connection aConn)
    {
       Vector<AccountTypeRecord> tAccountTypes = new Vector<AccountTypeRecord>();
 
@@ -218,7 +218,7 @@ public class DatabaseInterface
    /**
     * Get accounts.
     */
-   public Vector<AccountRecord> getAccountRecords(Connection aConn)
+   public Vector<AccountRecord> selectAccounts(Connection aConn)
    {
       
       Vector<AccountRecord> accounts = new Vector<AccountRecord>();
@@ -284,7 +284,7 @@ public class DatabaseInterface
    /**
     * Clear all trades and lots.
     */
-   public void clearAllTradesAndLots(Connection aConn)
+   public void deleteAllTradesAndLots(Connection aConn)
    {
       try
       {
