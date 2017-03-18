@@ -2,8 +2,9 @@ package cg;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.math.BigDecimal;
-
 import util.*;
 
 /**
@@ -49,52 +50,75 @@ public class TradeFileReader extends VectorFileReader {
 		SimpleDate fmtDate = new SimpleDate(year, month - 1, day);
 		return fmtDate;
 	}
+		
+	/** Share price patterns. */
+	private static final Pattern tDecimalPattern =
+	      Pattern.compile("^(\\d+\\.\\d+)$");
+	private static final Pattern tIntegerPattern =
+	      Pattern.compile("^(\\d+)$");
+	private static final Pattern tProperFractionPattern =
+	      Pattern.compile("^(\\d+)\\/(\\d+)$");
+	private static final Pattern tMixedFractionPattern =
+	      Pattern.compile("^(\\d+)\\s+(\\d+)\\/(\\d+)$");
 
 	/**
-	 * Converts a String of format ??? to a share price.
+	 * Converts a String to a share price.
+	 * Examples of the valid formats:
+	 * - 3.45
+	 * - 3
+	 * - 5/8
+	 * - 20 5/8
 	 * 
-	 * @param line
-	 *            String The string to be converted.
-	 * @return TradeDate The resulting share price.
+	 * @param priceStr String The string to be converted.
+	 * @return The resulting share price.
 	 */
-	private float stringToSharePrice(String priceStr) {
+	private float stringToSharePrice(String priceStr)
+	{
 		float sharePrice = (float) 0.0;
 
-		System.out.println("priceStr: " + priceStr);
-		StringTokenizer pt = new StringTokenizer(priceStr, " ");
-		String part1 = null;
-		String part2 = null;
-
-		part1 = pt.nextToken();
-		if (pt.hasMoreTokens())
-			part2 = pt.nextToken();
-
-		if (part2 == null && part1.indexOf('.') > -1) { // is decimal
-			sharePrice = Float.valueOf(part1).floatValue();
-		} else if (part2 == null) { // is simple frac
-			StringTokenizer ft = new StringTokenizer(part1, "/");
-			System.out.println("part1: " + part1);
-			float num = Float.valueOf(ft.nextToken()).floatValue();
-			System.out.println("num: " + num);
-			float den = Float.valueOf(ft.nextToken()).floatValue();
-			System.out.println("den: " + den);
-			float fracPart;
-			if (den < 1)
-				fracPart = 0;
-			else
-				fracPart = num / den;
-			sharePrice = fracPart;
-		} else { // is compound frac
-			float intPart = Float.valueOf(part1).floatValue();
-			StringTokenizer ft = new StringTokenizer(part2, "/");
-			float num = Float.valueOf(ft.nextToken()).floatValue();
-			float den = Float.valueOf(ft.nextToken()).floatValue();
-			float fracPart;
-			if (den < 1)
-				fracPart = 0;
-			else
-				fracPart = num / den;
-			sharePrice = intPart + fracPart;
+		Matcher tDecimalMatcher = tDecimalPattern.matcher(priceStr);
+		if (tDecimalMatcher.find())
+		{
+		   sharePrice = Float.valueOf(tDecimalMatcher.group(0)).floatValue();
+		}
+		else
+		{
+		   Matcher tIntegerMatcher = tIntegerPattern.matcher(priceStr);
+		   if (tIntegerMatcher.find())
+		   {
+		      sharePrice = Float.valueOf(tIntegerMatcher.group(0)).floatValue();
+		   }
+		   else
+		   {
+		      Matcher tProperFractionMatcher =
+		            tProperFractionPattern.matcher(priceStr);
+		      if (tProperFractionMatcher.find())
+		      {
+		         float tNum = Float.valueOf(tProperFractionMatcher.group(1));
+		         float tDen = Float.valueOf(tProperFractionMatcher.group(2));
+		         sharePrice = tNum/tDen;
+		      }
+		      else
+		      {
+		         Matcher tMixedFractionMatcher =
+		               tMixedFractionPattern.matcher(priceStr);
+		         if (tMixedFractionMatcher.find())
+		         {
+		            float tWholePart =
+		                  Float.valueOf(tMixedFractionMatcher.group(1));
+		            float tNum = Float.valueOf(tMixedFractionMatcher.group(2));
+		            float tDen = Float.valueOf(tMixedFractionMatcher.group(3));
+		            sharePrice = tWholePart + tNum/tDen;
+		         }
+		         else
+		         {
+		            System.out.println("ERROR: "
+		                  + "Bad price in TradeFileReader.convertLineToObj(): "
+		                  + priceStr);
+		            System.exit(1);
+		         }
+		      }
+		   }
 		}
 		return sharePrice;
 	}
@@ -112,6 +136,7 @@ public class TradeFileReader extends VectorFileReader {
 
 		// Initialize the trade to be returned. If the line is parsed
 		// successfully, the trade will be updated before being returned.
+//	   System.out.println("bbb converting: " + line);
 
 		BuyTrade bt = null;
 		SellTrade st = null;
