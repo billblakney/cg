@@ -27,3 +27,4 @@ export PATH=$CG_SCRIPTS:${PATH}
 export PERLSCRIPTS=$HOME/workspace/perlscripts
 echo "PERLSCRIPTS: $PERLSCRIPTS"
 export PATH=$PERLSCRIPTS:${PATH}
+export PERL5LIB=$HOME/workspace/perlscripts
